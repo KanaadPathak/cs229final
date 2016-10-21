@@ -1,0 +1,91 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{fancyhdr}
+\usepackage{textcomp}
+\usepackage[table,x11names,svgnames]{xcolor}
+\usepackage{soul}
+\usepackage{parskip}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{chngcntr}
+\usepackage{afterpage}
+\usepackage{tabularx}
+\usepackage{float}
+\usepackage{placeins}
+\usepackage{tablefootnote}
+\usepackage{microtype}
+\usepackage{textcomp}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{subcaption}
+\usepackage{verbatim}
+\usepackage[htt]{hyphenat}
+\usepackage[letterpaper, portrait, margin=1.5in]{geometry}
+\counterwithin{table}{section}
+\counterwithin{figure}{section}
+
+% Modify this to change who \Apple is (e.g. Olympic, Silver, Orion, Star ...)
+
+% Directives
+\pagestyle{fancy}
+\setlength\extrarowheight{5pt}
+\titlespacing*{\section}
+{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
+\titlespacing*{\subsection}
+{0pt}{2.0ex plus 1ex minus .2ex}{1.3ex plus .2ex}
+\titlespacing*{\subsubsection}
+{0pt}{1.0ex plus 1ex minus .2ex}{0.8ex plus .2ex}
+
+% Copypasta to get labeled paragraphs
+\setcounter{secnumdepth}{4}
+\titleformat{\paragraph}
+{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+\begin{document}
+
+{\Large \textbf{Plant leaf classification}\par}
+{\Large Proposal\par}
+\hrulefill \par
+{\bf Team members\par}
+\begin{align*}
+\mathrm{Albert\ Liu/SUID: 06167442} &&\href{mailto:albertpl@stanford.edu}{albertpl@stanford.edu}\\
+\mathrm{Yangming\ Huang} &&\href{mailto:yangming@stanford.edu@standford.edu}{yangming@stanford.edu}\\
+\end{align*}
+
+\section{Introduction}
+Automatic plan species recognition with image processing has gained increasing interests recently. The main application are crop/weeds identification, plan biology research and species tracking \cite{Pedro13}. The number of plant species is over 220000 and leave images are considered the most available and effective attributes for such identification.  This problem can be seen as a multi-class classification with relatively small training samples (raw image of leaf).  
+
+The main goal of this project is to apply various algorithms and techniques we learned in this class to solve this problem. First step is to use KNN on the pre-extracted {shape, margin, texture} features to establish baseline. This is because most of existing works \cite{Charles13} \cite{Pedro13} suggest KNN and the aforementioned features are readily available from the data sets.  Secondly we will approach with a set of models, including Linear SVM, Quadratic SVM, Linear Discriminative Analysis and others. Then we compare the results of different algorithms. Lastly we will explore to extract customer features from the raw images and apply feature extraction/selection techniques.
+
+The data set 
+\begin{enumerate}
+  \item UCI \cite{UCIDataSet} 40 species with 5 to 16 samples per species
+  \item kaggle \cite{KaggleDataSet} 99 species with 16 samples per species
+\end{enumerate}
+
+The feature extraction techniques are discussed in \cite{Pedro13}.
+
+
+\begin{thebibliography}{9}
+\bibitem{Charles13} 
+Charles Mallah, James Cope, James Orwell. Plant Leaf Classification Using Probabilistic Integration of Shape, Texture and Margin Features. Signal Processing, Pattern Recognition and Applications, in press. 2013
+
+\bibitem{Pedro13} 
+“Evaluation of Features for Leaf Discrimination”, Pedro F. B. Silva, Andre R.S. Marcal, Rubim M. Almeida da Silva (2013), Springer Lecture Notes in Computer Science, Vol. 7950, 197-204.
+
+\bibitem{UCIDataSet} 
+https://archive.ics.uci.edu/ml/datasets/Leaf
+
+\bibitem{KaggleDataSet} 
+https://www.kaggle.com/c/leaf-classification/data
+
+\end{thebibliography}
+\end{document}
