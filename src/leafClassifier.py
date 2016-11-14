@@ -49,8 +49,7 @@ class LeafDataSet():
 def trainLR(dataSet, reTrain=True):
   bestC=1.0; minScore=float("inf")
   if not reTrain:
-  #<0.1 gives accuracy
-    bestC = 0.1
+    bestC = 0.2
   else:
     for C in np.linspace(0.01,0.1,10):
       clf=linear_model.LogisticRegression(penalty='l2', C=C, solver='sag', multi_class='multinomial', verbose=0, warm_start=False, n_jobs=-1)
@@ -58,8 +57,8 @@ def trainLR(dataSet, reTrain=True):
       print("Training Error(C=%f): %0.2f (+/- %0.2f)" % (C, 1-m, scores.std() * 2))
       if m<minScore: bestC=C; minScore=m;
   clf=linear_model.LogisticRegression(penalty='l2', C=bestC, solver='sag', multi_class='multinomial', verbose=0, warm_start=False, n_jobs=-1)
-  clf.fit(dataSet.X_train)
-  return (clf,bestC)
+  clf.fit(dataSet.X_train, dataSet.y_train)
+  return clf
 
 def trainSVMRBF(dataSet, reTrain=True):
   if not reTrain:
@@ -78,8 +77,8 @@ def trainSVMRBF(dataSet, reTrain=True):
         print("Training Error(C=%f gamma=%f): %0.2f (+/- %0.2f)" % (C, gamma, 1-m, scores.std() * 2))
         if m<minScore: minScore=m; (bestC, bestGamma) = (C, gamma)
   clf = SVC(C=bestC, gamma=bestGamma)
-  clf.fit(dataSet.X_train)
-  return (clf, bestC, bestGamma)
+  clf.fit(dataSet.X_train, dataSet.y_train)
+  return clf
 
 def load_kaggle():
   return LeafDataSet(os.path.join(os.path.dirname(__file__), '../data/kaggle/train.csv'))
@@ -93,6 +92,6 @@ if __name__ == "__main__":
   if args.dumpLabel is not None:
     dataSet.writeLabelToJson(args.dumpLabel)
   for algo in (trainLR, trainSVMRBF):
-    clf = algo(dataSet)
+    clf = algo(dataSet, reTrain=False)
     predicts = clf.predict(dataSet.X_test)
     print("%s Test Error: %0.2f" % (str(algo), np.sum(predicts!=dataSet.y_test)/np.size(dataSet.y_test.shape)))
