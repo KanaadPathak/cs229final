@@ -6,12 +6,16 @@ __version__ = "0.1"
 import numpy as np
 import matplotlib.pyplot as plt
 from leafClassifier import *
+from sklearn.preprocessing import StandardScaler
 
 def plotData(dataSet):
   #randomly pick two features and plot it 
-  nrows=3; ncols=8; plot_number=1;
+  scaler = StandardScaler()
+  X = scaler.fit_transform(dataSet.data)
+
+  nrows=3; ncols=4; plot_number=1;
   plt.figure(figsize=(8, 1 * ncols))
-  features = (10 * dataSet.margin, 10 * dataSet.texture, 200 * dataSet.shape)
+  features = (X[:,0:64], X[:,64:128], X[:,128:192])
   names = ("margin", "texture", "shape")
   for (f,s) in zip(features, names):
     for i in range(0, ncols):
