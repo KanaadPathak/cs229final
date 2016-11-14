@@ -1,5 +1,7 @@
 1. Kaggle
 https://www.kaggle.com/c/leaf-classification
+The data included can be used for research and educational purposes only. All publications using this dataset should cite the following paper: 
+'Evaluation of Features for Leaf Discrimination', Pedro F.B. Silva, Andre R.S. Marcal, Rubim M. Almeida da Silva (2013). Springer Lecture Notes in Computer Science, Vol. 7950, 197-204.
 
 2. UCI
 https://archive.ics.uci.edu/ml/datasets/Leaf
