@@ -291,3 +291,17 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# custom ignore
+data/images.zip
+data/images/
+data/sample_submission.csv
+data/sample_submission.csv.zip
+data/test.csv
+data/test.csv.zip
+data/train.csv
+data/train.csv.zip
+leaf.ipynb
+plot_classification.ipynb
+src/label.plist
+tryout.ipynb

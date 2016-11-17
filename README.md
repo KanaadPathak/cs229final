@@ -12,11 +12,11 @@ data/train.csv
 
 ### software prerequiste
 ```bash
-brew cask install anaconda
-echo 'export PATH=~/anaconda3/bin:$PATH' >> ~/.bashrc
-source ~/.bashrc
-conda install jupyter numpy pandas matlabplot sympy
+brew install opencv3 --HEAD --with-contrib
+echo /usr/local/opt/opencv3/lib/python2.7/site-packages >> $PYTHON_PATH/site-packages/opencv3.pth
+pip install -r requirements
 ```
+
 or you can just install above packages with `pip`
 
 ### bootstrap
@@ -25,3 +25,53 @@ in command line enter the following:
 jupyter notebook
 ```
 a browser will open to show the jupyter notebook, select the `ipynb` files to open one of them.
+
+### dataset
+
+1. Kaggle
+    [Kaggle Leaf Classification](https://www.kaggle.com/c/leaf-classification)
+
+2. UCI
+    [UCI Leaf Dataset](https://archive.ics.uci.edu/ml/datasets/Leaf)
+
+3. Swedish leaf dataset
+    [Swedish Leaf Dataset](http://www.cvl.isy.liu.se/en/research/datasets/swedish-leaf/)
+    The files are named so that it is easy to find the leaf/leaves that we want. A file could be named for example : 
+    `l9nr003.tif`
+    
+    |-------|:--------------------
+    | l	    | is short for leaf
+    | 9	    | is treeclass nine
+    | nr	| is short for number
+    | 003	| is the number of the leaf of the specific treeclass
+    | Oskar | J. O. Söderkvist, “Computer vision classifcation of leaves from swedish trees,” Master’s Thesis, Linkoping University, 2001.
+
+    15 labels, >60 samples per label.
+
+4. Flavia data set
+    [Flavia Dataset](http://flavia.sourceforge.net)
+    Please cite it as the data used in our paper: Stephen Gang Wu, Forrest Sheng Bao, Eric You Xu, Yu-Xuan Wang, Yi-Fan Chang and Chiao-Liang Shiang, A Leaf Recognition Algorithm for Plant classification Using Probabilistic Neural Network, IEEE 7th International Symposium on Signal Processing and Information Technology, Dec. 2007, Cario, Egypt
+
+    33 labels. ~60  samples per label.
+    
+    
+    Leafsnap dataset, Intelengine dataset, and ImageCLEF
+
+# appendix: opencv caveats:
+This formula is keg-only, which means it was not symlinked into /usr/local.
+
+opencv3 and opencv install many of the same files.
+
+Generally there are no consequences of this for you. If you build your
+own software and it requires this formula, you'll need to add to your
+build variables:
+
+    LDFLAGS:  -L/usr/local/opt/opencv3/lib
+    CPPFLAGS: -I/usr/local/opt/opencv3/include
+    PKG_CONFIG_PATH: /usr/local/opt/opencv3/lib/pkgconfig
+
+If you need Python to find bindings for this keg-only formula, run:
+
+    echo /usr/local/opt/opencv3/lib/python2.7/site-packages >> /usr/local/lib/python2.7/site-packages/opencv3.pth
+    mkdir -p
+    echo 'import site; site.addsitedir("/usr/local/lib/python2.7/site-packages")' >> homebrew.pth
