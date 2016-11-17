@@ -1,0 +1,27 @@
+1. Kaggle
+https://www.kaggle.com/c/leaf-classification
+
+2. UCI
+https://archive.ics.uci.edu/ml/datasets/Leaf
+
+3. Swedish leaf dataset
+http://www.cvl.isy.liu.se/en/research/datasets/swedish-leaf/
+The files are named so that it is easy to find the leaf/leaves that we want. A file could be named for example : 
+l9nr003.tif
+
+l	is short for leaf
+9	is treeclass nine
+nr	is short for number
+003	is the number of the leaf of the specific treeclass
+Oskar J. O. Söderkvist, “Computer vision classifcation of leaves from swedish trees,” Master’s Thesis, Linkoping University, 2001.
+
+15 labels, >60 samples per label.
+
+4. Flavia data set
+http://flavia.sourceforge.net
+Please cite it as the data used in our paper: Stephen Gang Wu, Forrest Sheng Bao, Eric You Xu, Yu-Xuan Wang, Yi-Fan Chang and Chiao-Liang Shiang, A Leaf Recognition Algorithm for Plant classification Using Probabilistic Neural Network, IEEE 7th International Symposium on Signal Processing and Information Technology, Dec. 2007, Cario, Egypt
+
+33 labels. ~60  samples per label.
+
+
+Leafsnap dataset, Intelengine dataset, and ImageCLEF
