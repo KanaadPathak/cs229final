@@ -36,9 +36,9 @@ a browser will open to show the jupyter notebook, select the `ipynb` files to op
 
 3. Swedish leaf dataset
     [Swedish Leaf Dataset](http://www.cvl.isy.liu.se/en/research/datasets/swedish-leaf/)
-    The files are named so that it is easy to find the leaf/leaves that we want. A file could be named for example : 
+    The files are named so that it is easy to find the leaf/leaves that we want. A file could be named for example :
     `l9nr003.tif`
-    
+
     |-------|:--------------------
     | l	    | is short for leaf
     | 9	    | is treeclass nine
@@ -53,9 +53,18 @@ a browser will open to show the jupyter notebook, select the `ipynb` files to op
     Please cite it as the data used in our paper: Stephen Gang Wu, Forrest Sheng Bao, Eric You Xu, Yu-Xuan Wang, Yi-Fan Chang and Chiao-Liang Shiang, A Leaf Recognition Algorithm for Plant classification Using Probabilistic Neural Network, IEEE 7th International Symposium on Signal Processing and Information Technology, Dec. 2007, Cario, Egypt
 
     33 labels. ~60  samples per label.
-    
-    
+
+
     Leafsnap dataset, Intelengine dataset, and ImageCLEF
+
+# reference
+
+- [Wikipedia: Feature scaling](https://en.wikipedia.org/wiki/Feature_scaling)
+- [2014 about feature scaling](http://sebastianraschka.com/Articles/2014_about_feature_scaling.html)
+- [CS231N: Neural Network Data Preparation](http://cs231n.github.io/neural-networks-2/#datapre)
+- [OpenCV 2d Feature Extraction](http://docs.opencv.org/3.0-beta/doc/py_tutorials/py_feature2d/py_table_of_contents_feature2d/py_table_of_contents_feature2d.html)
+- [From feature descriptors to deep learning: 20 years of computer vision](http://www.computervisionblog.com/2015/01/from-feature-descriptors-to-deep.html)
+
 
 # appendix: opencv caveats:
 This formula is keg-only, which means it was not symlinked into /usr/local.
