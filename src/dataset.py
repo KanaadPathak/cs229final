@@ -6,6 +6,7 @@ __version__ = "0.1"
 import argparse, sys, os
 import json
 import numpy as np
+import random
 from collections import OrderedDict
 from sklearn import linear_model, datasets
 from sklearn.model_selection import cross_val_score, StratifiedShuffleSplit, train_test_split
@@ -60,6 +61,18 @@ class UCICsvDataSet(object):
       scaler = StandardScaler()
       self.X_train = scaler.fit_transform(self.X_train)
       self.X_test = scaler.transform(self.X_test)
+
+#PS2.3d
+class PSDataSet(object):
+  def __init__(self, train_csv, test_csv):
+    data = np.loadtxt(train_csv, delimiter=',')
+    self.X_train = data[:, 1:]
+    self.y_train = data[:, 0]
+
+    data = np.loadtxt(test_csv, delimiter=',')
+    self.X_test = data[:, 1:]
+    self.y_test = data[:, 0]
+
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser(description=__doc__, version=__version__)
