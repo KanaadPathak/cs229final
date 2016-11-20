@@ -39,12 +39,14 @@ a browser will open to show the jupyter notebook, select the `ipynb` files to op
     The files are named so that it is easy to find the leaf/leaves that we want. A file could be named for example :
     `l9nr003.tif`
 
-    |-------|:--------------------
-    | l	    | is short for leaf
-    | 9	    | is treeclass nine
-    | nr	| is short for number
-    | 003	| is the number of the leaf of the specific treeclass
-    | Oskar | J. O. Söderkvist, “Computer vision classifcation of leaves from swedish trees,” Master’s Thesis, Linkoping University, 2001.
+    | symbol | explanation          |
+    |--------|:--------------------:|
+    | l	     | is short for leaf    |
+    | 9	     | is treeclass nine    |
+    | nr	   | is short for number  |
+    | 003	   | is the number of the leaf of the specific treeclass |
+
+    Oskar J. O. Söderkvist, “Computer vision classifcation of leaves from swedish trees,” Master’s Thesis, Linkoping University, 2001.
 
     15 labels, >60 samples per label.
 
@@ -53,7 +55,6 @@ a browser will open to show the jupyter notebook, select the `ipynb` files to op
     Please cite it as the data used in our paper: Stephen Gang Wu, Forrest Sheng Bao, Eric You Xu, Yu-Xuan Wang, Yi-Fan Chang and Chiao-Liang Shiang, A Leaf Recognition Algorithm for Plant classification Using Probabilistic Neural Network, IEEE 7th International Symposium on Signal Processing and Information Technology, Dec. 2007, Cario, Egypt
 
     33 labels. ~60  samples per label.
-
 
     Leafsnap dataset, Intelengine dataset, and ImageCLEF
 
