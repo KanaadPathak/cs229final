@@ -66,7 +66,7 @@ In both cases, the new image representations can be used to train classifiers of
 We found these datasets.
 \begin{enumerate}
   \item UCI leaf dataset \cite{UCIDataSet}: 40 species with 5 to 16 samples per specie
-  \item Kaggle leaf dataset\cite{KaggleDataSet}: 99 species with 16 samples per specie
+  \item Kaggle leaf dataset\cite{Pedro13}: 99 species with 16 samples per specie
   \item Swedish leaf dataset \cite{SwedishLeafDataset}: 15 species with 952 samples (roughly 60 samples per specie)
   \item Flavia leaf dataset \cite{FlaviaDataset}: 33 species with roughly 60 samples per specie
   \item Pl@ntNet \cite{PlanetNet}: the most challenging dataset as images are collected through crowd sourced application. 71 species with 5436 images.
@@ -90,21 +90,22 @@ During preprocessing, raw images are converted to gray-scaled images and resized
     Vocabulary size & Softmax &  Linear SVM  & RBF SVM \\
     \hline
     100  &  0.86 & 0.86 & 0.87\\
-    1000 &  0.93 & 0.93 & 0.93
+    1000 &  0.93 & 0.93 & 0.93 \\
+    \hline
   \end{tabular}
   \label{table:prelimaryresult}
 \end{table}
 
 
-We noted that
+We look at the results and notice
 \begin{enumerate}
-  \item Since there are relative large features per training sample, we are not surprised that SVM with linear kernel and Softmax performs well. 
-  \item The test accuracy is improved with larger vocabulary size. This makes sense since more local feature descriptors could represent the discriminative characteristics better and hence better accuracy.
+  \item Since there are large features relative to training set, we are not surprised that SVM with linear kernel and Softmax perform well. 
+  \item The test accuracy is improved with larger vocabulary size. This makes sense since the more granularity the local descriptors are, the better they could represent the discriminative characteristics.
 \end{enumerate}
 
 \section{TODO}
 \begin{enumerate}
-  \item We will implement the global descriptor approach. We then compare the pro and con between these two approaches.
+  \item We will work on the global descriptor approach and then compare the pro and con between these two approaches.
   \item Swedish data set is high quality dataset with large samples per species and we will test our BoF system with more challenging data set. We expect worse test results and this will give us motivation to enhance our system.
   \item We reduce the total number of local descriptors for build the vocabulary by limiting the samples. We plan to use the dimension reduction techniques (e.g. PCA) for such task.
 \end{enumerate}
@@ -114,19 +115,16 @@ We noted that
 Charles Mallah, James Cope, James Orwell. Plant Leaf Classification Using Probabilistic Integration of Shape, Texture and Margin Features. Signal Processing, Pattern Recognition and Applications, in press. 2013
 
 \bibitem{Itheri}
-Itheri Yahiaoui, Nicolas Herve ́, and Nozha Boujemaa, “Shape-based image re- trieval in botanical collections,” Lecture Notes in Computer Science including subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinfor- matics, vol. 4261 LNCS, pp. 357–364, 2006.
+Itheri Yahiaoui, Nicolas Herve, and Nozha Boujemaa. Shape-based image re-trieval in botanical collections, Lecture Notes in Computer Science including subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinfor matics, vol. 4261 LNCS, pp 357-364, 2006.
 
 \bibitem{Pedro13}
-Evaluation of Features for Leaf Discrimination, Pedro F. B. Silva, Andre R.S. Marcal, Rubim M. Almeida da Silva (2013), Springer Lecture Notes in Computer Science, Vol. 7950, 197-204.
+Pedro F. B. Silva, Andre R.S. Marcal, Rubim M. Almeida da Silva. Evaluation of Features for Leaf Discrimination. 2013. Springer Lecture Notes in Computer Science, Vol. 7950, 197-204.
 
 \bibitem{UCIDataSet}
 https://archive.ics.uci.edu/ml/datasets/Leaf
 
-\bibitem{KaggleDataSet}
-'Evaluation of Features for Leaf Discrimination', Pedro F.B. Silva, Andre R.S. Marcal, Rubim M. Almeida da Silva (2013). Springer Lecture Notes in Computer Science, Vol. 7950, 197-204.
-
 \bibitem{SwedishLeafDataset}
-Oskar J. O. Söderkvist, “Computer vision classifcation of leaves from swedish trees,” Master’s Thesis, Linkoping University, 2001.
+Oskar J. O. Söderkvist. Computer vision classifcation of leaves from swedish trees. Master's Thesis, Linkoping University, 2001.
 
 \bibitem{FlaviaDataset}
 Stephen Gang Wu, Forrest Sheng Bao, Eric You Xu, Yu-Xuan Wang, Yi-Fan Chang and Chiao-Liang Shiang, A Leaf Recognition Algorithm for Plant classification Using Probabilistic Neural Network, IEEE 7th International Symposium on Signal Processing and Information Technology, Dec. 2007, Cario, Egypt
