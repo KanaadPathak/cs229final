@@ -27,23 +27,16 @@ class Classifier(object):
 
 class SoftMax(Classifier):
   def __init__(self, data_set, configs):
-    best_c=1.0; max_score=0
-    for c in configs['c_range']:
-      best_c = 0.1
-      clf=linear_model.LogisticRegression(penalty='l2', C=c, solver='sag', multi_class='multinomial', verbose=0, warm_start=False, n_jobs=-1)
-      scores = cross_val_score(clf, data_set.X_train, data_set.y_train, cv=10);
-      m = scores.mean()
-      logging.debug("Training Accuracy (c=%f): %0.2f (+/- %0.2f)" % (c, m, scores.std() * 2))
-      if m>max_score: best_c=c; max_score=m;
-    clf=linear_model.LogisticRegression(penalty='l2', C=best_c, solver='sag', multi_class='multinomial', verbose=0, warm_start=False, n_jobs=-1)
-    clf.fit(data_set.X_train, data_set.y_train)
-    logging.info("Training Accuracy(C=%f): %.2f" % (best_c, max_score))
-    self.clf = clf
+    parameters = {'C': configs['c_range']}
+    clf=linear_model.LogisticRegression(penalty='l2', solver='newton-cg', multi_class='multinomial')
+    self.clf = GridSearchCV(clf, parameters, n_jobs=-1)
+    self.clf.fit(data_set.X_train, data_set.y_train)
+    logging.info("Training Accuracy(C=%f) %.4f" % (self.clf.best_params_['C'], self.clf.best_score_))
 
 class SVM(Classifier):
   def __init__(self, data_set, parameters):
     svr = SVC()
-    self.clf = GridSearchCV(svr, parameters)
+    self.clf = GridSearchCV(svr, parameters, n_jobs=-1)
     self.clf.fit(data_set.X_train, data_set.y_train)
 
 class SVMGaussianKernel(SVM):
@@ -53,13 +46,13 @@ class SVMGaussianKernel(SVM):
     s = ""
     for k in ('C', 'gamma'):
       s += " {0:s}={1:.2f} ".format(k, self.clf.best_params_[k])
-    logging.info("Training Accuracy(%s): %.2f" % (s, self.clf.best_score_))
+    logging.info("Training Accuracy(%s): %.4f" % (s, self.clf.best_score_))
 
 class SVMLinearKernel(SVM):
   def __init__(self, data_set, configs):
     parameters = {'kernel': ['linear'], 'C': configs['c_range']}
     SVM.__init__(self, data_set, parameters)
-    logging.info("Training Accuracy(C=%f) %.2f" % (self.clf.best_params_['C'], self.clf.best_score_))
+    logging.info("Training Accuracy(C=%f) %.4f" % (self.clf.best_params_['C'], self.clf.best_score_))
 
 def selectModel(data_set, models):
   for (model, configs) in models:
@@ -67,7 +60,7 @@ def selectModel(data_set, models):
     t0 = time.time()
     clf = model(data_set, configs)
     score = clf.score(data_set)
-    logging.info("%s (%.2f) Test Accuracy: %0.2f" % (str(model), time.time()-t0, score))
+    logging.info("%s (%.2f) Test Accuracy: %0.4f" % (str(model), time.time()-t0, score))
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser(description=__doc__, version=__version__)
