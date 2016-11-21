@@ -82,6 +82,8 @@ if __name__ == "__main__":
 
   data_set = bof.BoFDataSet(args.train_file, args.test_file)
   #data_set = dataset.PSDataSet(args.train_file, args.test_file)
+  logging.info("Train data: %d x %d"%(len(data_set.X_train), data_set.X_train[0].size))
+  logging.info("Test data: %d x %d"%(len(data_set.X_test), data_set.X_test[0].size))
 
   classifiers = (SVMGaussianKernel, SVMLinearKernel, SoftMax)
   configs=(
@@ -90,7 +92,7 @@ if __name__ == "__main__":
      'c_range' : np.logspace(-4, 6, 11), #np.logspace(1, 9, 6, endpoint=True),
       #gamma = 1/(2*tao^2)
      'gamma_range' : np.logspace(-5, 9, 15), #np.linspace(1.0/(2*8*8), 1, 1, endpoint=True),
-     'skip' : True,
+     'skip' : False,
     },
     {
       #SVMGaussianLinear
