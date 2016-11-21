@@ -89,8 +89,8 @@ During preprocessing, raw images are converted to gray-scaled images and resized
     \hline\hline
     Vocabulary size & Softmax &  Linear SVM  & RBF SVM \\
     \hline
-    100  &  0.71 & 0.86 & 0.87\\
-    1000 &  0.79 & 0.93 & 0.93
+    100  &  0.86 & 0.86 & 0.87\\
+    1000 &  0.93 & 0.93 & 0.93
   \end{tabular}
   \label{table:prelimaryresult}
 \end{table}
@@ -98,7 +98,7 @@ During preprocessing, raw images are converted to gray-scaled images and resized
 
 We noted that
 \begin{enumerate}
-  \item Since there are relative large features per training sample, we are not surprised that SVM with linear kernel performs well. However, there seems to be overfitting for Softmax.
+  \item Since there are relative large features per training sample, we are not surprised that SVM with linear kernel and Softmax performs well. 
   \item The test accuracy is improved with larger vocabulary size. This makes sense since more local feature descriptors could represent the discriminative characteristics better and hence better accuracy.
 \end{enumerate}
 
