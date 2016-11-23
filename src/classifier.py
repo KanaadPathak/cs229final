@@ -36,7 +36,7 @@ class SoftMax(Classifier):
 class SVM(Classifier):
   def __init__(self, data_set, parameters):
     svr = SVC()
-    self.clf = GridSearchCV(svr, parameters, n_jobs=-1)
+    self.clf = GridSearchCV(svr, parameters, verbose=9, n_jobs=-1)
     self.clf.fit(data_set.X_train, data_set.y_train)
 
 class SVMGaussianKernel(SVM):
@@ -85,7 +85,7 @@ if __name__ == "__main__":
      'c_range' : np.logspace(-4, 6, 11), #np.logspace(1, 9, 6, endpoint=True),
       #gamma = 1/(2*tao^2)
      'gamma_range' : np.logspace(-5, 9, 15), #np.linspace(1.0/(2*8*8), 1, 1, endpoint=True),
-     'skip' : False,
+     'skip' : True,
     },
     {
       #SVMGaussianLinear
@@ -95,7 +95,7 @@ if __name__ == "__main__":
     {
       #Softmax
       'c_range' : np.logspace(-4, 6, 11, endpoint=True), #np.logspace(-4, 6, 11)
-      'skip' : False,
+      'skip' : True,
     },
   )
   selectModel(data_set, zip(classifiers, configs))

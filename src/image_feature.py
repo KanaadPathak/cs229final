@@ -62,3 +62,39 @@ class SiftDescriptor(ImageFeatureDescriptor):
   def get_size(self):
     return 128
 
+
+class HogDescriptor(object):
+  """  represents HOG descriptor
+  These seems to be fixed in open cv
+  #block_size is fixed at (16,16) and cell_size at (8,8)
+  #nbins fixed at 9
+  The following are configurable but may require regenerate samples
+  """
+  _parameters = {
+    'shrink_w_size' : 128, #shrink before detection
+    'window_size' : (128, 256), #detection window size,
+    'step_size' : (16,16), # step size of x and y, larger faster with less window, start off from (4,4)
+    'padding' : (0,0), # Typical values for padding include (8, 8), (16, 16), (24, 24), and (32, 32)
+    'scale' : 1.5, # each level decrease by 1/scale, until image size is less or equal of windows size
+    'use_mean_shift' : False, #NMS instead
+    'threshold' : 0.2, #threhold of merging two box if they overlap by this percentage, usually 0.3~0.5
+  }
+  @classmethod
+  def get_parameter(cls, k):
+    return cls._parameters[k] if k in cls._parameters else None
+
+  def extract(self, img):
+    desc = self.descriptor.compute(img)
+    return desc.flatten()
+
+  def __init__(self, parameters=None):
+    if parameters is not None:
+      for (k,v) in parameters.items():
+        if k in HogDescriptor._parameters:
+          HogDescriptor._parameters[k] = v
+    win_size = HogDescriptor._parameters['window_size']
+    block_size = (16,16)
+    block_stride = (8,8)
+    cell_size = (8,8)
+    nbins = 9
+    self.descriptor = cv2.HOGDescriptor(win_size, block_size, block_stride, cell_size, nbins)

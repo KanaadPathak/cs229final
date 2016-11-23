@@ -4,17 +4,14 @@
 """
 __version__ = "0.1"
 import argparse, sys, os
-import cv2
 import logging
-import numpy as np
 import pickle
-from abc import ABCMeta, abstractmethod
+import time
 from codebook import *
 from image_feature import *
 from preprocess import *
 from sklearn.cluster import KMeans
 from sklearn.feature_extraction.text import TfidfTransformer
-from scipy import sparse
 
 class TermSerializer(object):
   @classmethod
@@ -76,9 +73,15 @@ class BagOfFeature(object):
 
 
 def process(configs):
+  t0= time.time()
   bof = BagOfFeature(configs)
+  t1= time.time()
+  logging.info("Takes %.2f to build codebook" % (t1-t0))
   for (i,o) in (('train_records_file', 'train_output'), ('test_records_file', 'test_output')):
+    t0= time.time()
     data = bof.map_feature(configs[i])
+    t1= time.time()
+    logging.info("Takes %.2f to assign terms for %s" % (t1-t0, configs[i]) )
     TermSerializer.serialize(configs[o], data)
 
 if __name__ == "__main__":
