@@ -41,7 +41,9 @@ class Codebook(object):
 
   def assign_term(self, img):
     fv = self.descriptor.extract(img)
+    assert fv is not None, 'image descriptor is empty'
     return self.estimator.predict(fv)
+
 
   def get_clustersize(self):
     return self.estimator.n_clusters

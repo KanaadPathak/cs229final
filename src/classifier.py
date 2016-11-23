@@ -29,7 +29,7 @@ class SoftMax(Classifier):
   def __init__(self, data_set, configs):
     parameters = {'C': configs['c_range']}
     clf=linear_model.LogisticRegression(penalty='l2', solver='newton-cg', multi_class='multinomial')
-    self.clf = GridSearchCV(clf, parameters, n_jobs=-1)
+    self.clf = GridSearchCV(clf, parameters, n_jobs=1)
     self.clf.fit(data_set.X_train, data_set.y_train)
     logging.info("Training Accuracy(C=%f) %.4f" % (self.clf.best_params_['C'], self.clf.best_score_))
 

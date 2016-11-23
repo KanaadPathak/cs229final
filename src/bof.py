@@ -63,7 +63,15 @@ class BagOfFeature(object):
     return zip(labels, tfidf.toarray())
 
   def __init__(self, configs):
-    descriptor = SiftDescriptor(SiftDetector())
+    detector = SiftDetector()
+    if 'detector' in configs and configs['detector'] is not None:
+      detector_type = configs['detector']
+      logging.info("using detector: %(detector_type)s" % locals() )
+      if detector_type.lower() == 'dense':
+        detector = DenseDetector(configs)
+      else:
+        raise 'unknown detectory type: %(detector_type)s' % locals()
+    descriptor = SiftDescriptor(detector)
     self.cb = Codebook.build(configs['train_records_file'], descriptor, ClusterKMeans(), configs['K'])
 
 
@@ -75,17 +83,14 @@ def process(configs):
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser(description=__doc__, version=__version__)
-  parser.add_argument('-l', dest='logLevel', default='info',
-      help="logging level: {debug, info, error}")
-
-  for (k,h) in (('K', "size of the codebook"),):
-    parser.add_argument('--'+k, dest=k, type=int, help=h)
+  parser.add_argument('-l', dest='logLevel', default='info', help="logging level: {debug, info, error}")
+  for (k, t, h) in (('K', int, "size of the codebook"), ('detector', str, "type of detector to use")):
+    parser.add_argument('--'+k, dest=k, type=t, help=h)
 
   for f in ('train_records_file', 'test_records_file', 'train_output', 'test_output'):
     parser.add_argument(f, help = "supply filename for %s" % f)
 
   args = parser.parse_args()
-  logging.basicConfig(level=getattr(logging, args.logLevel.upper()),
-                      format='%(asctime)s %(levelname)s %(message)s')
+  logging.basicConfig(level=getattr(logging, args.logLevel.upper()), format='%(asctime)s %(levelname)s %(message)s')
   logging.debug(str(args))
   process(vars(args))
