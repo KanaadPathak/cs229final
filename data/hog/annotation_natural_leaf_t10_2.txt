@@ -1,0 +1,1248 @@
+/tmp/pos_hand/0.jpg 1 103 0 449 757
+/tmp/pos_hand/10021.jpg 1 245 18 380 503
+/tmp/pos_hand/10052.jpg 0
+/tmp/pos_hand/10055.jpg 1 97 182 528 339
+/tmp/pos_hand/10063.jpg 1 5 81 522 676
+/tmp/pos_hand/10065.jpg 1 193 88 242 551
+/tmp/pos_hand/10086.jpg 1 29 7 472 733
+/tmp/pos_hand/10100.jpg 0
+/tmp/pos_hand/10101.jpg 1 67 45 470 660
+/tmp/pos_hand/10105.jpg 1 292 71 248 353
+/tmp/pos_hand/10106.jpg 0
+/tmp/pos_hand/10109.jpg 0
+/tmp/pos_hand/1012.jpg 1 23 14 496 782
+/tmp/pos_hand/10142.jpg 1 77 0 720 593
+/tmp/pos_hand/10145.jpg 0
+/tmp/pos_hand/10151.jpg 1 88 2 644 522
+/tmp/pos_hand/10178.jpg 1 37 17 463 695
+/tmp/pos_hand/10183.jpg 1 2 3 573 738
+/tmp/pos_hand/10191.jpg 1 65 94 433 550
+/tmp/pos_hand/10200.jpg 1 260 140 357 390
+/tmp/pos_hand/10240.jpg 1 463 14 167 290
+/tmp/pos_hand/10244.jpg 0
+/tmp/pos_hand/10259.jpg 0
+/tmp/pos_hand/10268.jpg 0
+/tmp/pos_hand/10272.jpg 0
+/tmp/pos_hand/10279.jpg 0
+/tmp/pos_hand/10295.jpg 1 216 32 369 441
+/tmp/pos_hand/10296.jpg 0
+/tmp/pos_hand/10334.jpg 0
+/tmp/pos_hand/10343.jpg 0
+/tmp/pos_hand/10345.jpg 0
+/tmp/pos_hand/10346.jpg 0
+/tmp/pos_hand/10349.jpg 1 141 209 223 306
+/tmp/pos_hand/10356.jpg 0
+/tmp/pos_hand/10378.jpg 1 328 3 114 195
+/tmp/pos_hand/10385.jpg 1 19 26 576 720
+/tmp/pos_hand/10386.jpg 0
+/tmp/pos_hand/10387.jpg 1 143 16 348 641
+/tmp/pos_hand/10394.jpg 0
+/tmp/pos_hand/10398.jpg 1 75 43 343 412
+/tmp/pos_hand/10403.jpg 1 245 151 47 123
+/tmp/pos_hand/1043.jpg 1 21 55 478 622
+/tmp/pos_hand/10434.jpg 1 13 1 428 608
+/tmp/pos_hand/10435.jpg 1 19 2 584 672
+/tmp/pos_hand/10476.jpg 1 78 83 505 576
+/tmp/pos_hand/10495.jpg 1 9 24 589 718
+/tmp/pos_hand/10497.jpg 1 138 154 469 358
+/tmp/pos_hand/1050.jpg 1 230 48 181 234
+/tmp/pos_hand/10500.jpg 0
+/tmp/pos_hand/10509.jpg 1 78 56 424 531
+/tmp/pos_hand/10521.jpg 1 295 53 153 333
+/tmp/pos_hand/10525.jpg 0
+/tmp/pos_hand/10532.jpg 1 83 11 548 565
+/tmp/pos_hand/10533.jpg 1 301 37 258 338
+/tmp/pos_hand/10554.jpg 1 9 96 378 561
+/tmp/pos_hand/10563.jpg 1 102 8 643 581
+/tmp/pos_hand/10566.jpg 1 407 92 248 251
+/tmp/pos_hand/1058.jpg 1 175 69 173 195
+/tmp/pos_hand/10597.jpg 1 241 33 377 351
+/tmp/pos_hand/10599.jpg 1 223 45 369 418
+/tmp/pos_hand/10608.jpg 0
+/tmp/pos_hand/10629.jpg 1 5 8 588 714
+/tmp/pos_hand/10631.jpg 1 115 111 369 531
+/tmp/pos_hand/10632.jpg 0
+/tmp/pos_hand/10637.jpg 1 9 0 580 703
+/tmp/pos_hand/10640.jpg 0
+/tmp/pos_hand/10652.jpg 1 88 158 333 593
+/tmp/pos_hand/10660.jpg 1 111 8 572 516
+/tmp/pos_hand/10669.jpg 1 191 5 500 527
+/tmp/pos_hand/10689.jpg 1 89 69 391 590
+/tmp/pos_hand/10708.jpg 1 170 1 349 499
+/tmp/pos_hand/10723.jpg 1 29 44 453 601
+/tmp/pos_hand/10728.jpg 1 11 48 584 689
+/tmp/pos_hand/10735.jpg 1 59 79 434 607
+/tmp/pos_hand/10740.jpg 1 8 61 434 607
+/tmp/pos_hand/10744.jpg 0
+/tmp/pos_hand/10747.jpg 1 39 5 486 681
+/tmp/pos_hand/10789.jpg 1 35 11 544 696
+/tmp/pos_hand/1079.jpg 1 71 4 469 587
+/tmp/pos_hand/10791.jpg 1 16 3 572 751
+/tmp/pos_hand/10802.jpg 0
+/tmp/pos_hand/10834.jpg 1 38 44 535 630
+/tmp/pos_hand/10836.jpg 1 582 55 134 165
+/tmp/pos_hand/10851.jpg 0
+/tmp/pos_hand/10859.jpg 1 115 116 422 548
+/tmp/pos_hand/1088.jpg 1 57 20 421 566
+/tmp/pos_hand/10883.jpg 1 75 7 262 380
+/tmp/pos_hand/10892.jpg 0
+/tmp/pos_hand/10906.jpg 1 88 1 622 529
+/tmp/pos_hand/10923.jpg 1 183 185 248 383
+/tmp/pos_hand/10959.jpg 0
+/tmp/pos_hand/1096.jpg 1 88 71 413 662
+/tmp/pos_hand/11003.jpg 1 94 13 497 698
+/tmp/pos_hand/1101.jpg 1 188 94 149 270
+/tmp/pos_hand/11025.jpg 1 288 254 67 134
+/tmp/pos_hand/11044.jpg 1 73 18 423 532
+/tmp/pos_hand/11050.jpg 1 36 28 435 545
+/tmp/pos_hand/11053.jpg 1 147 0 341 675
+/tmp/pos_hand/11105.jpg 1 135 13 543 475
+/tmp/pos_hand/11107.jpg 1 25 78 467 550
+/tmp/pos_hand/11120.jpg 1 100 5 640 515
+/tmp/pos_hand/11131.jpg 1 7 73 476 675
+/tmp/pos_hand/11148.jpg 1 163 38 377 420
+/tmp/pos_hand/11176.jpg 1 76 25 368 688
+/tmp/pos_hand/11194.jpg 1 135 76 166 328
+/tmp/pos_hand/1121.jpg 1 44 95 451 650
+/tmp/pos_hand/11223.jpg 1 25 13 382 704
+/tmp/pos_hand/11229.jpg 1 61 40 444 652
+/tmp/pos_hand/11239.jpg 1 38 51 397 657
+/tmp/pos_hand/1125.jpg 1 210 92 176 268
+/tmp/pos_hand/11263.jpg 1 103 128 225 377
+/tmp/pos_hand/11281.jpg 1 39 115 414 426
+/tmp/pos_hand/11289.jpg 1 203 101 456 403
+/tmp/pos_hand/11293.jpg 1 133 145 131 307
+/tmp/pos_hand/11295.jpg 1 257 123 126 266
+/tmp/pos_hand/11337.jpg 1 99 28 535 447
+/tmp/pos_hand/11342.jpg 1 316 10 164 240
+/tmp/pos_hand/11344.jpg 1 54 71 503 627
+/tmp/pos_hand/11359.jpg 1 58 179 411 379
+/tmp/pos_hand/11367.jpg 0
+/tmp/pos_hand/11390.jpg 1 207 28 149 255
+/tmp/pos_hand/11395.jpg 1 19 79 525 665
+/tmp/pos_hand/11409.jpg 1 312 52 141 350
+/tmp/pos_hand/11437.jpg 1 104 45 341 651
+/tmp/pos_hand/11462.jpg 1 55 35 444 663
+/tmp/pos_hand/11496.jpg 1 187 85 277 459
+/tmp/pos_hand/11499.jpg 1 12 32 571 681
+/tmp/pos_hand/11525.jpg 1 16 120 545 549
+/tmp/pos_hand/11538.jpg 0
+/tmp/pos_hand/11560.jpg 1 130 212 293 360
+/tmp/pos_hand/11581.jpg 1 151 50 296 590
+/tmp/pos_hand/11594.jpg 1 277 43 164 357
+/tmp/pos_hand/11602.jpg 0
+/tmp/pos_hand/11614.jpg 0
+/tmp/pos_hand/11618.jpg 0
+/tmp/pos_hand/11644.jpg 0
+/tmp/pos_hand/11646.jpg 0
+/tmp/pos_hand/11666.jpg 0
+/tmp/pos_hand/11667.jpg 0
+/tmp/pos_hand/11668.jpg 0
+/tmp/pos_hand/11678.jpg 0
+/tmp/pos_hand/11689.jpg 0
+/tmp/pos_hand/11700.jpg 1 67 21 521 525
+/tmp/pos_hand/11705.jpg 1 27 29 542 683
+/tmp/pos_hand/11739.jpg 1 124 51 288 483
+/tmp/pos_hand/11755.jpg 1 89 71 297 581
+/tmp/pos_hand/11768.jpg 1 167 17 577 504
+/tmp/pos_hand/11777.jpg 1 124 1 587 519
+/tmp/pos_hand/11792.jpg 1 88 5 571 521
+/tmp/pos_hand/11796.jpg 1 56 230 137 144
+/tmp/pos_hand/11805.jpg 1 452 82 79 140
+/tmp/pos_hand/11806.jpg 1 139 57 482 468
+/tmp/pos_hand/11810.jpg 1 65 165 475 556
+/tmp/pos_hand/11833.jpg 1 10 25 565 604
+/tmp/pos_hand/11858.jpg 1 255 5 174 301
+/tmp/pos_hand/11870.jpg 1 26 81 482 455
+/tmp/pos_hand/11880.jpg 1 160 131 492 421
+/tmp/pos_hand/11883.jpg 1 21 92 499 642
+/tmp/pos_hand/11891.jpg 0
+/tmp/pos_hand/11906.jpg 1 187 50 123 214
+/tmp/pos_hand/11911.jpg 1 50 4 672 521
+/tmp/pos_hand/11935.jpg 0
+/tmp/pos_hand/11955.jpg 1 44 83 446 449
+/tmp/pos_hand/11971.jpg 0
+/tmp/pos_hand/11977.jpg 1 96 13 293 632
+/tmp/pos_hand/11986.jpg 0
+/tmp/pos_hand/11987.jpg 1 154 241 199 307
+/tmp/pos_hand/12007.jpg 1 190 11 192 368
+/tmp/pos_hand/12009.jpg 1 47 4 445 694
+/tmp/pos_hand/12010.jpg 1 12 54 479 645
+/tmp/pos_hand/12040.jpg 1 23 40 440 698
+/tmp/pos_hand/12053.jpg 1 225 170 130 284
+/tmp/pos_hand/12060.jpg 1 231 16 110 173
+/tmp/pos_hand/12092.jpg 1 230 2 252 282
+/tmp/pos_hand/12125.jpg 1 111 48 320 491
+/tmp/pos_hand/12129.jpg 1 15 99 544 585
+/tmp/pos_hand/12130.jpg 1 27 138 394 472
+/tmp/pos_hand/12134.jpg 0
+/tmp/pos_hand/12148.jpg 1 62 3 326 611
+/tmp/pos_hand/12155.jpg 1 197 80 102 221
+/tmp/pos_hand/12166.jpg 1 49 117 447 622
+/tmp/pos_hand/12170.jpg 1 110 11 561 433
+/tmp/pos_hand/12180.jpg 1 18 147 418 499
+/tmp/pos_hand/12192.jpg 0
+/tmp/pos_hand/12199.jpg 1 180 52 336 383
+/tmp/pos_hand/12201.jpg 1 17 104 430 616
+/tmp/pos_hand/12202.jpg 1 10 58 504 665
+/tmp/pos_hand/12206.jpg 1 43 97 460 632
+/tmp/pos_hand/12207.jpg 1 58 202 239 426
+/tmp/pos_hand/12209.jpg 1 219 135 96 169
+/tmp/pos_hand/12210.jpg 1 100 35 368 682
+/tmp/pos_hand/12212.jpg 1 326 38 93 149
+/tmp/pos_hand/12228.jpg 1 54 178 484 529
+/tmp/pos_hand/12241.jpg 1 26 1 390 601
+/tmp/pos_hand/12280.jpg 0
+/tmp/pos_hand/123.jpg 1 132 153 190 189
+/tmp/pos_hand/1230.jpg 1 4 124 406 556
+/tmp/pos_hand/12314.jpg 1 36 0 386 470
+/tmp/pos_hand/12323.jpg 1 324 55 163 338
+/tmp/pos_hand/1233.jpg 0
+/tmp/pos_hand/1234.jpg 1 165 68 262 548
+/tmp/pos_hand/12343.jpg 0
+/tmp/pos_hand/12350.jpg 1 129 166 251 422
+/tmp/pos_hand/12367.jpg 1 142 125 429 433
+/tmp/pos_hand/12373.jpg 0
+/tmp/pos_hand/12384.jpg 1 58 53 481 669
+/tmp/pos_hand/12406.jpg 1 340 117 233 242
+/tmp/pos_hand/12452.jpg 1 6 8 430 584
+/tmp/pos_hand/12454.jpg 1 133 186 348 475
+/tmp/pos_hand/1251.jpg 1 1 52 425 662
+/tmp/pos_hand/1254.jpg 1 69 59 349 444
+/tmp/pos_hand/12549.jpg 1 7 9 575 740
+/tmp/pos_hand/12568.jpg 1 191 120 151 266
+/tmp/pos_hand/12586.jpg 1 63 109 333 582
+/tmp/pos_hand/12600.jpg 1 90 13 474 606
+/tmp/pos_hand/12607.jpg 1 171 4 628 523
+/tmp/pos_hand/12631.jpg 1 9 48 296 422
+/tmp/pos_hand/12666.jpg 1 10 51 729 455
+/tmp/pos_hand/12667.jpg 1 67 4 360 470
+/tmp/pos_hand/12675.jpg 1 302 226 172 243
+/tmp/pos_hand/12682.jpg 1 313 18 225 216
+/tmp/pos_hand/12683.jpg 1 411 503 100 128
+/tmp/pos_hand/12713.jpg 0
+/tmp/pos_hand/1272.jpg 1 47 20 480 709
+/tmp/pos_hand/12720.jpg 1 137 41 503 507
+/tmp/pos_hand/12747.jpg 1 35 88 466 534
+/tmp/pos_hand/12748.jpg 1 102 65 365 550
+/tmp/pos_hand/12752.jpg 1 10 2 486 490
+/tmp/pos_hand/12759.jpg 1 25 42 328 637
+/tmp/pos_hand/12765.jpg 1 55 65 395 670
+/tmp/pos_hand/1278.jpg 1 4 95 439 615
+/tmp/pos_hand/12815.jpg 1 231 2 210 370
+/tmp/pos_hand/12816.jpg 1 155 24 199 254
+/tmp/pos_hand/12828.jpg 1 31 25 552 671
+/tmp/pos_hand/12834.jpg 0
+/tmp/pos_hand/12881.jpg 1 95 111 349 405
+/tmp/pos_hand/12910.jpg 1 196 123 213 191
+/tmp/pos_hand/12919.jpg 0
+/tmp/pos_hand/1292.jpg 1 82 11 441 687
+/tmp/pos_hand/1294.jpg 1 77 96 392 484
+/tmp/pos_hand/12951.jpg 1 49 15 599 508
+/tmp/pos_hand/12963.jpg 1 38 184 221 197
+/tmp/pos_hand/12986.jpg 1 8 59 439 609
+/tmp/pos_hand/13017.jpg 1 56 44 386 623
+/tmp/pos_hand/13021.jpg 0
+/tmp/pos_hand/13030.jpg 1 210 86 366 371
+/tmp/pos_hand/13036.jpg 1 482 94 169 262
+/tmp/pos_hand/13037.jpg 1 74 6 435 742
+/tmp/pos_hand/13039.jpg 1 18 39 338 575
+/tmp/pos_hand/1304.jpg 1 98 0 696 607
+/tmp/pos_hand/13044.jpg 1 199 5 471 501
+/tmp/pos_hand/13054.jpg 1 143 239 235 285
+/tmp/pos_hand/13061.jpg 1 74 44 324 586
+/tmp/pos_hand/13064.jpg 1 55 31 512 579
+/tmp/pos_hand/13070.jpg 0
+/tmp/pos_hand/13073.jpg 1 100 67 324 579
+/tmp/pos_hand/13099.jpg 1 7 89 468 569
+/tmp/pos_hand/13127.jpg 1 218 87 346 274
+/tmp/pos_hand/13128.jpg 1 8 33 615 603
+/tmp/pos_hand/13139.jpg 1 113 76 381 597
+/tmp/pos_hand/13151.jpg 1 99 14 552 480
+/tmp/pos_hand/1319.jpg 1 40 52 512 628
+/tmp/pos_hand/1321.jpg 0
+/tmp/pos_hand/13229.jpg 1 92 13 640 504
+/tmp/pos_hand/13234.jpg 1 134 5 602 498
+/tmp/pos_hand/13244.jpg 1 9 103 586 543
+/tmp/pos_hand/13249.jpg 0
+/tmp/pos_hand/13267.jpg 1 110 35 349 608
+/tmp/pos_hand/1327.jpg 1 222 148 141 200
+/tmp/pos_hand/13279.jpg 1 64 6 402 726
+/tmp/pos_hand/13350.jpg 1 23 7 748 628
+/tmp/pos_hand/13352.jpg 1 140 120 282 540
+/tmp/pos_hand/13359.jpg 1 9 19 541 680
+/tmp/pos_hand/13367.jpg 1 143 246 319 410
+/tmp/pos_hand/13402.jpg 1 208 21 136 207
+/tmp/pos_hand/13411.jpg 1 131 27 319 620
+/tmp/pos_hand/13468.jpg 1 8 2 654 513
+/tmp/pos_hand/13474.jpg 0
+/tmp/pos_hand/13477.jpg 1 64 115 368 467
+/tmp/pos_hand/13500.jpg 0
+/tmp/pos_hand/13503.jpg 0
+/tmp/pos_hand/13516.jpg 1 210 0 277 429
+/tmp/pos_hand/1352.jpg 1 70 9 273 702
+/tmp/pos_hand/13521.jpg 1 32 17 556 718
+/tmp/pos_hand/13525.jpg 1 564 145 80 111
+/tmp/pos_hand/13547.jpg 0
+/tmp/pos_hand/13560.jpg 1 10 30 482 613
+/tmp/pos_hand/13578.jpg 0
+/tmp/pos_hand/13630.jpg 1 58 51 279 542
+/tmp/pos_hand/13634.jpg 1 105 36 544 492
+/tmp/pos_hand/13645.jpg 1 95 143 390 495
+/tmp/pos_hand/13655.jpg 1 24 82 486 504
+/tmp/pos_hand/13669.jpg 1 89 94 395 539
+/tmp/pos_hand/13682.jpg 1 29 14 377 686
+/tmp/pos_hand/13720.jpg 1 416 4 175 358
+/tmp/pos_hand/13724.jpg 1 6 9 441 722
+/tmp/pos_hand/13733.jpg 1 147 104 208 372
+/tmp/pos_hand/13734.jpg 0
+/tmp/pos_hand/13748.jpg 0
+/tmp/pos_hand/13751.jpg 1 32 11 585 731
+/tmp/pos_hand/13797.jpg 1 137 185 195 315
+/tmp/pos_hand/13820.jpg 1 13 8 764 575
+/tmp/pos_hand/13845.jpg 1 114 79 426 568
+/tmp/pos_hand/13858.jpg 1 138 79 307 572
+/tmp/pos_hand/13872.jpg 1 461 73 63 157
+/tmp/pos_hand/13875.jpg 1 45 2 442 722
+/tmp/pos_hand/1388.jpg 1 148 169 287 512
+/tmp/pos_hand/13954.jpg 1 11 2 585 580
+/tmp/pos_hand/13958.jpg 1 147 153 284 401
+/tmp/pos_hand/14002.jpg 1 302 335 90 180
+/tmp/pos_hand/14016.jpg 1 108 86 529 490
+/tmp/pos_hand/14021.jpg 1 327 157 74 135
+/tmp/pos_hand/14023.jpg 0
+/tmp/pos_hand/14034.jpg 0
+/tmp/pos_hand/14042.jpg 1 28 7 491 604
+/tmp/pos_hand/14050.jpg 1 68 14 360 660
+/tmp/pos_hand/14061.jpg 0
+/tmp/pos_hand/14070.jpg 1 588 5 73 226
+/tmp/pos_hand/14085.jpg 1 184 1 165 272
+/tmp/pos_hand/1409.jpg 1 80 130 352 485
+/tmp/pos_hand/14091.jpg 0
+/tmp/pos_hand/14094.jpg 0
+/tmp/pos_hand/14114.jpg 1 74 8 309 685
+/tmp/pos_hand/14115.jpg 1 57 203 453 543
+/tmp/pos_hand/14126.jpg 1 343 35 163 344
+/tmp/pos_hand/14170.jpg 1 23 19 487 543
+/tmp/pos_hand/14174.jpg 1 57 18 541 443
+/tmp/pos_hand/14185.jpg 1 319 114 387 391
+/tmp/pos_hand/14186.jpg 0
+/tmp/pos_hand/14188.jpg 1 319 3 158 271
+/tmp/pos_hand/14190.jpg 1 14 27 461 499
+/tmp/pos_hand/14193.jpg 1 33 21 442 505
+/tmp/pos_hand/14199.jpg 1 82 3 587 521
+/tmp/pos_hand/14202.jpg 0
+/tmp/pos_hand/14205.jpg 1 66 49 337 590
+/tmp/pos_hand/14232.jpg 1 124 40 377 676
+/tmp/pos_hand/14234.jpg 1 431 30 106 187
+/tmp/pos_hand/1424.jpg 1 24 91 513 126
+/tmp/pos_hand/14258.jpg 0
+/tmp/pos_hand/14289.jpg 0
+/tmp/pos_hand/14299.jpg 0
+/tmp/pos_hand/14322.jpg 0
+/tmp/pos_hand/14335.jpg 1 12 58 458 565
+/tmp/pos_hand/14336.jpg 0
+/tmp/pos_hand/14376.jpg 1 79 35 682 480
+/tmp/pos_hand/14384.jpg 1 170 62 512 349
+/tmp/pos_hand/1439.jpg 1 78 104 398 411
+/tmp/pos_hand/14409.jpg 0
+/tmp/pos_hand/14411.jpg 1 367 70 59 108
+/tmp/pos_hand/14429.jpg 1 183 1 320 461
+/tmp/pos_hand/14435.jpg 1 146 280 268 253
+/tmp/pos_hand/14439.jpg 1 14 20 424 699
+/tmp/pos_hand/14443.jpg 1 149 84 301 600
+/tmp/pos_hand/14449.jpg 1 344 58 163 226
+/tmp/pos_hand/14459.jpg 1 217 1 420 414
+/tmp/pos_hand/1446.jpg 1 131 98 282 405
+/tmp/pos_hand/14461.jpg 0
+/tmp/pos_hand/1447.jpg 1 104 7 475 429
+/tmp/pos_hand/14473.jpg 1 156 11 577 435
+/tmp/pos_hand/14478.jpg 1 147 22 315 633
+/tmp/pos_hand/14497.jpg 1 469 20 112 132
+/tmp/pos_hand/14505.jpg 1 16 50 507 499
+/tmp/pos_hand/14507.jpg 1 170 53 150 239
+/tmp/pos_hand/14511.jpg 1 113 115 249 176
+/tmp/pos_hand/14513.jpg 1 71 64 444 607
+/tmp/pos_hand/14516.jpg 1 11 152 399 340
+/tmp/pos_hand/14522.jpg 0
+/tmp/pos_hand/14530.jpg 0
+/tmp/pos_hand/14542.jpg 1 74 62 427 615
+/tmp/pos_hand/14548.jpg 0
+/tmp/pos_hand/14571.jpg 1 191 119 121 254
+/tmp/pos_hand/14581.jpg 1 96 27 418 566
+/tmp/pos_hand/14614.jpg 0
+/tmp/pos_hand/1462.jpg 1 5 72 578 671
+/tmp/pos_hand/14623.jpg 1 308 8 159 208
+/tmp/pos_hand/14625.jpg 1 192 273 120 243
+/tmp/pos_hand/14643.jpg 1 178 7 104 299
+/tmp/pos_hand/14645.jpg 1 137 17 287 635
+/tmp/pos_hand/14650.jpg 1 247 38 334 366
+/tmp/pos_hand/14656.jpg 1 115 97 430 631
+/tmp/pos_hand/14665.jpg 1 92 112 460 391
+/tmp/pos_hand/14668.jpg 1 393 88 98 190
+/tmp/pos_hand/14677.jpg 1 168 168 237 383
+/tmp/pos_hand/14704.jpg 1 47 11 450 541
+/tmp/pos_hand/14748.jpg 1 94 11 454 622
+/tmp/pos_hand/14749.jpg 0
+/tmp/pos_hand/14755.jpg 1 71 43 372 598
+/tmp/pos_hand/14765.jpg 1 11 163 477 413
+/tmp/pos_hand/14808.jpg 1 227 51 144 204
+/tmp/pos_hand/14819.jpg 0
+/tmp/pos_hand/14824.jpg 1 5 31 586 566
+/tmp/pos_hand/14859.jpg 1 449 101 251 289
+/tmp/pos_hand/14860.jpg 1 192 35 186 287
+/tmp/pos_hand/14885.jpg 1 40 91 550 552
+/tmp/pos_hand/14906.jpg 1 242 41 320 294
+/tmp/pos_hand/14926.jpg 1 64 133 500 370
+/tmp/pos_hand/14939.jpg 1 179 170 195 427
+/tmp/pos_hand/14941.jpg 0
+/tmp/pos_hand/15010.jpg 1 9 11 398 694
+/tmp/pos_hand/15020.jpg 1 169 96 104 144
+/tmp/pos_hand/15021.jpg 1 132 18 580 519
+/tmp/pos_hand/15051.jpg 1 129 29 296 603
+/tmp/pos_hand/15054.jpg 1 302 89 184 257
+/tmp/pos_hand/15066.jpg 1 45 15 349 616
+/tmp/pos_hand/15072.jpg 0
+/tmp/pos_hand/15091.jpg 1 133 11 518 412
+/tmp/pos_hand/15094.jpg 0
+/tmp/pos_hand/15102.jpg 1 106 170 379 432
+/tmp/pos_hand/15110.jpg 1 99 34 346 521
+/tmp/pos_hand/15119.jpg 1 52 15 534 697
+/tmp/pos_hand/15127.jpg 1 121 66 138 202
+/tmp/pos_hand/15132.jpg 1 59 12 461 703
+/tmp/pos_hand/15136.jpg 1 75 14 608 566
+/tmp/pos_hand/15146.jpg 1 52 0 390 703
+/tmp/pos_hand/1516.jpg 1 15 51 543 640
+/tmp/pos_hand/15187.jpg 1 160 3 448 407
+/tmp/pos_hand/15199.jpg 1 28 6 687 637
+/tmp/pos_hand/15202.jpg 1 57 78 340 609
+/tmp/pos_hand/15232.jpg 1 464 72 119 237
+/tmp/pos_hand/1525.jpg 1 4 77 473 499
+/tmp/pos_hand/1527.jpg 1 167 27 556 492
+/tmp/pos_hand/15273.jpg 1 31 46 456 648
+/tmp/pos_hand/15290.jpg 1 88 51 450 391
+/tmp/pos_hand/15310.jpg 1 310 123 152 171
+/tmp/pos_hand/15322.jpg 1 20 190 420 450
+/tmp/pos_hand/1533.jpg 1 63 45 490 652
+/tmp/pos_hand/15342.jpg 1 43 138 388 475
+/tmp/pos_hand/1535.jpg 1 173 68 190 301
+/tmp/pos_hand/15355.jpg 1 1 82 491 604
+/tmp/pos_hand/15356.jpg 1 164 151 143 249
+/tmp/pos_hand/15375.jpg 1 152 60 469 450
+/tmp/pos_hand/15384.jpg 1 251 7 199 332
+/tmp/pos_hand/15438.jpg 0
+/tmp/pos_hand/15440.jpg 1 169 86 297 495
+/tmp/pos_hand/15443.jpg 1 203 23 321 442
+/tmp/pos_hand/15452.jpg 1 4 131 413 419
+/tmp/pos_hand/15460.jpg 1 110 62 333 529
+/tmp/pos_hand/15467.jpg 1 122 17 583 522
+/tmp/pos_hand/15478.jpg 1 20 28 430 703
+/tmp/pos_hand/15480.jpg 1 56 66 378 440
+/tmp/pos_hand/15490.jpg 1 7 44 508 577
+/tmp/pos_hand/15493.jpg 1 106 99 346 507
+/tmp/pos_hand/15495.jpg 0
+/tmp/pos_hand/15509.jpg 0
+/tmp/pos_hand/15517.jpg 0
+/tmp/pos_hand/15529.jpg 1 10 171 431 453
+/tmp/pos_hand/15537.jpg 1 135 69 188 488
+/tmp/pos_hand/1555.jpg 1 136 69 293 568
+/tmp/pos_hand/15578.jpg 0
+/tmp/pos_hand/156.jpg 0
+/tmp/pos_hand/15607.jpg 0
+/tmp/pos_hand/15609.jpg 0
+/tmp/pos_hand/15611.jpg 1 390 18 140 253
+/tmp/pos_hand/15620.jpg 1 14 141 509 489
+/tmp/pos_hand/15625.jpg 1 52 15 438 596
+/tmp/pos_hand/1563.jpg 1 19 11 393 686
+/tmp/pos_hand/15632.jpg 0
+/tmp/pos_hand/15635.jpg 1 229 74 216 485
+/tmp/pos_hand/15643.jpg 1 39 42 722 439
+/tmp/pos_hand/15672.jpg 1 98 165 208 251
+/tmp/pos_hand/15699.jpg 0
+/tmp/pos_hand/15703.jpg 1 151 25 340 557
+/tmp/pos_hand/15708.jpg 0
+/tmp/pos_hand/15732.jpg 1 43 157 503 574
+/tmp/pos_hand/15737.jpg 1 168 7 546 519
+/tmp/pos_hand/15748.jpg 1 434 44 121 188
+/tmp/pos_hand/15783.jpg 1 18 19 414 707
+/tmp/pos_hand/15798.jpg 1 85 19 331 452
+/tmp/pos_hand/15817.jpg 1 78 156 394 424
+/tmp/pos_hand/15821.jpg 1 90 99 432 463
+/tmp/pos_hand/15829.jpg 1 88 9 552 421
+/tmp/pos_hand/15831.jpg 1 97 258 381 443
+/tmp/pos_hand/15844.jpg 1 23 55 544 466
+/tmp/pos_hand/15847.jpg 1 18 46 527 412
+/tmp/pos_hand/1586.jpg 0
+/tmp/pos_hand/15870.jpg 1 17 35 539 671
+/tmp/pos_hand/15886.jpg 1 114 4 343 278
+/tmp/pos_hand/15899.jpg 1 79 12 399 649
+/tmp/pos_hand/15903.jpg 1 132 66 271 584
+/tmp/pos_hand/15905.jpg 1 169 269 333 379
+/tmp/pos_hand/1591.jpg 1 39 31 279 273
+/tmp/pos_hand/15945.jpg 1 72 75 318 519
+/tmp/pos_hand/15981.jpg 1 116 100 328 430
+/tmp/pos_hand/16002.jpg 1 15 56 533 626
+/tmp/pos_hand/16004.jpg 1 234 39 159 440
+/tmp/pos_hand/16036.jpg 0
+/tmp/pos_hand/16038.jpg 1 53 31 618 488
+/tmp/pos_hand/16047.jpg 1 125 6 287 687
+/tmp/pos_hand/16062.jpg 1 132 50 333 612
+/tmp/pos_hand/16073.jpg 0
+/tmp/pos_hand/16074.jpg 1 0 12 535 716
+/tmp/pos_hand/16080.jpg 1 11 0 420 560
+/tmp/pos_hand/16090.jpg 1 75 48 601 522
+/tmp/pos_hand/16120.jpg 1 193 7 409 522
+/tmp/pos_hand/16130.jpg 0
+/tmp/pos_hand/16133.jpg 0
+/tmp/pos_hand/16142.jpg 1 68 145 411 268
+/tmp/pos_hand/16144.jpg 1 197 134 241 323
+/tmp/pos_hand/16186.jpg 1 153 65 147 323
+/tmp/pos_hand/16188.jpg 1 14 69 506 671
+/tmp/pos_hand/16195.jpg 1 80 20 427 654
+/tmp/pos_hand/16260.jpg 0
+/tmp/pos_hand/16280.jpg 1 111 128 308 437
+/tmp/pos_hand/16288.jpg 1 10 73 489 507
+/tmp/pos_hand/16313.jpg 1 13 45 503 686
+/tmp/pos_hand/16325.jpg 0
+/tmp/pos_hand/16327.jpg 1 68 73 380 425
+/tmp/pos_hand/16347.jpg 1 10 8 367 729
+/tmp/pos_hand/16364.jpg 1 206 6 582 476
+/tmp/pos_hand/16382.jpg 0
+/tmp/pos_hand/16384.jpg 1 451 19 102 270
+/tmp/pos_hand/16413.jpg 1 129 18 514 618
+/tmp/pos_hand/16425.jpg 1 8 196 576 430
+/tmp/pos_hand/16456.jpg 2 437 85 63 157 515 121 44 124
+/tmp/pos_hand/16471.jpg 1 87 121 354 443
+/tmp/pos_hand/16477.jpg 1 240 16 400 305
+/tmp/pos_hand/16498.jpg 1 108 15 547 507
+/tmp/pos_hand/165.jpg 0
+/tmp/pos_hand/16507.jpg 1 14 131 422 600
+/tmp/pos_hand/16518.jpg 1 228 10 242 458
+/tmp/pos_hand/16527.jpg 1 388 80 52 94
+/tmp/pos_hand/16532.jpg 1 32 2 389 675
+/tmp/pos_hand/16539.jpg 1 52 6 348 675
+/tmp/pos_hand/16554.jpg 1 194 4 378 520
+/tmp/pos_hand/16557.jpg 0
+/tmp/pos_hand/16576.jpg 1 33 4 344 472
+/tmp/pos_hand/16592.jpg 1 160 48 526 478
+/tmp/pos_hand/16599.jpg 0
+/tmp/pos_hand/16619.jpg 1 219 76 278 602
+/tmp/pos_hand/16621.jpg 1 173 85 200 325
+/tmp/pos_hand/16622.jpg 0
+/tmp/pos_hand/1663.jpg 1 199 165 157 276
+/tmp/pos_hand/16631.jpg 1 511 90 76 129
+/tmp/pos_hand/16640.jpg 1 17 17 495 659
+/tmp/pos_hand/16660.jpg 1 168 259 162 304
+/tmp/pos_hand/16681.jpg 0
+/tmp/pos_hand/1669.jpg 1 138 21 358 644
+/tmp/pos_hand/16692.jpg 1 211 87 316 313
+/tmp/pos_hand/16697.jpg 0
+/tmp/pos_hand/16706.jpg 1 4 43 550 686
+/tmp/pos_hand/16715.jpg 1 103 36 372 562
+/tmp/pos_hand/16718.jpg 0
+/tmp/pos_hand/16732.jpg 1 13 55 428 615
+/tmp/pos_hand/16757.jpg 1 389 363 153 194
+/tmp/pos_hand/1680.jpg 1 129 123 238 339
+/tmp/pos_hand/16803.jpg 1 157 109 229 379
+/tmp/pos_hand/16807.jpg 1 183 234 387 306
+/tmp/pos_hand/16818.jpg 1 496 31 168 244
+/tmp/pos_hand/16821.jpg 1 100 9 297 735
+/tmp/pos_hand/16881.jpg 1 4 107 439 630
+/tmp/pos_hand/16887.jpg 1 147 0 564 527
+/tmp/pos_hand/16891.jpg 1 175 193 277 425
+/tmp/pos_hand/16902.jpg 1 23 34 456 684
+/tmp/pos_hand/16916.jpg 1 456 84 96 267
+/tmp/pos_hand/1692.jpg 1 120 110 375 352
+/tmp/pos_hand/16942.jpg 1 198 12 399 490
+/tmp/pos_hand/1696.jpg 1 269 58 385 429
+/tmp/pos_hand/16983.jpg 1 22 76 391 341
+/tmp/pos_hand/17013.jpg 0
+/tmp/pos_hand/17014.jpg 0
+/tmp/pos_hand/1702.jpg 1 267 139 142 457
+/tmp/pos_hand/1704.jpg 0
+/tmp/pos_hand/1708.jpg 0
+/tmp/pos_hand/17095.jpg 1 381 48 182 294
+/tmp/pos_hand/17159.jpg 1 328 5 110 286
+/tmp/pos_hand/17182.jpg 1 187 69 135 240
+/tmp/pos_hand/1722.jpg 1 427 56 110 253
+/tmp/pos_hand/17230.jpg 0
+/tmp/pos_hand/17234.jpg 1 184 118 230 481
+/tmp/pos_hand/1724.jpg 1 13 35 581 486
+/tmp/pos_hand/17242.jpg 0
+/tmp/pos_hand/17247.jpg 1 272 198 114 206
+/tmp/pos_hand/17252.jpg 1 37 115 511 556
+/tmp/pos_hand/17269.jpg 1 17 37 661 407
+/tmp/pos_hand/1727.jpg 1 29 56 523 409
+/tmp/pos_hand/17270.jpg 1 7 35 550 703
+/tmp/pos_hand/1728.jpg 1 129 57 440 377
+/tmp/pos_hand/17281.jpg 0
+/tmp/pos_hand/17316.jpg 1 181 23 216 385
+/tmp/pos_hand/17320.jpg 1 6 75 436 581
+/tmp/pos_hand/17336.jpg 1 170 92 324 367
+/tmp/pos_hand/17340.jpg 1 161 212 302 403
+/tmp/pos_hand/17344.jpg 1 81 6 441 735
+/tmp/pos_hand/17358.jpg 1 125 88 370 580
+/tmp/pos_hand/17372.jpg 1 44 88 477 467
+/tmp/pos_hand/17373.jpg 1 83 21 466 602
+/tmp/pos_hand/17385.jpg 1 89 72 307 546
+/tmp/pos_hand/17430.jpg 1 40 22 409 562
+/tmp/pos_hand/17432.jpg 0
+/tmp/pos_hand/17440.jpg 0
+/tmp/pos_hand/17447.jpg 1 486 3 79 298
+/tmp/pos_hand/17454.jpg 1 10 143 423 474
+/tmp/pos_hand/1746.jpg 1 24 50 414 526
+/tmp/pos_hand/17492.jpg 1 155 22 331 331
+/tmp/pos_hand/17506.jpg 1 65 245 301 308
+/tmp/pos_hand/17552.jpg 1 166 96 457 457
+/tmp/pos_hand/17563.jpg 0
+/tmp/pos_hand/17584.jpg 0
+/tmp/pos_hand/17602.jpg 1 88 70 371 223
+/tmp/pos_hand/17615.jpg 1 74 20 456 587
+/tmp/pos_hand/17636.jpg 0
+/tmp/pos_hand/17641.jpg 1 106 107 460 478
+/tmp/pos_hand/17646.jpg 1 66 81 445 589
+/tmp/pos_hand/17652.jpg 1 225 82 125 289
+/tmp/pos_hand/17680.jpg 1 103 116 341 488
+/tmp/pos_hand/17681.jpg 1 25 129 466 462
+/tmp/pos_hand/17686.jpg 1 248 178 159 228
+/tmp/pos_hand/17690.jpg 1 14 215 423 502
+/tmp/pos_hand/177.jpg 1 206 67 518 486
+/tmp/pos_hand/17728.jpg 0
+/tmp/pos_hand/17730.jpg 1 173 107 258 561
+/tmp/pos_hand/17755.jpg 1 229 25 349 322
+/tmp/pos_hand/17764.jpg 1 38 5 389 580
+/tmp/pos_hand/17771.jpg 0
+/tmp/pos_hand/17791.jpg 1 146 28 325 547
+/tmp/pos_hand/17811.jpg 0
+/tmp/pos_hand/17821.jpg 1 97 106 386 539
+/tmp/pos_hand/17825.jpg 1 40 48 677 505
+/tmp/pos_hand/17829.jpg 0
+/tmp/pos_hand/17846.jpg 2 245 298 47 103 198 297 44 105
+/tmp/pos_hand/17851.jpg 0
+/tmp/pos_hand/17860.jpg 1 57 12 444 619
+/tmp/pos_hand/17873.jpg 1 450 12 132 210
+/tmp/pos_hand/17879.jpg 0
+/tmp/pos_hand/17918.jpg 1 66 82 414 528
+/tmp/pos_hand/17926.jpg 1 26 54 323 544
+/tmp/pos_hand/17945.jpg 1 109 105 368 487
+/tmp/pos_hand/17949.jpg 1 114 3 570 641
+/tmp/pos_hand/1795.jpg 1 383 193 74 91
+/tmp/pos_hand/17966.jpg 1 88 58 316 478
+/tmp/pos_hand/17983.jpg 1 117 53 348 617
+/tmp/pos_hand/17989.jpg 0
+/tmp/pos_hand/17990.jpg 0
+/tmp/pos_hand/17993.jpg 0
+/tmp/pos_hand/17997.jpg 1 37 40 308 635
+/tmp/pos_hand/1832.jpg 1 10 32 421 613
+/tmp/pos_hand/1846.jpg 1 54 68 348 499
+/tmp/pos_hand/1856.jpg 1 9 5 387 738
+/tmp/pos_hand/1867.jpg 1 10 13 517 607
+/tmp/pos_hand/1879.jpg 1 172 107 209 608
+/tmp/pos_hand/190.jpg 1 145 113 289 595
+/tmp/pos_hand/1901.jpg 0
+/tmp/pos_hand/1912.jpg 1 108 117 321 460
+/tmp/pos_hand/1928.jpg 1 232 19 367 506
+/tmp/pos_hand/1938.jpg 1 143 158 323 376
+/tmp/pos_hand/1957.jpg 1 173 29 157 252
+/tmp/pos_hand/1958.jpg 1 146 100 269 472
+/tmp/pos_hand/1960.jpg 1 21 17 400 547
+/tmp/pos_hand/198.jpg 1 23 6 400 580
+/tmp/pos_hand/199.jpg 1 129 16 307 727
+/tmp/pos_hand/1993.jpg 1 224 2 558 487
+/tmp/pos_hand/1995.jpg 1 105 16 256 394
+/tmp/pos_hand/2057.jpg 1 87 41 387 632
+/tmp/pos_hand/2062.jpg 1 63 97 437 489
+/tmp/pos_hand/2069.jpg 1 151 23 559 496
+/tmp/pos_hand/2079.jpg 0
+/tmp/pos_hand/208.jpg 0
+/tmp/pos_hand/2083.jpg 1 95 12 311 726
+/tmp/pos_hand/2107.jpg 1 231 101 161 236
+/tmp/pos_hand/2108.jpg 1 53 104 466 614
+/tmp/pos_hand/2109.jpg 1 160 208 267 450
+/tmp/pos_hand/211.jpg 1 181 76 215 260
+/tmp/pos_hand/2111.jpg 1 26 91 340 406
+/tmp/pos_hand/2123.jpg 1 295 35 271 383
+/tmp/pos_hand/2127.jpg 0
+/tmp/pos_hand/2132.jpg 1 148 8 218 628
+/tmp/pos_hand/2135.jpg 1 83 147 498 523
+/tmp/pos_hand/2154.jpg 1 79 1 358 587
+/tmp/pos_hand/2160.jpg 1 248 21 193 387
+/tmp/pos_hand/2178.jpg 0
+/tmp/pos_hand/2185.jpg 1 89 31 515 485
+/tmp/pos_hand/2190.jpg 1 188 83 149 294
+/tmp/pos_hand/2194.jpg 0
+/tmp/pos_hand/2197.jpg 1 148 305 221 279
+/tmp/pos_hand/2202.jpg 1 76 58 381 627
+/tmp/pos_hand/2218.jpg 1 164 83 216 659
+/tmp/pos_hand/222.jpg 1 98 116 312 407
+/tmp/pos_hand/2229.jpg 1 126 167 185 268
+/tmp/pos_hand/2231.jpg 1 14 17 422 438
+/tmp/pos_hand/2233.jpg 1 75 72 287 493
+/tmp/pos_hand/2244.jpg 0
+/tmp/pos_hand/2252.jpg 1 25 30 370 516
+/tmp/pos_hand/2268.jpg 1 227 67 129 149
+/tmp/pos_hand/2275.jpg 1 20 38 501 614
+/tmp/pos_hand/2295.jpg 0
+/tmp/pos_hand/2299.jpg 0
+/tmp/pos_hand/2312.jpg 1 14 28 565 603
+/tmp/pos_hand/2362.jpg 1 320 40 163 319
+/tmp/pos_hand/2368.jpg 1 11 72 565 634
+/tmp/pos_hand/2369.jpg 2 395 115 65 148 522 294 72 145
+/tmp/pos_hand/2372.jpg 1 101 67 407 582
+/tmp/pos_hand/2387.jpg 0
+/tmp/pos_hand/2393.jpg 1 300 84 185 310
+/tmp/pos_hand/2399.jpg 0
+/tmp/pos_hand/2413.jpg 1 25 172 482 482
+/tmp/pos_hand/2419.jpg 1 21 13 691 479
+/tmp/pos_hand/2420.jpg 1 130 8 460 406
+/tmp/pos_hand/2435.jpg 0
+/tmp/pos_hand/2462.jpg 1 59 21 670 545
+/tmp/pos_hand/2508.jpg 1 200 25 57 127
+/tmp/pos_hand/2513.jpg 1 51 79 525 509
+/tmp/pos_hand/2526.jpg 1 64 27 479 635
+/tmp/pos_hand/2528.jpg 1 80 63 369 490
+/tmp/pos_hand/2532.jpg 1 11 104 493 518
+/tmp/pos_hand/2545.jpg 1 18 40 270 481
+/tmp/pos_hand/2546.jpg 1 192 201 232 365
+/tmp/pos_hand/2551.jpg 2 309 10 147 256 450 4 131 252
+/tmp/pos_hand/2554.jpg 1 458 11 197 196
+/tmp/pos_hand/2577.jpg 1 12 11 434 690
+/tmp/pos_hand/2592.jpg 1 63 46 610 423
+/tmp/pos_hand/2605.jpg 1 13 119 467 436
+/tmp/pos_hand/2625.jpg 1 139 116 343 522
+/tmp/pos_hand/2651.jpg 1 35 35 377 636
+/tmp/pos_hand/2663.jpg 1 209 2 248 327
+/tmp/pos_hand/2701.jpg 1 129 8 240 567
+/tmp/pos_hand/2718.jpg 1 108 162 327 398
+/tmp/pos_hand/2720.jpg 1 192 30 351 395
+/tmp/pos_hand/2722.jpg 1 175 22 488 420
+/tmp/pos_hand/2733.jpg 1 5 66 442 454
+/tmp/pos_hand/274.jpg 1 183 16 199 283
+/tmp/pos_hand/2755.jpg 1 349 30 224 292
+/tmp/pos_hand/2765.jpg 1 9 6 427 540
+/tmp/pos_hand/2772.jpg 1 234 105 197 223
+/tmp/pos_hand/2774.jpg 1 295 4 163 246
+/tmp/pos_hand/2775.jpg 1 10 29 605 697
+/tmp/pos_hand/2784.jpg 1 308 81 162 252
+/tmp/pos_hand/2800.jpg 1 71 195 336 296
+/tmp/pos_hand/281.jpg 0
+/tmp/pos_hand/2828.jpg 1 4 156 436 418
+/tmp/pos_hand/2838.jpg 1 60 11 404 585
+/tmp/pos_hand/2840.jpg 1 398 133 82 153
+/tmp/pos_hand/2844.jpg 1 74 198 162 491
+/tmp/pos_hand/2848.jpg 1 67 146 400 502
+/tmp/pos_hand/2849.jpg 1 120 1 603 501
+/tmp/pos_hand/2850.jpg 1 83 12 269 684
+/tmp/pos_hand/2860.jpg 1 171 70 212 304
+/tmp/pos_hand/2884.jpg 1 378 21 179 381
+/tmp/pos_hand/2890.jpg 1 92 3 370 677
+/tmp/pos_hand/2891.jpg 1 103 4 274 689
+/tmp/pos_hand/2900.jpg 1 167 263 277 439
+/tmp/pos_hand/2911.jpg 1 110 194 317 361
+/tmp/pos_hand/2937.jpg 0
+/tmp/pos_hand/2945.jpg 1 24 5 559 591
+/tmp/pos_hand/2959.jpg 1 19 57 568 689
+/tmp/pos_hand/296.jpg 1 194 104 124 362
+/tmp/pos_hand/2972.jpg 1 194 29 97 228
+/tmp/pos_hand/2986.jpg 1 11 27 354 549
+/tmp/pos_hand/3043.jpg 1 100 131 263 502
+/tmp/pos_hand/3055.jpg 1 32 196 384 363
+/tmp/pos_hand/3092.jpg 1 235 39 320 331
+/tmp/pos_hand/3097.jpg 0
+/tmp/pos_hand/3101.jpg 1 70 30 403 572
+/tmp/pos_hand/3109.jpg 1 122 21 360 686
+/tmp/pos_hand/3115.jpg 1 433 102 74 146
+/tmp/pos_hand/3120.jpg 0
+/tmp/pos_hand/3130.jpg 1 171 86 273 477
+/tmp/pos_hand/3151.jpg 1 27 22 480 658
+/tmp/pos_hand/3162.jpg 1 23 7 478 606
+/tmp/pos_hand/3169.jpg 1 442 37 156 263
+/tmp/pos_hand/3177.jpg 0
+/tmp/pos_hand/3186.jpg 0
+/tmp/pos_hand/3193.jpg 1 68 24 451 626
+/tmp/pos_hand/3204.jpg 1 26 16 559 567
+/tmp/pos_hand/3214.jpg 0
+/tmp/pos_hand/3223.jpg 0
+/tmp/pos_hand/3233.jpg 0
+/tmp/pos_hand/3237.jpg 1 350 10 147 310
+/tmp/pos_hand/3265.jpg 1 180 48 240 692
+/tmp/pos_hand/3272.jpg 1 120 9 314 580
+/tmp/pos_hand/3298.jpg 1 131 24 444 680
+/tmp/pos_hand/3311.jpg 1 116 153 402 569
+/tmp/pos_hand/3354.jpg 1 130 41 405 413
+/tmp/pos_hand/3356.jpg 0
+/tmp/pos_hand/3359.jpg 1 114 36 379 627
+/tmp/pos_hand/338.jpg 1 237 0 178 256
+/tmp/pos_hand/341.jpg 1 139 29 251 372
+/tmp/pos_hand/3413.jpg 1 140 98 331 486
+/tmp/pos_hand/3419.jpg 1 225 74 179 639
+/tmp/pos_hand/3432.jpg 1 55 79 420 513
+/tmp/pos_hand/3440.jpg 1 159 245 166 316
+/tmp/pos_hand/3441.jpg 1 188 54 197 581
+/tmp/pos_hand/3458.jpg 1 139 82 305 512
+/tmp/pos_hand/3473.jpg 1 145 10 470 464
+/tmp/pos_hand/3490.jpg 0
+/tmp/pos_hand/3504.jpg 1 17 146 408 596
+/tmp/pos_hand/352.jpg 1 371 30 103 196
+/tmp/pos_hand/3531.jpg 0
+/tmp/pos_hand/3566.jpg 1 141 53 194 606
+/tmp/pos_hand/3589.jpg 1 74 147 441 458
+/tmp/pos_hand/3600.jpg 1 45 129 448 607
+/tmp/pos_hand/3606.jpg 0
+/tmp/pos_hand/3662.jpg 1 149 88 302 519
+/tmp/pos_hand/3671.jpg 1 125 3 266 558
+/tmp/pos_hand/3705.jpg 1 110 44 382 378
+/tmp/pos_hand/3707.jpg 1 276 115 241 310
+/tmp/pos_hand/3729.jpg 1 532 208 144 126
+/tmp/pos_hand/373.jpg 1 176 18 504 510
+/tmp/pos_hand/3737.jpg 1 89 5 464 638
+/tmp/pos_hand/3779.jpg 1 138 72 340 582
+/tmp/pos_hand/3785.jpg 1 171 130 450 360
+/tmp/pos_hand/3786.jpg 1 16 11 380 625
+/tmp/pos_hand/379.jpg 1 140 7 498 572
+/tmp/pos_hand/3796.jpg 1 12 95 747 585
+/tmp/pos_hand/3817.jpg 1 332 101 175 304
+/tmp/pos_hand/3820.jpg 1 195 208 228 312
+/tmp/pos_hand/3827.jpg 1 34 52 507 627
+/tmp/pos_hand/3838.jpg 1 28 21 444 588
+/tmp/pos_hand/3839.jpg 1 13 31 505 584
+/tmp/pos_hand/3847.jpg 0
+/tmp/pos_hand/3873.jpg 0
+/tmp/pos_hand/3888.jpg 1 81 83 263 491
+/tmp/pos_hand/3894.jpg 1 68 105 478 426
+/tmp/pos_hand/3898.jpg 1 76 31 505 665
+/tmp/pos_hand/3902.jpg 1 475 113 123 208
+/tmp/pos_hand/3921.jpg 1 72 37 660 456
+/tmp/pos_hand/3974.jpg 1 127 140 352 477
+/tmp/pos_hand/3990.jpg 1 19 28 676 556
+/tmp/pos_hand/3995.jpg 1 83 241 409 435
+/tmp/pos_hand/4.jpg 1 418 77 73 168
+/tmp/pos_hand/40.jpg 1 31 118 474 507
+/tmp/pos_hand/4003.jpg 1 112 93 306 526
+/tmp/pos_hand/4019.jpg 1 246 6 241 353
+/tmp/pos_hand/4031.jpg 1 395 33 137 309
+/tmp/pos_hand/4032.jpg 1 168 42 510 458
+/tmp/pos_hand/4048.jpg 1 393 40 196 283
+/tmp/pos_hand/4055.jpg 1 124 95 365 579
+/tmp/pos_hand/4065.jpg 1 143 53 444 376
+/tmp/pos_hand/4091.jpg 1 99 154 336 443
+/tmp/pos_hand/4122.jpg 1 14 201 493 459
+/tmp/pos_hand/4154.jpg 1 83 8 436 694
+/tmp/pos_hand/4161.jpg 0
+/tmp/pos_hand/4168.jpg 1 336 34 144 310
+/tmp/pos_hand/4170.jpg 1 80 83 116 179
+/tmp/pos_hand/4189.jpg 1 25 24 412 451
+/tmp/pos_hand/4192.jpg 1 125 96 80 173
+/tmp/pos_hand/4204.jpg 1 117 34 294 579
+/tmp/pos_hand/4218.jpg 1 153 4 264 535
+/tmp/pos_hand/4235.jpg 1 109 62 389 606
+/tmp/pos_hand/4239.jpg 1 80 118 476 631
+/tmp/pos_hand/4264.jpg 1 50 43 511 456
+/tmp/pos_hand/4266.jpg 1 38 12 364 683
+/tmp/pos_hand/4297.jpg 0
+/tmp/pos_hand/4304.jpg 1 195 51 457 446
+/tmp/pos_hand/4314.jpg 1 59 29 527 515
+/tmp/pos_hand/4315.jpg 1 82 33 484 694
+/tmp/pos_hand/4365.jpg 1 64 71 421 561
+/tmp/pos_hand/4373.jpg 1 104 164 405 548
+/tmp/pos_hand/4379.jpg 1 163 61 471 476
+/tmp/pos_hand/4440.jpg 1 224 12 126 165
+/tmp/pos_hand/4441.jpg 1 108 4 594 551
+/tmp/pos_hand/4442.jpg 1 76 36 687 477
+/tmp/pos_hand/4462.jpg 1 44 71 437 431
+/tmp/pos_hand/4469.jpg 1 62 251 303 329
+/tmp/pos_hand/4475.jpg 1 223 2 360 397
+/tmp/pos_hand/4487.jpg 0
+/tmp/pos_hand/449.jpg 1 14 13 415 675
+/tmp/pos_hand/4503.jpg 1 167 8 241 322
+/tmp/pos_hand/4511.jpg 0
+/tmp/pos_hand/454.jpg 1 164 12 295 429
+/tmp/pos_hand/4560.jpg 1 241 11 339 448
+/tmp/pos_hand/4580.jpg 1 2 72 474 491
+/tmp/pos_hand/4588.jpg 1 193 86 178 515
+/tmp/pos_hand/4596.jpg 1 51 19 372 703
+/tmp/pos_hand/4598.jpg 1 49 385 486 340
+/tmp/pos_hand/46.jpg 1 268 24 322 441
+/tmp/pos_hand/4605.jpg 1 130 36 274 549
+/tmp/pos_hand/461.jpg 1 67 7 279 642
+/tmp/pos_hand/4652.jpg 1 9 8 432 526
+/tmp/pos_hand/4669.jpg 1 62 47 312 592
+/tmp/pos_hand/4680.jpg 1 37 52 389 646
+/tmp/pos_hand/4686.jpg 1 135 36 627 529
+/tmp/pos_hand/4700.jpg 1 49 7 708 585
+/tmp/pos_hand/471.jpg 1 7 242 498 501
+/tmp/pos_hand/4712.jpg 1 53 59 436 568
+/tmp/pos_hand/4723.jpg 1 79 81 363 553
+/tmp/pos_hand/473.jpg 1 37 16 487 630
+/tmp/pos_hand/4761.jpg 1 0 94 518 627
+/tmp/pos_hand/4764.jpg 0
+/tmp/pos_hand/4781.jpg 1 9 4 443 609
+/tmp/pos_hand/4782.jpg 1 5 61 452 522
+/tmp/pos_hand/4787.jpg 1 26 5 369 632
+/tmp/pos_hand/4838.jpg 1 142 111 196 360
+/tmp/pos_hand/4840.jpg 1 93 65 360 593
+/tmp/pos_hand/4846.jpg 1 191 148 167 263
+/tmp/pos_hand/4864.jpg 1 62 65 429 618
+/tmp/pos_hand/4867.jpg 1 92 44 299 578
+/tmp/pos_hand/487.jpg 1 76 93 331 551
+/tmp/pos_hand/4903.jpg 0
+/tmp/pos_hand/4926.jpg 1 120 65 343 617
+/tmp/pos_hand/4952.jpg 1 100 79 373 431
+/tmp/pos_hand/4963.jpg 1 415 446 141 149
+/tmp/pos_hand/4974.jpg 1 98 63 428 534
+/tmp/pos_hand/4978.jpg 1 25 39 463 654
+/tmp/pos_hand/4991.jpg 0
+/tmp/pos_hand/5004.jpg 0
+/tmp/pos_hand/501.jpg 1 26 30 332 667
+/tmp/pos_hand/5022.jpg 1 141 122 245 452
+/tmp/pos_hand/5024.jpg 1 139 28 244 645
+/tmp/pos_hand/5029.jpg 1 179 136 136 241
+/tmp/pos_hand/5031.jpg 1 161 133 109 130
+/tmp/pos_hand/5045.jpg 1 155 3 200 329
+/tmp/pos_hand/5091.jpg 1 125 234 412 482
+/tmp/pos_hand/5099.jpg 1 234 307 303 409
+/tmp/pos_hand/5133.jpg 0
+/tmp/pos_hand/5136.jpg 0
+/tmp/pos_hand/5138.jpg 0
+/tmp/pos_hand/5163.jpg 1 14 4 364 703
+/tmp/pos_hand/5173.jpg 1 28 33 520 336
+/tmp/pos_hand/5178.jpg 1 44 206 504 163
+/tmp/pos_hand/5186.jpg 1 191 9 408 208
+/tmp/pos_hand/5187.jpg 1 22 12 150 373
+/tmp/pos_hand/5192.jpg 1 185 51 353 590
+/tmp/pos_hand/5193.jpg 0
+/tmp/pos_hand/5194.jpg 0
+/tmp/pos_hand/5205.jpg 1 34 71 400 486
+/tmp/pos_hand/5218.jpg 1 126 102 291 508
+/tmp/pos_hand/5250.jpg 0
+/tmp/pos_hand/5270.jpg 0
+/tmp/pos_hand/5280.jpg 1 224 52 131 233
+/tmp/pos_hand/5287.jpg 0
+/tmp/pos_hand/5311.jpg 1 136 102 160 285
+/tmp/pos_hand/5325.jpg 1 371 2 151 175
+/tmp/pos_hand/5351.jpg 1 192 97 148 414
+/tmp/pos_hand/5352.jpg 1 467 30 134 194
+/tmp/pos_hand/5353.jpg 0
+/tmp/pos_hand/5361.jpg 1 72 100 463 607
+/tmp/pos_hand/54.jpg 1 195 122 131 269
+/tmp/pos_hand/5460.jpg 1 124 44 530 429
+/tmp/pos_hand/5467.jpg 1 70 201 448 340
+/tmp/pos_hand/547.jpg 1 165 147 238 408
+/tmp/pos_hand/5481.jpg 0
+/tmp/pos_hand/5504.jpg 1 76 15 400 351
+/tmp/pos_hand/5518.jpg 0
+/tmp/pos_hand/5519.jpg 1 129 82 260 540
+/tmp/pos_hand/553.jpg 0
+/tmp/pos_hand/5534.jpg 1 11 29 363 493
+/tmp/pos_hand/5543.jpg 1 256 26 134 283
+/tmp/pos_hand/5576.jpg 0
+/tmp/pos_hand/5581.jpg 1 34 140 458 425
+/tmp/pos_hand/5595.jpg 1 12 73 578 533
+/tmp/pos_hand/5603.jpg 1 151 76 329 503
+/tmp/pos_hand/5606.jpg 1 131 74 285 609
+/tmp/pos_hand/5615.jpg 1 41 85 466 545
+/tmp/pos_hand/5622.jpg 0
+/tmp/pos_hand/5643.jpg 1 83 21 684 506
+/tmp/pos_hand/5644.jpg 1 157 24 310 682
+/tmp/pos_hand/5650.jpg 1 121 72 317 660
+/tmp/pos_hand/5664.jpg 1 33 7 384 452
+/tmp/pos_hand/5675.jpg 0
+/tmp/pos_hand/5696.jpg 1 115 100 323 466
+/tmp/pos_hand/5698.jpg 1 65 111 417 392
+/tmp/pos_hand/5703.jpg 1 220 102 191 300
+/tmp/pos_hand/5718.jpg 1 191 141 229 557
+/tmp/pos_hand/5731.jpg 1 89 132 169 242
+/tmp/pos_hand/5737.jpg 1 493 14 150 248
+/tmp/pos_hand/5744.jpg 0
+/tmp/pos_hand/5750.jpg 0
+/tmp/pos_hand/5754.jpg 0
+/tmp/pos_hand/5756.jpg 1 581 109 105 166
+/tmp/pos_hand/5758.jpg 1 41 93 416 474
+/tmp/pos_hand/5764.jpg 1 89 113 316 435
+/tmp/pos_hand/5785.jpg 0
+/tmp/pos_hand/5810.jpg 1 85 30 243 655
+/tmp/pos_hand/5828.jpg 1 22 5 510 608
+/tmp/pos_hand/5830.jpg 1 79 176 430 526
+/tmp/pos_hand/5834.jpg 1 185 89 311 487
+/tmp/pos_hand/5845.jpg 1 57 42 322 633
+/tmp/pos_hand/5875.jpg 0
+/tmp/pos_hand/5899.jpg 1 23 39 463 630
+/tmp/pos_hand/5917.jpg 1 372 156 93 175
+/tmp/pos_hand/5920.jpg 0
+/tmp/pos_hand/5923.jpg 1 61 0 336 719
+/tmp/pos_hand/5928.jpg 1 321 14 162 424
+/tmp/pos_hand/5932.jpg 0
+/tmp/pos_hand/5980.jpg 0
+/tmp/pos_hand/5982.jpg 0
+/tmp/pos_hand/5983.jpg 0
+/tmp/pos_hand/6003.jpg 1 27 134 333 365
+/tmp/pos_hand/6006.jpg 1 160 137 236 546
+/tmp/pos_hand/6011.jpg 1 20 104 506 631
+/tmp/pos_hand/6012.jpg 1 278 253 260 203
+/tmp/pos_hand/6039.jpg 0
+/tmp/pos_hand/6082.jpg 1 173 21 257 548
+/tmp/pos_hand/6094.jpg 1 131 49 249 572
+/tmp/pos_hand/6101.jpg 1 59 66 637 436
+/tmp/pos_hand/6124.jpg 0
+/tmp/pos_hand/6137.jpg 1 33 11 382 611
+/tmp/pos_hand/6143.jpg 1 42 72 433 473
+/tmp/pos_hand/6144.jpg 1 113 70 425 574
+/tmp/pos_hand/6158.jpg 1 62 59 490 631
+/tmp/pos_hand/6179.jpg 1 263 16 214 322
+/tmp/pos_hand/6193.jpg 0
+/tmp/pos_hand/62.jpg 0
+/tmp/pos_hand/6220.jpg 1 173 41 150 321
+/tmp/pos_hand/6225.jpg 0
+/tmp/pos_hand/6241.jpg 1 89 153 74 117
+/tmp/pos_hand/6254.jpg 1 228 113 175 504
+/tmp/pos_hand/6266.jpg 1 163 28 269 574
+/tmp/pos_hand/6288.jpg 1 152 50 368 574
+/tmp/pos_hand/6292.jpg 1 103 94 417 530
+/tmp/pos_hand/6296.jpg 1 2 55 460 504
+/tmp/pos_hand/6302.jpg 0
+/tmp/pos_hand/6318.jpg 0
+/tmp/pos_hand/6325.jpg 1 195 74 261 512
+/tmp/pos_hand/6334.jpg 1 17 162 483 458
+/tmp/pos_hand/6341.jpg 1 19 88 422 510
+/tmp/pos_hand/6349.jpg 1 220 3 166 270
+/tmp/pos_hand/6367.jpg 1 169 27 334 584
+/tmp/pos_hand/6371.jpg 1 184 82 63 93
+/tmp/pos_hand/6407.jpg 0
+/tmp/pos_hand/6428.jpg 1 39 77 462 670
+/tmp/pos_hand/6477.jpg 1 42 5 391 697
+/tmp/pos_hand/6480.jpg 1 163 57 246 524
+/tmp/pos_hand/6483.jpg 0
+/tmp/pos_hand/6496.jpg 1 234 117 92 229
+/tmp/pos_hand/6505.jpg 0
+/tmp/pos_hand/6532.jpg 1 105 42 391 620
+/tmp/pos_hand/6554.jpg 1 199 8 376 427
+/tmp/pos_hand/6560.jpg 0
+/tmp/pos_hand/6584.jpg 1 25 34 445 490
+/tmp/pos_hand/6591.jpg 1 79 229 252 335
+/tmp/pos_hand/6603.jpg 1 236 52 410 415
+/tmp/pos_hand/6614.jpg 1 468 79 106 214
+/tmp/pos_hand/6662.jpg 0
+/tmp/pos_hand/6672.jpg 0
+/tmp/pos_hand/6676.jpg 0
+/tmp/pos_hand/6728.jpg 0
+/tmp/pos_hand/6747.jpg 1 256 21 355 481
+/tmp/pos_hand/6754.jpg 1 200 26 131 455
+/tmp/pos_hand/6761.jpg 0
+/tmp/pos_hand/6766.jpg 1 535 5 87 177
+/tmp/pos_hand/6786.jpg 0
+/tmp/pos_hand/6792.jpg 0
+/tmp/pos_hand/6829.jpg 0
+/tmp/pos_hand/6846.jpg 0
+/tmp/pos_hand/685.jpg 0
+/tmp/pos_hand/6866.jpg 0
+/tmp/pos_hand/6880.jpg 0
+/tmp/pos_hand/6887.jpg 0
+/tmp/pos_hand/6889.jpg 0
+/tmp/pos_hand/6901.jpg 0
+/tmp/pos_hand/6921.jpg 1 66 27 395 646
+/tmp/pos_hand/6933.jpg 0
+/tmp/pos_hand/6939.jpg 0
+/tmp/pos_hand/6943.jpg 0
+/tmp/pos_hand/695.jpg 0
+/tmp/pos_hand/6950.jpg 0
+/tmp/pos_hand/6971.jpg 1 129 257 216 283
+/tmp/pos_hand/7004.jpg 0
+/tmp/pos_hand/7028.jpg 0
+/tmp/pos_hand/7037.jpg 0
+/tmp/pos_hand/7038.jpg 0
+/tmp/pos_hand/7039.jpg 0
+/tmp/pos_hand/7040.jpg 0
+/tmp/pos_hand/7041.jpg 0
+/tmp/pos_hand/7043.jpg 0
+/tmp/pos_hand/7046.jpg 0
+/tmp/pos_hand/7092.jpg 0
+/tmp/pos_hand/7093.jpg 0
+/tmp/pos_hand/7094.jpg 0
+/tmp/pos_hand/7099.jpg 0
+/tmp/pos_hand/7107.jpg 1 121 97 353 547
+/tmp/pos_hand/7127.jpg 0
+/tmp/pos_hand/7180.jpg 1 472 38 121 232
+/tmp/pos_hand/7181.jpg 0
+/tmp/pos_hand/721.jpg 0
+/tmp/pos_hand/7229.jpg 0
+/tmp/pos_hand/7237.jpg 0
+/tmp/pos_hand/7244.jpg 0
+/tmp/pos_hand/7256.jpg 0
+/tmp/pos_hand/7274.jpg 0
+/tmp/pos_hand/7332.jpg 0
+/tmp/pos_hand/7344.jpg 0
+/tmp/pos_hand/7378.jpg 0
+/tmp/pos_hand/7380.jpg 0
+/tmp/pos_hand/7383.jpg 0
+/tmp/pos_hand/7397.jpg 1 329 6 165 416
+/tmp/pos_hand/7398.jpg 1 261 137 154 309
+/tmp/pos_hand/7422.jpg 0
+/tmp/pos_hand/7445.jpg 0
+/tmp/pos_hand/7465.jpg 0
+/tmp/pos_hand/7481.jpg 0
+/tmp/pos_hand/7502.jpg 1 77 119 458 514
+/tmp/pos_hand/7520.jpg 0
+/tmp/pos_hand/7522.jpg 0
+/tmp/pos_hand/7526.jpg 0
+/tmp/pos_hand/756.jpg 0
+/tmp/pos_hand/7574.jpg 0
+/tmp/pos_hand/7582.jpg 0
+/tmp/pos_hand/7583.jpg 0
+/tmp/pos_hand/7598.jpg 0
+/tmp/pos_hand/7612.jpg 1 17 92 541 553
+/tmp/pos_hand/7660.jpg 1 36 82 455 428
+/tmp/pos_hand/7709.jpg 0
+/tmp/pos_hand/7731.jpg 0
+/tmp/pos_hand/7735.jpg 0
+/tmp/pos_hand/7736.jpg 0
+/tmp/pos_hand/7818.jpg 0
+/tmp/pos_hand/7830.jpg 0
+/tmp/pos_hand/7833.jpg 1 25 116 495 582
+/tmp/pos_hand/7874.jpg 0
+/tmp/pos_hand/7882.jpg 0
+/tmp/pos_hand/7885.jpg 0
+/tmp/pos_hand/7895.jpg 0
+/tmp/pos_hand/7896.jpg 0
+/tmp/pos_hand/7900.jpg 1 224 3 223 522
+/tmp/pos_hand/7918.jpg 1 59 108 667 366
+/tmp/pos_hand/792.jpg 0
+/tmp/pos_hand/7925.jpg 0
+/tmp/pos_hand/7945.jpg 1 206 105 429 363
+/tmp/pos_hand/7954.jpg 0
+/tmp/pos_hand/7987.jpg 1 25 6 549 655
+/tmp/pos_hand/8017.jpg 0
+/tmp/pos_hand/8042.jpg 0
+/tmp/pos_hand/8114.jpg 0
+/tmp/pos_hand/8122.jpg 0
+/tmp/pos_hand/8125.jpg 0
+/tmp/pos_hand/8157.jpg 0
+/tmp/pos_hand/8160.jpg 0
+/tmp/pos_hand/8183.jpg 0
+/tmp/pos_hand/8188.jpg 1 272 152 264 182
+/tmp/pos_hand/8204.jpg 0
+/tmp/pos_hand/8213.jpg 0
+/tmp/pos_hand/8221.jpg 0
+/tmp/pos_hand/8232.jpg 0
+/tmp/pos_hand/8276.jpg 0
+/tmp/pos_hand/8288.jpg 0
+/tmp/pos_hand/83.jpg 0
+/tmp/pos_hand/833.jpg 0
+/tmp/pos_hand/8343.jpg 0
+/tmp/pos_hand/8359.jpg 0
+/tmp/pos_hand/836.jpg 0
+/tmp/pos_hand/8383.jpg 0
+/tmp/pos_hand/8390.jpg 0
+/tmp/pos_hand/8398.jpg 0
+/tmp/pos_hand/8400.jpg 1 372 45 175 355
+/tmp/pos_hand/8401.jpg 0
+/tmp/pos_hand/8429.jpg 0
+/tmp/pos_hand/8431.jpg 0
+/tmp/pos_hand/8436.jpg 0
+/tmp/pos_hand/8456.jpg 0
+/tmp/pos_hand/8472.jpg 0
+/tmp/pos_hand/8534.jpg 0
+/tmp/pos_hand/8541.jpg 0
+/tmp/pos_hand/8547.jpg 0
+/tmp/pos_hand/8553.jpg 0
+/tmp/pos_hand/8557.jpg 0
+/tmp/pos_hand/8595.jpg 0
+/tmp/pos_hand/8597.jpg 0
+/tmp/pos_hand/8615.jpg 0
+/tmp/pos_hand/8620.jpg 0
+/tmp/pos_hand/8629.jpg 0
+/tmp/pos_hand/865.jpg 0
+/tmp/pos_hand/8651.jpg 0
+/tmp/pos_hand/8655.jpg 0
+/tmp/pos_hand/8662.jpg 0
+/tmp/pos_hand/8682.jpg 0
+/tmp/pos_hand/8693.jpg 0
+/tmp/pos_hand/8713.jpg 0
+/tmp/pos_hand/8714.jpg 0
+/tmp/pos_hand/8722.jpg 0
+/tmp/pos_hand/8725.jpg 0
+/tmp/pos_hand/8742.jpg 1 537 83 150 192
+/tmp/pos_hand/8747.jpg 0
+/tmp/pos_hand/8751.jpg 1 463 77 112 184
+/tmp/pos_hand/8771.jpg 0
+/tmp/pos_hand/8793.jpg 0
+/tmp/pos_hand/8825.jpg 0
+/tmp/pos_hand/8845.jpg 0
+/tmp/pos_hand/8847.jpg 0
+/tmp/pos_hand/8868.jpg 0
+/tmp/pos_hand/8892.jpg 0
+/tmp/pos_hand/8893.jpg 0
+/tmp/pos_hand/8898.jpg 0
+/tmp/pos_hand/890.jpg 0
+/tmp/pos_hand/8902.jpg 0
+/tmp/pos_hand/8914.jpg 1 210 34 143 221
+/tmp/pos_hand/8930.jpg 0
+/tmp/pos_hand/8933.jpg 0
+/tmp/pos_hand/8941.jpg 0
+/tmp/pos_hand/8985.jpg 0
+/tmp/pos_hand/8990.jpg 0
+/tmp/pos_hand/8996.jpg 0
+/tmp/pos_hand/9013.jpg 0
+/tmp/pos_hand/9029.jpg 0
+/tmp/pos_hand/9034.jpg 0
+/tmp/pos_hand/9065.jpg 0
+/tmp/pos_hand/9074.jpg 0
+/tmp/pos_hand/9144.jpg 0
+/tmp/pos_hand/9159.jpg 1 115 161 304 483
+/tmp/pos_hand/9170.jpg 0
+/tmp/pos_hand/9181.jpg 0
+/tmp/pos_hand/9217.jpg 0
+/tmp/pos_hand/9234.jpg 0
+/tmp/pos_hand/926.jpg 0
+/tmp/pos_hand/9260.jpg 0
+/tmp/pos_hand/9268.jpg 0
+/tmp/pos_hand/9285.jpg 1 153 166 247 279
+/tmp/pos_hand/9304.jpg 0
+/tmp/pos_hand/9306.jpg 0
+/tmp/pos_hand/9310.jpg 0
+/tmp/pos_hand/9314.jpg 0
+/tmp/pos_hand/9323.jpg 0
+/tmp/pos_hand/9362.jpg 0
+/tmp/pos_hand/9433.jpg 0
+/tmp/pos_hand/9454.jpg 0
+/tmp/pos_hand/9463.jpg 0
+/tmp/pos_hand/9465.jpg 0
+/tmp/pos_hand/9469.jpg 0
+/tmp/pos_hand/9471.jpg 0
+/tmp/pos_hand/9492.jpg 0
+/tmp/pos_hand/9511.jpg 0
+/tmp/pos_hand/9520.jpg 0
+/tmp/pos_hand/9528.jpg 0
+/tmp/pos_hand/9542.jpg 0
+/tmp/pos_hand/9546.jpg 0
+/tmp/pos_hand/9549.jpg 0
+/tmp/pos_hand/9578.jpg 0
+/tmp/pos_hand/9587.jpg 0
+/tmp/pos_hand/959.jpg 0
+/tmp/pos_hand/9601.jpg 0
+/tmp/pos_hand/9610.jpg 0
+/tmp/pos_hand/9612.jpg 0
+/tmp/pos_hand/9633.jpg 0
+/tmp/pos_hand/9638.jpg 0
+/tmp/pos_hand/9639.jpg 0
+/tmp/pos_hand/9683.jpg 0
+/tmp/pos_hand/9688.jpg 0
+/tmp/pos_hand/9717.jpg 0
+/tmp/pos_hand/9760.jpg 0
+/tmp/pos_hand/9778.jpg 0
+/tmp/pos_hand/9786.jpg 0
+/tmp/pos_hand/980.jpg 0
+/tmp/pos_hand/9805.jpg 0
+/tmp/pos_hand/9807.jpg 0
+/tmp/pos_hand/9823.jpg 0
+/tmp/pos_hand/9828.jpg 0
+/tmp/pos_hand/9833.jpg 0
+/tmp/pos_hand/9844.jpg 0
+/tmp/pos_hand/985.jpg 0
+/tmp/pos_hand/9853.jpg 0
+/tmp/pos_hand/9870.jpg 0
+/tmp/pos_hand/9877.jpg 0
+/tmp/pos_hand/9916.jpg 0
+/tmp/pos_hand/9923.jpg 0
+/tmp/pos_hand/9924.jpg 0
+/tmp/pos_hand/9928.jpg 0
+/tmp/pos_hand/9930.jpg 0

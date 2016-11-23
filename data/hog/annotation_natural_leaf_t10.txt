@@ -1,0 +1,87 @@
+/tmp/natural_leaf_t10/0.jpg 0
+/tmp/natural_leaf_t10/10021.jpg 1 77 42 464 654
+/tmp/natural_leaf_t10/10052.jpg 1 189 58 372 444
+/tmp/natural_leaf_t10/10055.jpg 0
+/tmp/natural_leaf_t10/10063.jpg 1 78 212 410 431
+/tmp/natural_leaf_t10/10065.jpg 1 6 136 482 507
+/tmp/natural_leaf_t10/10086.jpg 0
+/tmp/natural_leaf_t10/10100.jpg 1 84 94 389 537
+/tmp/natural_leaf_t10/10101.jpg 0
+/tmp/natural_leaf_t10/10105.jpg 1 98 110 426 594
+/tmp/natural_leaf_t10/10106.jpg 1 281 90 273 359
+/tmp/natural_leaf_t10/10109.jpg 0
+/tmp/natural_leaf_t10/1012.jpg 1 314 229 208 360
+/tmp/natural_leaf_t10/10142.jpg 0
+/tmp/natural_leaf_t10/10145.jpg 0
+/tmp/natural_leaf_t10/10151.jpg 0
+/tmp/natural_leaf_t10/10178.jpg 1 84 35 637 487
+/tmp/natural_leaf_t10/10183.jpg 1 57 76 469 675
+/tmp/natural_leaf_t10/10191.jpg 1 14 19 564 733
+/tmp/natural_leaf_t10/10200.jpg 1 39 241 445 501
+/tmp/natural_leaf_t10/10240.jpg 1 169 30 378 473
+/tmp/natural_leaf_t10/10244.jpg 1 467 549 132 203
+/tmp/natural_leaf_t10/10259.jpg 1 190 251 350 432
+/tmp/natural_leaf_t10/10268.jpg 1 147 12 497 513
+/tmp/natural_leaf_t10/10272.jpg 1 189 63 381 686
+/tmp/natural_leaf_t10/10279.jpg 0
+/tmp/natural_leaf_t10/10295.jpg 0
+/tmp/natural_leaf_t10/10296.jpg 1 214 36 390 489
+/tmp/natural_leaf_t10/10334.jpg 1 12 7 571 662
+/tmp/natural_leaf_t10/10343.jpg 1 30 48 472 705
+/tmp/natural_leaf_t10/10345.jpg 0
+/tmp/natural_leaf_t10/10346.jpg 0
+/tmp/natural_leaf_t10/10349.jpg 1 20 75 418 632
+/tmp/natural_leaf_t10/10356.jpg 1 177 291 237 328
+/tmp/natural_leaf_t10/10362.jpg 0
+/tmp/natural_leaf_t10/10374.jpg 0
+/tmp/natural_leaf_t10/10378.jpg 1 12 13 378 738
+/tmp/natural_leaf_t10/10385.jpg 1 334 1 109 187
+/tmp/natural_leaf_t10/10386.jpg 1 9 20 583 736
+/tmp/natural_leaf_t10/10387.jpg 1 154 149 305 500
+/tmp/natural_leaf_t10/10394.jpg 1 64 15 506 664
+/tmp/natural_leaf_t10/10398.jpg 0
+/tmp/natural_leaf_t10/10403.jpg 1 79 49 311 446
+/tmp/natural_leaf_t10/1043.jpg 0
+/tmp/natural_leaf_t10/10434.jpg 1 24 32 492 725
+/tmp/natural_leaf_t10/10435.jpg 1 6 2 438 649
+/tmp/natural_leaf_t10/10476.jpg 1 38 17 538 711
+/tmp/natural_leaf_t10/10495.jpg 0
+/tmp/natural_leaf_t10/10497.jpg 1 26 16 556 733
+/tmp/natural_leaf_t10/1050.jpg 0
+/tmp/natural_leaf_t10/10500.jpg 0
+/tmp/natural_leaf_t10/10509.jpg 0
+/tmp/natural_leaf_t10/10521.jpg 1 66 170 424 583
+/tmp/natural_leaf_t10/10525.jpg 0
+/tmp/natural_leaf_t10/10532.jpg 0
+/tmp/natural_leaf_t10/10533.jpg 1 174 50 538 549
+/tmp/natural_leaf_t10/10554.jpg 1 331 49 236 339
+/tmp/natural_leaf_t10/10563.jpg 0
+/tmp/natural_leaf_t10/10566.jpg 0
+/tmp/natural_leaf_t10/1058.jpg 0
+/tmp/natural_leaf_t10/10597.jpg 1 173 74 163 210
+/tmp/natural_leaf_t10/10599.jpg 0
+/tmp/natural_leaf_t10/10608.jpg 1 236 9 328 519
+/tmp/natural_leaf_t10/10629.jpg 0
+/tmp/natural_leaf_t10/10631.jpg 0
+/tmp/natural_leaf_t10/10632.jpg 0
+/tmp/natural_leaf_t10/10637.jpg 0
+/tmp/natural_leaf_t10/10640.jpg 0
+/tmp/natural_leaf_t10/10652.jpg 0
+/tmp/natural_leaf_t10/10660.jpg 1 31 155 463 602
+/tmp/natural_leaf_t10/10669.jpg 0
+/tmp/natural_leaf_t10/10689.jpg 1 151 3 436 522
+/tmp/natural_leaf_t10/10708.jpg 1 79 93 394 628
+/tmp/natural_leaf_t10/10723.jpg 1 304 25 340 506
+/tmp/natural_leaf_t10/10728.jpg 1 63 50 394 598
+/tmp/natural_leaf_t10/10735.jpg 0
+/tmp/natural_leaf_t10/10740.jpg 1 84 72 424 682
+/tmp/natural_leaf_t10/10744.jpg 1 10 79 420 621
+/tmp/natural_leaf_t10/10747.jpg 0
+/tmp/natural_leaf_t10/10789.jpg 1 69 46 449 598
+/tmp/natural_leaf_t10/1079.jpg 1 39 134 487 623
+/tmp/natural_leaf_t10/10791.jpg 1 97 67 427 585
+/tmp/natural_leaf_t10/10802.jpg 1 7 6 582 731
+/tmp/natural_leaf_t10/10834.jpg 1 208 27 396 415
+/tmp/natural_leaf_t10/10836.jpg 1 71 53 462 656
+/tmp/natural_leaf_t10/10851.jpg 0
+/tmp/natural_leaf_t10/10859.jpg 0

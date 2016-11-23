@@ -1,0 +1,29 @@
+/tmp/uniform_leaf_t10/10000.jpg 0
+/tmp/uniform_leaf_t10/10001.jpg 1 57 59 484 600
+/tmp/uniform_leaf_t10/10002.jpg 1 17 45 436 613
+/tmp/uniform_leaf_t10/10010.jpg 1 125 138 379 481
+/tmp/uniform_leaf_t10/10031.jpg 1 69 87 388 502
+/tmp/uniform_leaf_t10/10043.jpg 1 39 0 323 638
+/tmp/uniform_leaf_t10/10044.jpg 1 8 25 454 592
+/tmp/uniform_leaf_t10/10046.jpg 1 151 374 288 331
+/tmp/uniform_leaf_t10/10047.jpg 1 188 4 181 209
+/tmp/uniform_leaf_t10/10048.jpg 1 5 4 385 455
+/tmp/uniform_leaf_t10/10051.jpg 1 5 4 596 575
+/tmp/uniform_leaf_t10/10057.jpg 1 3 0 331 730
+/tmp/uniform_leaf_t10/10059.jpg 1 78 181 347 439
+/tmp/uniform_leaf_t10/10067.jpg 1 1 25 363 696
+/tmp/uniform_leaf_t10/1007.jpg 1 47 132 448 499
+/tmp/uniform_leaf_t10/10073.jpg 1 57 54 524 647
+/tmp/uniform_leaf_t10/10085.jpg 1 2 14 485 671
+/tmp/uniform_leaf_t10/10088.jpg 1 4 23 543 703
+/tmp/uniform_leaf_t10/10090.jpg 0
+/tmp/uniform_leaf_t10/10091.jpg 1 156 18 157 159
+/tmp/uniform_leaf_t10/10096.jpg 1 114 161 411 470
+/tmp/uniform_leaf_t10/10099.jpg 1 114 71 406 415
+/tmp/uniform_leaf_t10/1010.jpg 0
+/tmp/uniform_leaf_t10/10107.jpg 1 41 0 370 471
+/tmp/uniform_leaf_t10/10108.jpg 1 77 37 502 583
+/tmp/uniform_leaf_t10/1011.jpg 1 9 3 509 700
+/tmp/uniform_leaf_t10/10112.jpg 1 15 48 448 622
+/tmp/uniform_leaf_t10/10115.jpg 1 15 58 516 681
+/tmp/uniform_leaf_t10/10131.jpg 0
