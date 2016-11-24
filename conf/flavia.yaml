@@ -1,7 +1,6 @@
 ---
 img_width: 150
 img_height: 150
-num_classes: 33
 batch_size: 25
 data_dir: data/flavia/
 
