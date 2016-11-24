@@ -293,13 +293,15 @@ ENV/
 .ropeproject
 
 # custom ignore
+src/label.plist
+
+preview/
+
 data/kaggle/
 data/swedish
 data/uci
 data/flavia
 data/dogs_vs_cats/
 data/imageclef/
-leaf.ipynb
-plot_classification.ipynb
-src/label.plist
-tryout.ipynb
+
+notebook/

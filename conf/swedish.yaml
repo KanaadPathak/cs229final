@@ -1,0 +1,17 @@
+---
+img_width: 150
+img_height: 150
+num_classes: 15
+batch_size: 32
+
+num_classes: 15
+
+train_data:
+  dir: data/swedish/train/
+  num: 850
+
+val_data:
+  dir: data/swedish/validation/
+  num: 300
+
+...
