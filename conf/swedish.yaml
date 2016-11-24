@@ -24,6 +24,6 @@ val_data:
   dir: data/swedish/validation/
   num: 300
   generator:
-    rescale: 1./255
+    rescale: 0.005
 
 ...
