@@ -6,6 +6,7 @@ from argparse import ArgumentParser
 import yaml
 import os
 
+
 class CNNClassifier(object):
     def __init__(self, num_classes=2, img_height=150, img_width=150):
         # dimensions of our images.
@@ -82,7 +83,6 @@ def load_generator(data_dir, target_size, batch_size, generator_params):
     class_mode = 'binary' if len(classes) <= 2 else 'categorical'
 
     data_gen = ImageDataGenerator(**generator_params)
-
     return data_gen.flow_from_directory(
         data_dir,
         target_size=target_size,
@@ -101,27 +101,18 @@ if __name__ == '__main__':
     with open(args.config_file, 'r') as stream:
         conf = yaml.load(stream)
 
-    img_height = conf['img_height']
-    img_width = conf['img_width']
+    data_dir = conf.get('data_dir')
+    img_height = conf.get('img_height', 256)
+    img_width = conf.get('img_width', 256)
+    batch_size = conf.get('batch_size', 32)
     target_size = (img_height, img_width)
-    batch_size = conf['batch_size']
-    train_data_dir = '%s/train' % conf['data_dir']
-    val_data_dir = '%s/validation' % conf['data_dir']
-
-    if 'num_train' in conf:
-        num_train = conf['num_train']
-    else:
-        num_train = count_image(train_data_dir)
-
-    if 'num_test' in conf:
-        num_test = conf['num_test']
-    else:
-        num_test = count_image(val_data_dir)
-
-    train_gen_conf = conf['train_gen']
-    val_gen_conf = conf['val_gen']
-
+    train_data_dir = '%s/train' % data_dir
+    val_data_dir = '%s/validation' % data_dir
     classes = get_classes(train_data_dir)
+    num_train = conf.get('num_train', count_image(train_data_dir))
+    num_test = conf.get('num_test', count_image(val_data_dir))
+    train_gen_conf = conf.get('train_gen', {})
+    val_gen_conf = conf.get('val_gen', {})
 
     clf = CNNClassifier(num_classes=len(classes), img_height=img_height, img_width=img_width)
     clf.fit_generator(load_generator(train_data_dir, target_size, batch_size, train_gen_conf),

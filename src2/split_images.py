@@ -33,7 +33,8 @@ def split(data_dir, test_size=None, train_size=None):
 
         count = 0
         for f in sample_list:
-            if f.endswith('jpg') or f.endswith('jpeg'):
+            supported_ext = ('.jpeg', '.jpg', '.png')
+            if f.lower().endswith(supported_ext):
                 if count < train_bound:
                     shutil.copy('%s/%s' % (class_dir, f),
                                 '%s/%s' % (train_class_dir, f))
