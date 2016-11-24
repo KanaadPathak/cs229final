@@ -4,7 +4,7 @@ img_height: 180
 data_dir: data/uci/
 
 train_gen:
-  rescale: 003921568627
+  rescale: 0.003921568627
   rotation_range: 90
   height_shift_range: 0.2
   width_shift_range: 0.2
@@ -13,5 +13,5 @@ train_gen:
   vertical_flip: True
 
 val_gen:
-  rescale: 003921568627
+  rescale: 0.003921568627
 ...

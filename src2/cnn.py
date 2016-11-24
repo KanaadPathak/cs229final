@@ -5,6 +5,7 @@ from keras.layers import Activation, Dropout, Flatten, Dense
 from argparse import ArgumentParser
 import yaml
 import os
+from datetime import datetime
 
 
 class CNNClassifier(object):
@@ -123,3 +124,9 @@ if __name__ == '__main__':
 
     if args.save_file is not None:
         clf.save(args.save_file)
+    else:
+        filename = args.config_file.rsplit('/', 1)[-1]
+        name = filename.rsplit('.', 1)[0]
+        dt = datetime.now().strftime("%Y%m%d%H%M%S")
+        save_file = 'history/%s-%s.h5' % (name, dt)
+        clf.save(save_file)
