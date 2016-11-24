@@ -1,9 +1,9 @@
 ---
 img_width: 150
 img_height: 150
-num_classes: 15
+num_classes: 33
 batch_size: 25
-data_dir: data/swedish/
+data_dir: data/flavia/
 
 train_gen:
   rescale: 0.1
@@ -11,7 +11,6 @@ train_gen:
   height_shift_range: 0.1
   width_shift_range: 0.1
   channel_shift_range: 0.1
-  shear_range: 0
   zoom_range: 0.2
   horizontal_flip: True
   vertical_flip: True
