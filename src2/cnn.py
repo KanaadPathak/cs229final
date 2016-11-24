@@ -91,14 +91,6 @@ def load_generator(data_dir, target_size, batch_size, generator_params):
         batch_size=batch_size)
 
 
-def make_divisible(total, divisor):
-    remainder = total % divisor
-    if remainder != 0:
-        return total + divisor - remainder
-    else:
-        return total
-
-
 if __name__ == '__main__':
     parser = ArgumentParser(description=__doc__)
     parser.add_argument('-e', '--epoch', type=int, default=50, help="the number of epochs to run")
@@ -119,12 +111,12 @@ if __name__ == '__main__':
     if 'num_train' in conf:
         num_train = conf['num_train']
     else:
-        num_train = make_divisible(count_image(train_data_dir), batch_size)
+        num_train = count_image(train_data_dir)
 
     if 'num_test' in conf:
         num_test = conf['num_test']
     else:
-        num_test = make_divisible(count_image(val_data_dir), batch_size)
+        num_test = count_image(val_data_dir)
 
     train_gen_conf = conf['train_gen']
     val_gen_conf = conf['val_gen']
