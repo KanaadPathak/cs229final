@@ -39,7 +39,7 @@ class CNNClassifier(object):
         model.add(Dense(64))
         model.add(Activation('relu'))
         model.add(Dropout(0.5))
-        model.add(Dense(self.num_classes))
+        model.add(Dense(1 if self.num_classes == 2 else self.num_classes))
         model.add(Activation(final_activation))
 
         model.compile(loss=loss,
@@ -70,7 +70,7 @@ if __name__ == '__main__':
         conf = load(stream)
 
     class_mode = 'binary'
-    if conf['num_classes']> 2:
+    if conf['num_classes'] > 2:
         class_mode = 'categorical'
     target_size = (conf['img_height'], conf['img_width'])
 
