@@ -2,13 +2,13 @@
 img_width: 150
 img_height: 150
 num_classes: 15
-batch_size: 50
+batch_size: 25
 
 num_classes: 15
 
 train_data:
   dir: data/swedish/train/
-  num: 850
+  num: 825
   generator:
     rescale: 0.005
     rotation_range: 30
