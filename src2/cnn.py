@@ -3,6 +3,7 @@ from keras.models import Sequential
 from keras.layers import Convolution2D, MaxPooling2D
 from keras.layers import Activation, Dropout, Flatten, Dense
 from argparse import ArgumentParser
+from yaml import load
 
 class CNNClassifier(object):
     def __init__(self, num_classes=2, img_height=150, img_width=150):
@@ -56,42 +57,37 @@ class CNNClassifier(object):
 
     def save(self, h5_file):
         self.model.save_weights(h5_file)
-
+        
 
 if __name__ == '__main__':
     parser = ArgumentParser(description=__doc__)
-    parser.add_argument('-W', '--img_width', type=int, default=150, help="image width")
-    parser.add_argument('-H', '--img_height', type=int, default=150, help="image height")
-    parser.add_argument('-c', '--num_classes', type=int, default=2, help="the number of class to classify")
     parser.add_argument('-e', '--epoch', type=int, default=50, help="the number of epochs to run")
-
-    parser.add_argument('-b', '--batch_size', type=int, default=32, help="image height")
-    parser.add_argument('--num_train', type=int, default=2000, help="image width")
-    parser.add_argument('--num_val', type=int, default=800, help="image height")
-
-    parser.add_argument('train_dir', help="directory of train image files")
-    parser.add_argument('val_dir', help="directory of validation image files")
-
     parser.add_argument('-s', '--save_file', help="the file that the weight are saved to")
+    parser.add_argument('config_file', help="the path to the config")
     args = parser.parse_args()
 
+    with open(args.config_file, 'r') as stream:
+        conf = load(stream)
+
     class_mode = 'binary'
-    if args.num_classes > 2:
+    if conf['num_classes']> 2:
         class_mode = 'categorical'
 
     train_generator = ImageDataGenerator().flow_from_directory(
-        args.train_dir,
-        target_size=(args.img_height, args.img_width),
-        batch_size=args.batch_size,
+        conf['train_data']['dir'],
+        target_size=(conf['img_height'], conf['img_width']),
+        batch_size=conf['batch_size'],
         class_mode=class_mode)
 
     validation_generator = ImageDataGenerator().flow_from_directory(
-        args.val_dir,
-        target_size=(args.img_height, args.img_width),
-        batch_size=args.batch_size,
+        conf['val_data']['dir'],
+        target_size=(conf['img_height'], conf['img_width']),
+        batch_size=conf['batch_size'],
         class_mode=class_mode)
 
-    clf = CNNClassifier(num_classes=args.num_classes, img_height=args.img_height, img_width=args.img_width)
-    clf.fit_generator(train_generator, validation_generator, num_train=args.num_train, num_val=args.num_val,
-                      num_epoch=args.epoch)
-    clf.save(args.save_file)
+    clf = CNNClassifier(num_classes=conf['num_classes'], img_height=conf['img_height'], img_width=conf['img_width'])
+    clf.fit_generator(train_generator, validation_generator, num_train=conf['train_data']['num'],
+                      num_val=conf['val_data']['num'], num_epoch=args.epoch)
+
+    if args.save_file is not None:
+        clf.save(args.save_file)
