@@ -5,7 +5,7 @@ batch_size: 25
 data_dir: data/flavia/
 
 train_gen:
-  rescale: 0.1
+  rescale: 003921568627
   rotation_range: 30
   height_shift_range: 0.1
   width_shift_range: 0.1
@@ -15,6 +15,5 @@ train_gen:
   vertical_flip: True
 
 val_gen:
-  rescale: 0.1
-
+  rescale: 003921568627
 ...

@@ -4,19 +4,12 @@ img_height: 150
 num_classes: 2
 batch_size: 32
 
-train_data:
-  dir: data/dogs_vs_cats/train/
-  num: 2000
-  generator:
-    rescale: 0.003921568627
-    shear_range: 0.2
-    zoom_range: 0.2
-    horizontal_flip: True
+train_gen:
+  rescale: 0.003921568627
+  shear_range: 0.2
+  zoom_range: 0.2
+  horizontal_flip: True
 
-val_data:
-  dir: data/dogs_vs_cats/validation/
-  num: 800
-  generator:
-    rescale: 0.003921568627
-
+val_gen:
+  rescale: 0.003921568627
 ...
