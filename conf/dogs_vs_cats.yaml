@@ -1,8 +1,7 @@
 ---
 img_width: 150
 img_height: 150
-num_classes: 2
-batch_size: 32
+data_dir: data/dogs_vs_cats/
 
 train_gen:
   rescale: 0.003921568627
