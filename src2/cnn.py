@@ -72,22 +72,26 @@ if __name__ == '__main__':
     class_mode = 'binary'
     if conf['num_classes']> 2:
         class_mode = 'categorical'
+    target_size = (conf['img_height'], conf['img_width'])
 
-    train_generator = ImageDataGenerator().flow_from_directory(
+    train_generator = ImageDataGenerator(**conf['train_data']['generator']).flow_from_directory(
         conf['train_data']['dir'],
-        target_size=(conf['img_height'], conf['img_width']),
+        target_size=target_size,
         batch_size=conf['batch_size'],
         class_mode=class_mode)
 
-    validation_generator = ImageDataGenerator().flow_from_directory(
+    val_generator = ImageDataGenerator(**conf['val_data']['generator']
+                                       ).flow_from_directory(
         conf['val_data']['dir'],
-        target_size=(conf['img_height'], conf['img_width']),
+        target_size=target_size,
         batch_size=conf['batch_size'],
         class_mode=class_mode)
 
     clf = CNNClassifier(num_classes=conf['num_classes'], img_height=conf['img_height'], img_width=conf['img_width'])
-    clf.fit_generator(train_generator, validation_generator, num_train=conf['train_data']['num'],
-                      num_val=conf['val_data']['num'], num_epoch=args.epoch)
+    clf.fit_generator(train_generator, val_generator,
+                      num_train=conf['train_data']['num'],
+                      num_val=conf['val_data']['num'],
+                      num_epoch=args.epoch)
 
     if args.save_file is not None:
         clf.save(args.save_file)

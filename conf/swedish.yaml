@@ -2,16 +2,28 @@
 img_width: 150
 img_height: 150
 num_classes: 15
-batch_size: 32
+batch_size: 50
 
 num_classes: 15
 
 train_data:
   dir: data/swedish/train/
   num: 850
+  generator:
+    rescale: 0.005
+    rotation_range: 30
+    height_shift_range: 0.1
+    width_shift_range: 0.1
+    channel_shift_range: 0.1
+    shear_range: 0
+    zoom_range: 0.2
+    horizontal_flip: True
+    vertical_flip: True
 
 val_data:
   dir: data/swedish/validation/
   num: 300
+  generator:
+    rescale: 1./255
 
 ...
