@@ -293,14 +293,12 @@ ENV/
 .ropeproject
 
 # custom ignore
-data/images.zip
-data/images/
-data/sample_submission.csv
-data/sample_submission.csv.zip
-data/test.csv
-data/test.csv.zip
-data/train.csv
-data/train.csv.zip
+data/kaggle/
+data/swedish
+data/uci
+data/flavia
+data/dogs_vs_cats/
+data/imageclef/
 leaf.ipynb
 plot_classification.ipynb
 src/label.plist

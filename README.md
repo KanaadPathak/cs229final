@@ -41,10 +41,10 @@ a browser will open to show the jupyter notebook, select the `ipynb` files to op
 
     | symbol | explanation          |
     |--------|:--------------------:|
-    | l	     | is short for leaf    |
-    | 9	     | is treeclass nine    |
-    | nr	   | is short for number  |
-    | 003	   | is the number of the leaf of the specific treeclass |
+    | l      | is short for leaf    |
+    | 9      | is treeclass nine    |
+    | nr     | is short for number  |
+    | 003    | is the number of the leaf of the specific treeclass |
 
     Oskar J. O. Söderkvist, “Computer vision classifcation of leaves from swedish trees,” Master’s Thesis, Linkoping University, 2001.
 
