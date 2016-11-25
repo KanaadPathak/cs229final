@@ -129,7 +129,7 @@ def count_image(data_dir):
     supported_ext = ('.jpeg', '.jpg', '.png')
     image_count = 0
     for root, dirs, files in os.walk(data_dir):
-        image_count += sum(f.endswith(supported_ext) for f in files)
+        image_count += sum(f.lower().endswith(supported_ext) for f in files)
     return image_count
 
 

@@ -6,9 +6,9 @@ data_dir: data/uci/
 train_gen:
   rescale: 0.003921568627
   rotation_range: 90
-  height_shift_range: 0.2
-  width_shift_range: 0.2
-  zoom_range: 0.2
+  height_shift_range: 0.4
+  width_shift_range: 0.4
+  zoom_range: 0.4
   horizontal_flip: True
   vertical_flip: True
 
