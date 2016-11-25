@@ -1,6 +1,6 @@
 from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Sequential
-from keras.layers import Convolution2D, MaxPooling2D
+from keras.layers import Convolution2D, MaxPooling2D, ZeroPadding2D
 from keras.layers import Activation, Dropout, Flatten, Dense
 from argparse import ArgumentParser
 import yaml
@@ -19,35 +19,89 @@ class CNNClassifier(object):
 
     def create_model(self):
         loss = 'binary_crossentropy'
+        output_dim = 1
         final_activation = 'sigmoid'
         if self.num_classes > 2:
             loss = 'categorical_crossentropy'
+            output_dim = self.num_classes
             final_activation = 'softmax'
 
         model = Sequential()
-        model.add(Convolution2D(32, 3, 3, input_shape=(3, self.img_height, self.img_width)))
-        model.add(Activation('relu'))
-        model.add(Dropout(0.3))
+        model.add(ZeroPadding2D((1, 1), input_shape=(3, self.img_height, self.img_width)))
+        model.add(Convolution2D(32, 3, 3, activation='relu'))
         model.add(MaxPooling2D(pool_size=(2, 2)))
 
-        model.add(Convolution2D(32, 3, 3))
-        model.add(Activation('relu'))
+        model.add(ZeroPadding2D((1, 1)))
+        model.add(Convolution2D(64, 3, 3, activation='relu', name='conv1'))
         model.add(MaxPooling2D(pool_size=(2, 2)))
 
-        model.add(Convolution2D(64, 3, 3))
-        model.add(Activation('relu'))
+        model.add(ZeroPadding2D((1, 1)))
+        model.add(Convolution2D(128, 3, 3, activation='relu', name='conv2'))
         model.add(MaxPooling2D(pool_size=(2, 2)))
 
         model.add(Flatten())
-        model.add(Dense(64))
-        model.add(Activation('relu'))
+        model.add(Dense(64, activation='relu'))
         model.add(Dropout(0.5))
-        model.add(Dense(1 if self.num_classes == 2 else self.num_classes))
-        model.add(Activation(final_activation))
+        model.add(Dense(output_dim, activation=final_activation))
 
         model.compile(loss=loss,
                       optimizer='rmsprop',
                       metrics=['accuracy'])
+        return model
+
+    def vgg16(self):
+        loss = 'binary_crossentropy'
+        output_dim = 1
+        final_activation = 'sigmoid'
+        if self.num_classes > 2:
+            loss = 'categorical_crossentropy'
+            output_dim = self.num_classes
+            final_activation = 'softmax'
+
+        model = Sequential()
+        model.add(ZeroPadding2D((1, 1), input_shape=(3, self.img_height, self.img_width)))
+
+        model.add(Convolution2D(64, 3, 3, activation='relu', name='conv1_1'))
+        model.add(ZeroPadding2D((1, 1)))
+        model.add(Convolution2D(64, 3, 3, activation='relu', name='conv1_2'))
+        model.add(MaxPooling2D((2, 2), strides=(2, 2)))
+
+        model.add(ZeroPadding2D((1, 1)))
+        model.add(Convolution2D(128, 3, 3, activation='relu', name='conv2_1'))
+        model.add(ZeroPadding2D((1, 1)))
+        model.add(Convolution2D(128, 3, 3, activation='relu', name='conv2_2'))
+        model.add(MaxPooling2D((2, 2), strides=(2, 2)))
+
+        model.add(ZeroPadding2D((1, 1)))
+        model.add(Convolution2D(256, 3, 3, activation='relu', name='conv3_1'))
+        model.add(ZeroPadding2D((1, 1)))
+        model.add(Convolution2D(256, 3, 3, activation='relu', name='conv3_2'))
+        model.add(ZeroPadding2D((1, 1)))
+        model.add(Convolution2D(256, 3, 3, activation='relu', name='conv3_3'))
+        model.add(MaxPooling2D((2, 2), strides=(2, 2)))
+
+        model.add(ZeroPadding2D((1, 1)))
+        model.add(Convolution2D(512, 3, 3, activation='relu', name='conv4_1'))
+        model.add(ZeroPadding2D((1, 1)))
+        model.add(Convolution2D(512, 3, 3, activation='relu', name='conv4_2'))
+        model.add(ZeroPadding2D((1, 1)))
+        model.add(Convolution2D(512, 3, 3, activation='relu', name='conv4_3'))
+        model.add(MaxPooling2D((2, 2), strides=(2, 2)))
+
+        model.add(ZeroPadding2D((1, 1)))
+        model.add(Convolution2D(512, 3, 3, activation='relu', name='conv5_1'))
+        model.add(ZeroPadding2D((1, 1)))
+        model.add(Convolution2D(512, 3, 3, activation='relu', name='conv5_2'))
+        model.add(ZeroPadding2D((1, 1)))
+        model.add(Convolution2D(512, 3, 3, activation='relu', name='conv5_3'))
+        model.add(MaxPooling2D((2, 2), strides=(2, 2)))
+
+        model.add(Flatten())
+        model.add(Dense(256, activation='relu'))
+        model.add(Dropout(0.5))
+        model.add(Dense(output_dim, activation=final_activation))
+
+        model.compile(optimizer='rmsprop', loss=loss, metrics=['accuracy'])
         return model
 
     def fit_generator(self, train_generator, val_generator, num_train, num_val, num_epoch=50):

@@ -4,7 +4,7 @@ img_height: 150
 data_dir: data/flavia/
 
 train_gen:
-  rescale: 0.003921568627
+  rescale: 0.00392156862745098
   rotation_range: 90
   height_shift_range: 0.1
   width_shift_range: 0.1
@@ -14,5 +14,6 @@ train_gen:
   vertical_flip: True
 
 val_gen:
-  rescale: 0.003921568627
+  rescale: 0.00392156862745098
+
 ...
