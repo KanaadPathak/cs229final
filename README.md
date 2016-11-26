@@ -38,12 +38,12 @@ a browser will open to show the jupyter notebook, select the `ipynb` files to op
     [Swedish Leaf Dataset](http://www.cvl.isy.liu.se/en/research/datasets/swedish-leaf/)
     The files are named so that it is easy to find the leaf/leaves that we want. A file could be named for example :
     `l9nr003.tif`
-
-    | symbol | explanation          |
-    |--------|:--------------------:|
-    | l      | is short for leaf    |
-    | 9      | is treeclass nine    |
-    | nr     | is short for number  |
+    
+    | symbol | explanation         |
+    | ------ | :------------------ |
+    | l      | is short for leaf   |
+    | 9      | is treeclass nine   |
+    | nr     | is short for number |
     | 003    | is the number of the leaf of the specific treeclass |
 
     Oskar J. O. Söderkvist, “Computer vision classifcation of leaves from swedish trees,” Master’s Thesis, Linkoping University, 2001.
