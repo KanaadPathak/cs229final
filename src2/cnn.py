@@ -44,6 +44,8 @@ class CNNClassifier(object):
         model.add(Dropout(0.5))
         model.add(Dense(output_dim, activation=final_activation))
 
+        model.get_output_at()
+
         model.compile(loss=loss,
                       optimizer='rmsprop',
                       metrics=['accuracy'])
