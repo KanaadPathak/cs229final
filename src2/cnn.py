@@ -1,11 +1,10 @@
-import argparse
 from datetime import datetime
 
 import yaml
 from keras.layers import Convolution2D, MaxPooling2D, ZeroPadding2D, Dropout, Flatten, Dense
 from keras.models import Sequential
 
-from cnn_preprocess import count_image, get_classes, load_generator
+from preprocess_utils import load_generator
 
 
 class CNNClassifier(object):
@@ -60,13 +59,7 @@ class CNNClassifier(object):
         self.model.save_weights(h5_file)
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('-e', '--epoch', type=int, default=50, help="the number of epochs to run")
-    parser.add_argument('-s', '--save_file', help="the file that the weight are saved to")
-    parser.add_argument('config_file', help="the path to the config")
-    args = parser.parse_args()
-
+def run_cnn_classify(args):
     with open(args.config_file, 'r') as stream:
         conf = yaml.load(stream)
 

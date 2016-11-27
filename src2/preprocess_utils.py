@@ -1,6 +1,7 @@
 import os
 
 from keras.preprocessing.image import ImageDataGenerator
+import pandas as pd
 
 
 def get_classes(data_dir):
@@ -33,3 +34,7 @@ def load_generator(data_dir, target_size=(256, 256), batch_size=32, **generator_
         classes=classes_,
         class_mode=class_mode,
         batch_size=batch_size)
+
+
+def transform_values(dataframe, func):
+    return pd.DataFrame(func(dataframe.values), columns=dataframe.columns, index=dataframe.index)

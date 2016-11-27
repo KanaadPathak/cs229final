@@ -2,8 +2,13 @@ from sklearn.preprocessing import LabelEncoder, StandardScaler
 import pandas as pd
 import csv
 import zipfile
-import argparse
 import os
+import shutil
+
+from xml.dom import minidom
+
+from preprocess_utils import transform_values
+
 
 class KaggleLoader(object):
     def __init__(self, csv_file, label_column='species', scale=True):
@@ -105,15 +110,21 @@ class UCILoader(object):
         pass
 
 
+class ImageClefLoader(object):
+    def extract_leaves(self, root_dir):
+        # root_dir = sys.argv[1]
+        image_dir = '%s/train' % root_dir
+        for f in os.listdir(image_dir):
+            if f.endswith('.xml'):
+                filename = '%s/%s' % (image_dir, f)
+                xmldoc = minidom.parse(filename)
+                the_content = xmldoc.getElementsByTagName('Content')[0].firstChild.data
+                the_type = xmldoc.getElementsByTagName('Type')[0].firstChild.data
+                the_classid = xmldoc.getElementsByTagName('ClassId')[0].firstChild.data
+                the_filename = xmldoc.getElementsByTagName('FileName')[0].firstChild.data
+                if the_content == 'Leaf':
+                    print(','.join([the_type, the_classid, the_content, the_filename]))
+                    dest_dir = '%s/ready' % root_dir
+                    os.makedirs(dest_dir, exist_ok=True)
+                    shutil.copy('%s/%s' % (image_dir, the_filename), '%s/%s' % (dest_dir, the_filename))
 
-
-def transform_values(df, func):
-    return pd.DataFrame(func(df.values), columns=df.columns, index=df.index)
-
-
-if __name__ == '__main__':
-    # parser = argparse.ArgumentParser(description=__doc__)
-    # parser.add_argument('csv_file', help="csv file from kaggle")
-    # args = parser.parse_args()
-    data_set = FlaviaLoader().load_labels()
-    # print(data_set.X_train)
