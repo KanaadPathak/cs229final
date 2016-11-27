@@ -1,3 +1,5 @@
+tqdm
+tables
 sklearn
 appnope==0.1.0
 cycler==0.10.0
