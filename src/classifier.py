@@ -85,17 +85,17 @@ if __name__ == "__main__":
      'c_range' : np.logspace(-4, 6, 11), #np.logspace(1, 9, 6, endpoint=True),
       #gamma = 1/(2*tao^2)
      'gamma_range' : np.logspace(-5, 9, 15), #np.linspace(1.0/(2*8*8), 1, 1, endpoint=True),
-     'skip' : True,
+     'skip' : False,
     },
     {
       #SVMGaussianLinear
-      'c_range' : np.logspace(-4, 6, 11, endpoint=True), #np.logspace(-4, 6, 11),
+      'c_range' : np.logspace(-4, 9, 11, endpoint=True), #np.logspace(-4, 6, 11),
       'skip' : False,
     },
     {
       #Softmax
       'c_range' : np.logspace(-4, 6, 11, endpoint=True), #np.logspace(-4, 6, 11)
-      'skip' : True,
+      'skip' : False,
     },
   )
   selectModel(data_set, zip(classifiers, configs))
