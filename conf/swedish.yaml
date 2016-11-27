@@ -1,18 +1,23 @@
 ---
-img_width: 240
-img_height: 180
-data_dir: data/swedish/
 
-train_gen:
-  rescale: 0.003921568627
-  rotation_range: 30
-  height_shift_range: 0.1
-  width_shift_range: 0.1
-  channel_shift_range: 0.1
-  zoom_range: 0.2
-  horizontal_flip: True
-  vertical_flip: True
+train:
+  img_width: 240
+  img_height: 180
+  data_dir: data/swedish/train
+  gen_params:
+    rescale: 0.003921568627
+    rotation_range: 30
+    height_shift_range: 0.1
+    width_shift_range: 0.1
+    channel_shift_range: 0.1
+    zoom_range: 0.2
+    horizontal_flip: True
+    vertical_flip: True
 
-val_gen:
-  rescale: 0.003921568627
+val:
+  img_width: 240
+  img_height: 180
+  data_dir: data/swedish/validation
+  gen_params:
+    rescale: 0.003921568627
 ...

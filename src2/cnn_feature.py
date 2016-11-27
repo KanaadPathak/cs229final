@@ -1,6 +1,9 @@
 from functools import reduce
 
-from preprocess_utils import load_generator
+from keras.layers import Dense, Flatten, Dropout
+from keras.models import Sequential
+
+from preprocess_utils import GeneratorLoader
 from vgg16 import VGG16
 from tqdm import tqdm
 from operator import mul
@@ -84,22 +87,34 @@ class CNNFeatureExtractor(object):
     def extract_feature(self, data_dir, feature_file, target_size=(256, 256), batch_size=8):
         model = VGG16(weights='imagenet', include_top=False)
 
-        data_gen = load_generator(data_dir, target_size=target_size, batch_size=batch_size)
+        data_gen = GeneratorLoader(target_size=target_size, batch_size=batch_size).load_generator(data_dir)
 
-        with tqdm(total=data_gen.nb_sample) as pbar, tables.open_file(feature_file, mode='w') as f:
+        with tqdm(total=data_gen.nb_sample) as pbar, \
+                tables.open_file(feature_file, mode='w') as f:
+
             atom = tables.Float64Atom()
             cnn_input_shape = (batch_size, *data_gen.image_shape)
             cnn_output_shape = model.get_output_shape_for(cnn_input_shape)
             single_sample_feature_shape = reduce(mul, cnn_output_shape[1:])
             feature_arr = f.create_earray(f.root, 'features', atom, (0, single_sample_feature_shape))
             label_arr = f.create_earray(f.root, 'labels', atom, (0, ))
+            table_def = {
+                'classid': tables.Int32Col(),
+                'name': tables.StringCol(itemsize=60),
+            }
+            class_table = f.create_table(f.root, 'classes', table_def)
+            row = class_table.row
+            for name, classid in data_gen.class_indices.items():
+                row['classid'] = classid
+                row['name'] = name
+                row.append()
+            class_table.flush()
 
             for X, y in data_gen:
-                batch_samples = X.shape[0]
-                features = model.predict(X).reshape((batch_samples, single_sample_feature_shape))
+                features = model.predict(X).reshape((X.shape[0], single_sample_feature_shape))
                 feature_arr.append(features)
                 label_arr.append(y.argmax(1))
-                pbar.update(batch_samples)
+                pbar.update(X.shape[0])
                 if pbar.n >= data_gen.nb_sample:
                     break
 
@@ -107,4 +122,30 @@ class CNNFeatureExtractor(object):
         with tables.open_file(feature_file, mode='r') as f:
             X = f.root.features[:, :]
             y = f.root.labels[:]
-        return X, y
+            classes = f.root.classes[:, :]
+        return X, y, classes
+
+    def train_top_model(self, feature_file, weight_file=None, batch_size=32, nb_epoch=10):
+        X, y, classes = self.load_features(feature_file)
+        X_train, X_val, y_train, y_val = train_test_split(X, y, train_size=.8, stratify=y)
+
+        loss = 'binary_crossentropy'
+        output_dim = 1
+        final_activation = 'sigmoid'
+        if classes.shape[0] > 2:
+            loss = 'categorical_crossentropy'
+            output_dim = classes.shape[0]
+            final_activation = 'softmax'
+
+        model = Sequential()
+        model.add(Flatten(name='flatten', input_shape=X_train.shape[1:]))
+        model.add(Dense(256, activation='relu', name='fc1'))
+        model.add(Dropout(0.5))
+        model.add(Dense(output_dim, activation=final_activation, name='predictions'))
+
+        model.compile(optimizer='rmpsprop', loss=loss, metrics=['accuracy'])
+
+        model.fit(X_train, y_train, batch_size=batch_size, nb_epoch=nb_epoch, validation_data=(X_val, y_val))
+
+        if weight_file is not None:
+            model.save_weights(weight_file)

@@ -22,19 +22,38 @@ def count_image(data_dir):
     return image_count
 
 
-def load_generator(data_dir, target_size=(256, 256), batch_size=32, **generator_params):
-    if generator_params is None:
-        generator_params = {}
-    classes_ = get_classes(data_dir)
-    class_mode = 'binary' if len(classes_) <= 2 else 'categorical'
-
-    data_gen = ImageDataGenerator(**generator_params)
-    return data_gen.flow_from_directory(
-        data_dir,
+def create_from_dict(conf):
+    batch_size = conf.get('batch_size', 32)
+    target_size = (conf.get('img_height', 256), conf.get('img_width', 256))
+    generator_params = conf.get('gen_params', {})
+    data_dir = conf.get('data_dir')
+    return GeneratorLoader(
         target_size=target_size,
-        classes=classes_,
-        class_mode=class_mode,
-        batch_size=batch_size)
+        batch_size=batch_size,
+        generator_params=generator_params
+    ).load_generator(data_dir)
+
+
+class GeneratorLoader(object):
+    def __init__(self, target_size=(256, 256), batch_size=32, generator_params=None):
+        self.batch_size = batch_size
+        self.target_size = target_size
+        if generator_params is None:
+            self.generator_params = {}
+        else:
+            self.generator_params = generator_params
+
+    def load_generator(self, data_dir):
+        classes_ = get_classes(data_dir)
+        class_mode = 'binary' if len(classes_) <= 2 else 'categorical'
+
+        data_gen = ImageDataGenerator(**self.generator_params)
+        return data_gen.flow_from_directory(
+            data_dir,
+            target_size=self.target_size,
+            classes=classes_,
+            class_mode=class_mode,
+            batch_size=self.batch_size)
 
 
 def transform_values(dataframe, func):
