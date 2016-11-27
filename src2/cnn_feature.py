@@ -1,10 +1,11 @@
 from functools import reduce
 
-from keras.constraints import maxnorm
 from keras.layers import Dense, Dropout
 from keras.models import Sequential
 from keras.utils import np_utils
+from resnet50 import ResNet50
 from vgg16 import VGG16
+from vgg19 import VGG19
 
 from preprocess_utils import GeneratorLoader
 from tqdm import tqdm
@@ -24,8 +25,8 @@ from sklearn.gaussian_process.kernels import RBF
 
 from sklearn.metrics import accuracy_score, log_loss
 from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import cross_val_score, StratifiedShuffleSplit, train_test_split
-from sklearn.feature_selection import VarianceThreshold, SelectKBest, SelectPercentile, chi2, f_classif
+from sklearn.model_selection import cross_val_score, train_test_split
+from sklearn.feature_selection import VarianceThreshold, SelectKBest, f_classif
 
 
 class ClassifierPool(object):
@@ -47,14 +48,9 @@ class ClassifierPool(object):
             ('QDA', QuadraticDiscriminantAnalysis())]
 
     def feature_selection(self, X, y):
-        selectors = [
-            VarianceThreshold(threshold=(.9 * (1 - .9))),
-            SelectKBest(f_classif, k=3000)
-            # SelectPercentile(f_classif, percentile=20)
-        ]
+        X = VarianceThreshold(threshold=(.9 * (1 - .9))).fit_transform(X, y)
+        X = SelectKBest(f_classif, k=min(X.shape[1], 3000)).fit_transform(X, y)
 
-        for sel in selectors:
-            X = sel.fit_transform(X, y)
         return X
 
     def scale(self, X):
@@ -86,8 +82,17 @@ class CNNFeatureExtractor(object):
     def __init__(self):
         pass
 
-    def extract_feature(self, data_dir, feature_file, target_size=(256, 256), batch_size=8):
-        model = VGG16(weights='imagenet', include_top=False)
+    @staticmethod
+    def select_architecture(architecture):
+        if architecture == 'vgg16':
+            return VGG16(weights='imagenet', include_top=False)
+        elif architecture == 'vgg19':
+            return VGG19(weights='imagenet', include_top=False)
+        elif architecture == 'resnet50':
+            return ResNet50(weights='imagenet', include_top=False)
+
+    def extract_feature(self, data_dir, feature_file, architecture='vgg16', target_size=(256, 256), batch_size=8):
+        model = self.select_architecture(architecture)
 
         data_gen = GeneratorLoader(target_size=target_size, batch_size=batch_size).load_generator(data_dir)
 
