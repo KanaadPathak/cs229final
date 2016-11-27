@@ -207,7 +207,7 @@ class ImageCLEF2013(LeafPreprocessor):
   Each image is uniquely identified by an integer "uid" between 1 and 30000.
   """
   def read_property_xml(self, path, basename):
-    m = re.match(r"([0-9]+)[.]jpg", basename)
+    m = re.match(r"([0-9]+)[.].*jpg", basename)
     if m is None:
       return None
     #read property xml
@@ -220,7 +220,8 @@ class ImageCLEF2013(LeafPreprocessor):
 
   def downsize(self, img):
     #~300 KP with original size and SIFT detector. requires dense detector
-    return self.resize(img, 128.0)
+    #return self.resize(img, 128.0)
+    return img
 
   def read_record(self, path, basename):
     tree = self.read_property_xml(path, basename)

@@ -16,6 +16,7 @@ import nms
 import numpy as np
 import re
 import time
+import threshold
 import json
 from sklearn.externals import joblib
 
@@ -59,22 +60,35 @@ class HogDetector(object):
   def deserialize(self):
     self.clf = joblib.load(self.model_file)
 
-  def write_detected_img(self, img, detected, image_name, output_path, once):
+  def write_detected_img(self, img, detected, image_name, output_path, p):
+    once = p['once']
+    visual = p['visual_detection']
     if once:
       detected = detected[:1]
     for (i, (x,y,m,w,h)) in enumerate(detected):
       suffix = ''
       if not once:
-        suffix =  '.'  + str(int(m*100)) + '.' + str(i)
+        suffix =  '_'  + str(int(m*100)) + '_' + str(i)
       filename = os.path.join(output_path, os.path.basename(image_name).split('.')[0] + suffix + '.jpg')
+      if y + h > img.shape[0]:
+        y = 0; h = img.shape[0]
+      elif x + w > img.shape[1]:
+        x = 0; w = img.shape[0]
+      logging.debug(" writing detection: margin=%(m).2f (%(x)d, %(y)d, %(w)d, %(h)d)" % locals())
+      #apply background removal
       crop = img[y:y + h, x:x + w]
-      cv2.imwrite(filename, crop)
+      output = threshold.remove_background(crop, visual)
+      cv2.imwrite(filename, output)
 
   def show_window(self, img, (x,y), window_size, color=(255,255,255)):
     clone = img.copy()
     cv2.rectangle(clone, (x, y), (x + window_size[0], y + window_size[1]), color, thickness = 2)
-    cv2.imshow("Sliding Window in Progress", clone)
-    cv2.waitKey(1)
+    imgutil.show_img((clone,), ("Sliding Window in Progress",), 1)
+
+  def get_init_factor(self, img, scaled):
+    w_factor = float(img.shape[1]) / float(scaled.shape[1])
+    h_factor = float(img.shape[0]) / float(scaled.shape[0])
+    return max(w_factor, h_factor)
 
 
   def detect_multi_scale(self, img, p):
@@ -84,8 +98,14 @@ class HogDetector(object):
     detected_window = []
     #looks like we have too many matches. we only need one
     #from smallest scale to original scale
-    reversed=True; max_margin = 0
+    reversed=False; max_margin = 0; factor = 0
     for (i, scaled)  in enumerate(imgutil.pyramid(img, scale=scale, minSize=window_size, reversed=reversed)):
+      if i == 0:
+        factor = self.get_init_factor(img, scaled)
+      elif reversed:
+        factor = factor/scale
+      else:
+        factor = factor * scale
       t2 = time.time()
       for (x, y, window) in  imgutil.sliding_window(scaled, window_size, step_size):
         if window.shape[0] != window_size[1] or window.shape[1] != window_size[0]:
@@ -99,22 +119,20 @@ class HogDetector(object):
           margin = self.clf.decision_function(vec)
           logging.debug("found object with %(margin)f" % locals())
           #TODO: why?
-          if margin < 0.45:
+          if margin < 0.30:
             logging.debug("skipping detection with low margin %(margin)f" % locals())
             continue
           if margin > max_margin:
             max_margin = margin
           #to scale back to original size
-          factor = float(img.shape[0]) / float(scaled.shape[0])
           detected_window.append((int(x * factor), int(y * factor), margin, int(window_size[0] * factor),
                                   int(window_size[1] * factor)))
           if p['visual_scan'] or p['visual_detection']:
             self.show_window(scaled, (x,y), window_size, color=(0,255,0))
-            cv2.waitKey(300)
+      logging.debug("scanning level %d (%d,%d) takes %.2f" % (i, window.shape[1], window.shape[0], time.time()-t2))
       #TODO: why?
-      if max_margin > 1.0:
+      if max_margin > 1.5:
         break
-      logging.debug("scanning level %d takes %.2f" % (i, time.time()-t2))
     return (detected_window, max_margin)
 
   def detect_img(self, image_name, output_path, p):
@@ -123,27 +141,32 @@ class HogDetector(object):
     window_size = self.hog.get_parameter('window_size')
     shrink_w_size = int(p['shrink_w_size'])
 
-    img = cv2.imread(image_name, 0)
-    img = imgutil.resize(img, width=shrink_w_size, height=shrink_w_size*2)
-    assert img is not None and img.shape[1]>=window_size[0] and img.shape[0] >= window_size[1]
+    origin = cv2.imread(image_name)
+    resized = imgutil.resize(origin, width=shrink_w_size, height=shrink_w_size*2)
+    assert resized is not None and resized.shape[1]>=window_size[0] and resized.shape[0] >= window_size[1]
 
-    detected_window = [] ; origin = img; best_img = None; best_margin = 0; best_window = []
-    for degree in (0, 90, 180, -90, 45, -45):
+    detected_window = [] ; best_img = None; best_margin = 0; best_window = []
+    for degree in (0,):
       logging.debug("scanning with %(degree)d degree" % locals())
-      img = imgutil.rotate(origin.copy(), degree)
-      (detected_window, margin) = self.detect_multi_scale(img, p)
-      #TODO: why
+      #rotate and gray scale before processing
+      rotated = imgutil.rotate(resized.copy(), degree)
+      gray= cv2.cvtColor(rotated, cv2.COLOR_BGR2GRAY)
+      (detected_window, margin) = self.detect_multi_scale(gray, p)
       if margin > best_margin:
         best_margin = margin
-        best_img = img
+        best_img = rotated
         best_window = detected_window
-      if len(best_window) > 0 and best_margin > 1.2:
+      #TODO: why
+      if len(best_window) > 0 and best_margin > 5.0:
         break
     #Non-Maximum Suppression
     if ( len(best_window) > 1 ):
       detected_window = nms.nms(best_window, p['threshold'])
+
+
+
     if output_path is not None and len(detected_window) > 0:
-      self.write_detected_img(best_img, detected_window, image_name, output_path, p['once'])
+      self.write_detected_img(best_img, detected_window, image_name, output_path, p)
     return len(detected_window) > 0
 
   def detect(self, args):

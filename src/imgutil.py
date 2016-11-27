@@ -10,6 +10,14 @@ import logging
 import numpy as np
 import re
 import time
+from matplotlib import pyplot as plt
+
+
+def show_img(imgs, titles, delay):
+  for (i,img) in enumerate(imgs):
+    cv2.imshow(titles[i], img)
+  cv2.waitKey(delay)
+  cv2.destroyAllWindows()
 
 def compare_shape(img, dim):
   """ damn cv2 img size doesn't match dim"""
@@ -19,6 +27,33 @@ def sliding_window(image, window_size, step_size):
   for y in xrange(0, image.shape[0], step_size[1]):
     for x in xrange(0, image.shape[1], step_size[0]):
       yield (x, y, image[y:y + window_size[1], x:x + window_size[0]])
+
+def find_surrounding_box(image, w, h):
+  """ create a new image and draw "image in the center"""
+  if image.shape[0] >= h and image.shape[1] >= w:
+    return image
+  height = max(h, image.shape[0])
+  width = max(w, image.shape[1])
+  dst_image = np.zeros((height, width), dtype='uint8')
+  offset_y = (height-image.shape[0])/2; offset_x = (width-image.shape[1])/2
+  dst_image[offset_y:(offset_y + image.shape[0]), offset_x:(offset_x + image.shape[1])] = image
+  return dst_image
+
+def shrink(image, width, height, inter=cv2.INTER_AREA):
+  #create a new box with the desired dimension and draw the re_sized image
+  dim = (width, height)
+  (h, w) = image.shape[:2]
+  aspect_ratio = float(w)/float(h)
+  assert w > width or h > height
+  if float(width)/float(height) > aspect_ratio:
+    new_w = int(float(height) * aspect_ratio)
+    new_h = height
+  else:
+    new_h = int(float(width)/aspect_ratio)
+    new_w = width
+  dim = (new_w, new_h)
+  image = cv2.resize(image, dim, interpolation=inter)
+  return find_surrounding_box(image, width, height)
 
 def resize(image, width=None, height=None, inter=cv2.INTER_AREA):
   """ resize and make sure new height and width are within limits"""
@@ -32,7 +67,7 @@ def resize(image, width=None, height=None, inter=cv2.INTER_AREA):
   #calculate new width, height w/ot considering limits
   new_w = width if width is not None else int(height * aspect_ratio)
   if width is not None and height is not None:
-    #both are present. pick the one that satisfy new_h >= height and new_w >= width
+    #both are present. create a new box with the desired dimension and draw the re_sized image
     if float(width)/float(height) > aspect_ratio:
       new_h = int(float(width)/aspect_ratio)
       new_w = width
@@ -49,17 +84,11 @@ def resize(image, width=None, height=None, inter=cv2.INTER_AREA):
   # resize the image
   return cv2.resize(image, dim, interpolation=inter)
 
-def get_max_pyramid_levels(image_shape, window_size, scale):
-    t1 = math.log(float(image_shape[1])/float(window_size[0]))/math.log(float(scale))
-    assert math.fabs(math.pow(scale, t1) *  window_size[0] - image_shape[1]) < 1.0e-10
-    t2 = math.log(float(image_shape[0])/float(window_size[1]))/math.log(float(scale))
-    assert math.fabs(math.pow(scale, t2) *  window_size[1] - image_shape[0]) < 1.0e-10
-    return math.ceil(min(t1, t2))
-
 def pyramid(image, scale=1.5, minSize=(30, 30), reversed=False):
   # yield the original image
   (orig_h, orig_w) = image.shape
   if reversed:
+    #image = shrink(image, width=minSize[0], height=minSize[1], inter=cv2.INTER_LINEAR)
     image = resize(image, width=minSize[0], height=minSize[1], inter=cv2.INTER_LINEAR)
   yield image
   # keep looping over the pyramid
@@ -67,17 +96,22 @@ def pyramid(image, scale=1.5, minSize=(30, 30), reversed=False):
     # compute the new dimensions of the image and resize it
     if reversed:
       w = int(image.shape[1] * scale)
-      image = imutils.resize(image, width=w, inter=cv2.INTER_LINEAR)
+      image = resize(image, width=w, inter=cv2.INTER_LINEAR)
     else:
       w = int(image.shape[1] / scale)
-      image = imutils.resize(image, width=w)
+      h = int(image.shape[0] / scale)
+      #image = shrink(image, w, h)
+      image = resize(image, w, h)
 
     # if the resized image does not meet the supplied minimum
     # size, then stop constructing the pyramid
-    if image.shape[0] < minSize[1] or image.shape[1] < minSize[0]:
+    if image.shape[0] < minSize[1] and image.shape[1] < minSize[0]:
       break
     if image.shape[0] > orig_h or image.shape[1] > orig_w:
       break
+
+    if image.shape[0] < minSize[1] or image.shape[1] < minSize[0]:
+      image = find_surrounding_box(image, minSize[0], minSize[1])
 
     # yield the next image in the pyramid
     yield image
