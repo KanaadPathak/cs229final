@@ -29,20 +29,25 @@ class CNNFeatureExtractor(object):
 
             for x, y in data_gen:
                 new_x = model.predict(x)
-                new_x = new_x.reshape(feature_shape)
-                features.append(new_x)
-                labels.append(y)
-                pbar.update(batch_size)
+                try:
+                    new_x = new_x.reshape(feature_shape)
+                    features.append(new_x)
+                    labels.append(y)
+                    pbar.update(batch_size)
+                except ValueError as e:
+                    print(new_x.shape)
+                    raise e
 
     def load_features(self, feature_file):
         with tables.open_file(feature_file, mode='r') as f:
-            print(f.root.data[:2, :])
+            x = f.root.features
+            y = f.root.labels
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('-V', '--version', action='version', version=__version__)
-    parser.add_argument('-s', '--feature_file', help="the file that the weight are saved to")
+    parser.add_argument('-s', '--feature_file', required=True, help="the file that the weight are saved to")
     parser.add_argument('data_dir', help="the path to the config")
     args = parser.parse_args()
 
