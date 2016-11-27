@@ -57,8 +57,8 @@ if __name__ == '__main__':
     split_parser.add_argument('data_dir', help="the data dir with a images folder")
     # ------------------------------------------------
     top_cnn_parser = subparsers.add_parser('top_cnn_classify', description='train top layer with pre-trained weights')
-    top_cnn_parser.add_argument('--batch_size', default=32,  help="num of samples or proportion of samples for train")
-    top_cnn_parser.add_argument('-e',  '--epoch', default=10, help="the number of epochs to run")
+    top_cnn_parser.add_argument('--batch_size', type=int, default=32,  help="batch size")
+    top_cnn_parser.add_argument('-e',  '--epoch', type=int, default=10, help="the number of epochs to run")
     top_cnn_parser.add_argument('-f', '--feature_file', help="the feature file to load from")
     top_cnn_parser.add_argument('-s', '--save_file', help="the file that the weight are saved to")
     # ================================================

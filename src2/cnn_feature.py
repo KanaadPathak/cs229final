@@ -1,13 +1,16 @@
 from functools import reduce
 
-from keras.layers import Dense, Flatten, Dropout
+from keras.constraints import maxnorm
+from keras.layers import Dense, Dropout
 from keras.models import Sequential
+from keras.utils import np_utils
+from vgg16 import VGG16
 
 from preprocess_utils import GeneratorLoader
-from vgg16 import VGG16
 from tqdm import tqdm
 from operator import mul
 import tables
+import pandas as pd
 
 from sklearn.neural_network import MLPClassifier
 from sklearn.neighbors import KNeighborsClassifier
@@ -23,7 +26,6 @@ from sklearn.metrics import accuracy_score, log_loss
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import cross_val_score, StratifiedShuffleSplit, train_test_split
 from sklearn.feature_selection import VarianceThreshold, SelectKBest, SelectPercentile, chi2, f_classif
-import pandas as pd
 
 
 class ClassifierPool(object):
@@ -120,30 +122,32 @@ class CNNFeatureExtractor(object):
 
     def load_features(self, feature_file):
         with tables.open_file(feature_file, mode='r') as f:
-            X = f.root.features[:, :]
-            y = f.root.labels[:]
-            classes = f.root.classes[:, :]
+            X = f.root.features[:, :].astype(float)
+            y = f.root.labels[:].astype(int)
+            classes = dict((int(r['classid']), r['name']) for r in f.root.classes.iterrows())
         return X, y, classes
 
     def train_top_model(self, feature_file, weight_file=None, batch_size=32, nb_epoch=10):
         X, y, classes = self.load_features(feature_file)
         X_train, X_val, y_train, y_val = train_test_split(X, y, train_size=.8, stratify=y)
+        y_train = np_utils.to_categorical(y_train)
+        y_val = np_utils.to_categorical(y_val)
 
         loss = 'binary_crossentropy'
         output_dim = 1
         final_activation = 'sigmoid'
-        if classes.shape[0] > 2:
+        if len(classes) > 2:
             loss = 'categorical_crossentropy'
-            output_dim = classes.shape[0]
+            output_dim = len(classes)
             final_activation = 'softmax'
 
         model = Sequential()
-        model.add(Flatten(name='flatten', input_shape=X_train.shape[1:]))
-        model.add(Dense(256, activation='relu', name='fc1'))
+        model.add(Dense(4096, activation='relu', input_dim=X_train.shape[1]))
         model.add(Dropout(0.5))
+        model.add(Dense(1024, activation='relu', name='fc2'))
         model.add(Dense(output_dim, activation=final_activation, name='predictions'))
 
-        model.compile(optimizer='rmpsprop', loss=loss, metrics=['accuracy'])
+        model.compile(optimizer='rmsprop', loss=loss, metrics=['accuracy'])
 
         model.fit(X_train, y_train, batch_size=batch_size, nb_epoch=nb_epoch, validation_data=(X_val, y_val))
 
