@@ -64,8 +64,6 @@
 % draft mode.
 %
 \documentclass[journal]{IEEEtran}
-\usepackage{blindtext}
-\usepackage{graphicx}
 
 % Some very useful LaTeX packages include:
 % (uncomment the ones you want to load)
@@ -119,24 +117,14 @@
 
 % *** GRAPHICS RELATED PACKAGES ***
 %
-\ifCLASSINFOpdf
-  % \usepackage[pdftex]{graphicx}
-  % declare the path(s) where your graphic files are
-  % \graphicspath{{../pdf/}{../jpeg/}}
-  % and their extensions so you won't have to specify these with
-  % every instance of \includegraphics
-  % \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
-\else
-  % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
-  % will default to the driver specified in the system graphics.cfg if no
-  % driver is specified.
-  % \usepackage[dvips]{graphicx}
-  % declare the path(s) where your graphic files are
-  % \graphicspath{{../eps/}}
-  % and their extensions so you won't have to specify these with
-  % every instance of \includegraphics
-  % \DeclareGraphicsExtensions{.eps}
-\fi
+
+\usepackage[pdftex]{graphicx} % Enhanced support for graphics
+% declare the path(s) where your graphic files are
+\graphicspath{../../resources/}
+% and their extensions so you won't have to specify these with
+% every instance of \includegraphics
+\DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+
 % graphicx was written by David Carlisle and Sebastian Rahtz. It is
 % required if you want graphics, photos, etc. graphicx.sty is already
 % installed on most LaTeX systems. The latest version and documentation can
@@ -180,7 +168,12 @@
 % version and documentation can be obtained at:
 % http://www.ctan.org/tex-archive/macros/latex/required/amslatex/math/
 
-
+\usepackage{amsmath}   % AMS math­e­mat­i­cal fa­cil­i­ties
+\usepackage{amsthm}    % Type­set­ting the­o­rems (AMS style)
+\usepackage{amssymb}   % AMS symbol fonts
+\usepackage{mathtools} % Math­e­mat­i­cal tools to use with ams­math
+\usepackage{physics}   % Macros sup­port­ing the Math­e­mat­ics of Physics
+\usepackage{esvect}    % Vec­tor ar­rows
 
 
 
@@ -203,12 +196,13 @@
 % algorithmicx.sty package by Szasz Janos:
 % http://www.ctan.org/tex-archive/macros/latex/contrib/algorithmicx/
 
-
+\usepackage{listings} % Typeset source code listings
+% \usepackage[]{mcode}
 
 
 % *** ALIGNMENT PACKAGES ***
 %
-%\usepackage{array}
+%\usepackage{array} % Ex­tend­ing the ar­ray and tab­u­lar en­vi­ron­ments
 % Frank Mittelbach's and David Carlisle's array.sty patches and improves
 % the standard LaTeX2e array and tabular environments to provide better
 % appearance and additional user controls. As the default LaTeX2e table
@@ -239,6 +233,29 @@
 % (automatically sized) equal width boxes - aka "natural width parboxes".
 % Available at:
 % http://www.ctan.org/tex-archive/macros/latex/contrib/eqparbox/
+
+%% Table, Bulletin and other type­set­ting
+\usepackage[ampersand]{easylist} % Lists us­ing a sin­gle ac­tive char­ac­ter
+% \usepackage[table,x11names,svgnames]{xcolor} % Driver-in­de­pen­dent color ex­ten­sions
+% \usepackage{enumitem}      % Con­trol lay­out of item­ize, enu­mer­ate, de­scrip­tion
+% \usepackage{multirow}      % Create tab­u­lar cells span­ning mul­ti­ple rows
+% \usepackage{tabularx}      % Tab­u­lars with ad­justable-width columns
+% \usepackage{tablefootnote} % Per­mit foot­notes in ta­bles
+
+
+%% Sectioning and Paging
+\usepackage{multicol}
+% \usepackage{fancyhdr}   % Ex­ten­sive con­trol of page head­ers and foot­ers
+% \usepackage{titlesec}   % Select al­ter­na­tive sec­tion ti­tles
+% \usepackage{afterpage}  % Ex­e­cute com­mand af­ter the next page break
+% \usepackage{parskip}    % Lay­out with zero \parindent, non-zero \parskip
+% \usepackage{microtype}  % Sublim­i­nal re­fine­ments to­wards ty­po­graph­i­cal per­fec­tion
+
+
+%% Language and font encodings
+% \usepackage{textcomp}        % Text Com­pan­ion fonts
+% \usepackage{lmodern}         % Latin Modern fonts
+% \usepackage{soul}            % Hyphen­ation for let­terspac­ing, un­der­lin­ing, and more
 
 
 
@@ -274,6 +291,11 @@
 % http://www.ctan.org/tex-archive/macros/latex/contrib/subfig/
 % The latest version and documentation of caption.sty can be obtained at:
 % http://www.ctan.org/tex-archive/macros/latex/contrib/caption/
+
+%% Figure, Listing and Reference
+% \usepackage{subcaption} % Sup­port for sub-cap­tions
+% \usepackage{verbatim}   % Reimplementation of and extensions to LATEX verbati
+
 
 
 
@@ -354,6 +376,9 @@
 % later in the document, say, to conditionally put the References on a
 % page by themselves.
 
+\usepackage{float}    % Im­proved in­ter­face for float­ing ob­jects
+\usepackage{placeins} % Control float placement
+
 
 
 
@@ -367,6 +392,9 @@
 % http://www.ctan.org/tex-archive/macros/latex/contrib/misc/
 % Read the url.sty source comments for usage information. Basically,
 % \url{my_url_here}.
+
+\usepackage[final]{pdfpages} % In­clude PDF doc­u­ments
+\usepackage[colorlinks=true, allcolors=blue]{hyperref} % Ex­ten­sive sup­port for hy­per­text
 
 
 
@@ -390,7 +418,7 @@
 \title{Leaf Image Recognition and Classification}
 %
 %
-% author names and IEEE memberships
+% author names
 % note positions of commas and nonbreaking spaces ( ~ ) LaTeX will not break
 % a structure at a ~ so this keeps an author's name from being broken across
 % two lines.
@@ -399,13 +427,9 @@
 % was not built to handle multiple paragraphs
 %
 
-\author{Peng~Liu, albertliu@stanford.edu
-        Yangming~Huang, yangming@standford% <-this % stops a space
-\thanks{M. Shell is with the Department
-of Electrical and Computer Engineering, Georgia Institute of Technology, Atlanta,
-GA, 30332 USA e-mail: (see http://www.michaelshell.org/contact.html).}% <-this % stops a space
-\thanks{J. Doe and J. Doe are with Anonymous University.}% <-this % stops a space
-\thanks{Manuscript received April 19, 2005; revised January 11, 2007.}}
+\author{Albert~Liu, albertliu@stanford.edu
+        Yangming~Huang, yangming@standford}% <-this % stops a space
+% \thanks{Nihit Desai from Computer Science Department, Stanford University}% <-this % stops a space
 
 % note the % following the last \IEEEmembership and also \thanks -
 % these prevent an unwanted space from occurring between the last author name
@@ -426,42 +450,12 @@ GA, 30332 USA e-mail: (see http://www.michaelshell.org/contact.html).}% <-this %
 % space somehow managed to creep in.
 
 
-
-% The paper headers
-\markboth{Journal of \LaTeX\ Class Files,~Vol.~6, No.~1, January~2007}%
-{Shell \MakeLowercase{\textit{et al.}}: Bare Demo of IEEEtran.cls for Journals}
-% The only time the second header will appear is for the odd numbered pages
-% after the title page when using the twoside option.
-%
-% *** Note that you probably will NOT want to include the author's ***
-% *** name in the headers of peer review papers.                   ***
-% You can use \ifCLASSOPTIONpeerreview for conditional compilation here if
-% you desire.
-
-
-
-
-% If you want to put a publisher's ID mark on the page you can do it like
-% this:
-%\IEEEpubid{0000--0000/00\$00.00~\copyright~2007 IEEE}
-% Remember, if you use this you must call \IEEEpubidadjcol in the second
-% column for its text to clear the IEEEpubid mark.
-
-
-
-% use for special paper notices
-%\IEEEspecialpapernotice{(Invited Paper)}
-
-
-
-
 % make the title area
 \maketitle
 
 
 \begin{abstract}
 %\boldmath
-\blindtext[1]
 \end{abstract}
 % IEEEtran.cls defaults to using nonbold math in the Abstract.
 % This preserves the distinction between vectors and scalars. However,
@@ -470,33 +464,20 @@ GA, 30332 USA e-mail: (see http://www.michaelshell.org/contact.html).}% <-this %
 % of the abstract to achieve this. Many IEEE journals frown on math
 % in the abstract anyway.
 
-% Note that keywords are not normally used for peerreview papers.
-\begin{IEEEkeywords}
-IEEEtran, journal, \LaTeX, paper, template.
-\end{IEEEkeywords}
-
-
-
-
-
-
-% For peer review papers, you can put extra information on the cover
-% page as needed:
-% \ifCLASSOPTIONpeerreview
-% \begin{center} \bfseries EDICS Category: 3-BBND \end{center}
-% \fi
-%
-% For peerreview papers, this IEEEtran command inserts a page break and
-% creates the second title. It will be ignored for other modes.
-\IEEEpeerreviewmaketitle
-
-
 
 \section{Introduction}
-\blindtext
+
 
 \subsection{DataSet}
-\blindtext
+
+We found these datasets.
+\begin{enumerate}
+  \item UCI leaf dataset \cite{UCIDataSet}: 40 species with 5 to 16 samples per specie
+  \item Kaggle leaf dataset\cite{Pedro13}: 99 species with 16 samples per specie
+  \item Swedish leaf dataset \cite{SwedishLeafDataset}: 15 species with 952 samples (roughly 60 samples per specie)
+  \item Flavia leaf dataset \cite{FlaviaDataset}: 33 species with roughly 60 samples per specie
+  \item Pl@ntNet \cite{PlanetNet}: the most challenging dataset as images are collected through crowd sourced application. 71 species with 5436 images.
+\end{enumerate}
 
 % needed in second column of first page if using \IEEEpubid
 %\IEEEpubidadjcol
@@ -575,8 +556,14 @@ IEEEtran, journal, \LaTeX, paper, template.
 %\end{tabular}
 %\end{table}
 
-\section{Theorem Background}
-\blindtext
+\section{Approach}
+\subsection{Preprocessing}
+
+\subsection{Object Detection}
+
+\subsection{Feature Extraction}
+
+\subsection{Classification}
 
 % Note that IEEE does not put floats in the very first column - or typically
 % anywhere on the first page for that matter. Also, in-text middle ("here")
@@ -586,9 +573,10 @@ IEEEtran, journal, \LaTeX, paper, template.
 % stfloats package.
 
 
+\section{Measurement}
+
 
 \section{Conclusion}
-\blindtext
 
 
 
@@ -651,11 +639,26 @@ The authors would like to thank...
 % set second argument of \begin to the number of references
 % (used to reserve space for the reference number labels box)
 \begin{thebibliography}{1}
+  \bibitem{Charles13}
+  Charles Mallah, James Cope, James Orwell. Plant Leaf Classification Using Probabilistic Integration of Shape, Texture and Margin Features. Signal Processing, Pattern Recognition and Applications, in press. 2013
 
-\bibitem{IEEEhowto:kopka}
-H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
-  0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
+  \bibitem{Itheri}
+  Itheri Yahiaoui, Nicolas Herve, and Nozha Boujemaa. Shape-based image re-trieval in botanical collections, Lecture Notes in Computer Science including subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinfor matics, vol. 4261 LNCS, pp 357-364, 2006.
 
+  \bibitem{Pedro13}
+  Pedro F. B. Silva, Andre R.S. Marcal, Rubim M. Almeida da Silva. Evaluation of Features for Leaf Discrimination. 2013. Springer Lecture Notes in Computer Science, Vol. 7950, 197-204.
+
+  \bibitem{UCIDataSet}
+  https://archive.ics.uci.edu/ml/datasets/Leaf
+
+  \bibitem{SwedishLeafDataset}
+  Oskar J. O. Söderkvist. Computer vision classifcation of leaves from swedish trees. Master's Thesis, Linkoping University, 2001.
+
+  \bibitem{FlaviaDataset}
+  Stephen Gang Wu, Forrest Sheng Bao, Eric You Xu, Yu-Xuan Wang, Yi-Fan Chang and Chiao-Liang Shiang, A Leaf Recognition Algorithm for Plant classification Using Probabilistic Neural Network, IEEE 7th International Symposium on Signal Processing and Information Technology, Dec. 2007, Cario, Egypt
+
+  \bibitem{PlanetNet}
+  http://www.imageclef.org/2011/Plants
 \end{thebibliography}
 
 % biography section
@@ -668,10 +671,6 @@ H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
 % simpler here.)
 %\begin{biography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{mshell}}]{Michael Shell}
 % or if you just want to reserve a space for a photo:
-
-\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{picture}}]{John Doe}
-\blindtext
-\end{IEEEbiography}
 
 % You can push biographies down or up by placing
 % a \vfill before or after them. The appropriate
