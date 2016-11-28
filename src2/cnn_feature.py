@@ -1,51 +1,59 @@
-from functools import reduce
-
 from keras.layers import Dense, Dropout
+from keras.layers.convolutional import Convolution2D
 from keras.models import Sequential
 from keras.utils import np_utils
+from keras import backend as K
+from keras.preprocessing import image
+from tqdm import trange
+
 from resnet50 import ResNet50
 from vgg16 import VGG16
 from vgg19 import VGG19
+from imagenet_utils import preprocess_input
+
+from matplotlib import pyplot as plt
+import tables
+import numpy as np
+import pandas as pd
 
 from preprocess_utils import GeneratorLoader
 from tqdm import tqdm
 from operator import mul
-import tables
-import pandas as pd
+from functools import reduce
+import os
 
 from sklearn.neural_network import MLPClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, GradientBoostingClassifier
 from sklearn.naive_bayes import GaussianNB
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis, QuadraticDiscriminantAnalysis
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.svm import SVC, LinearSVC, NuSVC
 from sklearn.gaussian_process import GaussianProcessClassifier
 from sklearn.gaussian_process.kernels import RBF
 
 from sklearn.metrics import accuracy_score, log_loss
 from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import cross_val_score, train_test_split
-from sklearn.feature_selection import VarianceThreshold, SelectKBest, f_classif
+from sklearn.model_selection import StratifiedShuffleSplit, cross_val_score, train_test_split, GridSearchCV, KFold
+from sklearn.feature_selection import VarianceThreshold, SelectKBest, f_classif, f_regression
 
 
 class ClassifierPool(object):
     def __init__(self):
         self.classifiers = [
-            ('KNN', KNeighborsClassifier(10)),
-            ('Linear SVM', SVC(kernel="linear", C=0.01)),
-            ('Linear SVM2', LinearSVC(C=0.01)),
-            ('RBF SVM',    SVC(C=0.1, probability=True)),
-            # ('Nu SVM', NuSVC(probability=True)),
-            # ('Gaussian Process', GaussianProcessClassifier(1.0 * RBF(1.0), warm_start=True)),
-            # ('Decision Tree', DecisionTreeClassifier()),
-            # ('Random Forest', RandomForestClassifier()),
-            # ('AdaBoost', AdaBoostClassifier()),
-            # ('GradientBoost', GradientBoostingClassifier()),
-            ('Neural Network', MLPClassifier()),
-            ('Naive Bayes', GaussianNB()),
-            ('LDA', LinearDiscriminantAnalysis()),
-            ('QDA', QuadraticDiscriminantAnalysis())]
+            ('KNN', KNeighborsClassifier(), {'n_neighbors': [5, 10]})
+            , ('Linear SVM', SVC(), {'kernel': ["linear", 'rbf'], 'C': [0.01, 0.025]})
+            # , ('Nu SVM', NuSVC(probability=True), {})
+            # , ('Gaussian Process', GaussianProcessClassifier(1.0 * RBF(1.0), warm_start=True))
+            # , ('Decision Tree', DecisionTreeClassifier(), {})
+            # , ('Random Forest', RandomForestClassifier(), {})
+            # , ('AdaBoost', AdaBoostClassifier(), {})
+            # , ('GradientBoost', GradientBoostingClassifier(), {})
+            , ('Neural Network', MLPClassifier(), {})
+            , ('Naive Bayes', GaussianNB(), {})
+            , ('LDA', LinearDiscriminantAnalysis(), {})
+            # ,('QDA', QuadraticDiscriminantAnalysis(), {})
+        ]
 
     def feature_selection(self, X, y):
         X = VarianceThreshold(threshold=(.9 * (1 - .9))).fit_transform(X, y)
@@ -62,18 +70,22 @@ class ClassifierPool(object):
         X = self.scale(X)
         print(X.shape)
 
-        log_cols = ["Classifier", "Accuracy"]
-        log = pd.DataFrame(columns=log_cols)
+        # log_cols = ["Classifier", "Accuracy"]
+        # log = pd.DataFrame(columns=log_cols)
 
-        for name, clf in self.classifiers:
+        for name, clf, param_grid in self.classifiers:
             print("=" * 30)
             print(name, )
+            # cv = KFold(2)
+            clf = GridSearchCV(clf, param_grid, n_jobs=1)
+            # clf.fit(X, y)
+            # print('Training Accuracy %.4f with params: %s' % (clf.best_score_, clf.best_params_))
 
             score = cross_val_score(clf, X, y).min()
             print("Accuracy Score: %.4f" % score)
 
-            log_entry = pd.DataFrame([[name, score]], columns=log_cols)
-            log = log.append(log_entry)
+            # log_entry = pd.DataFrame([[name, score]], columns=log_cols)
+            # log = log.append(log_entry)
 
         print("=" * 30)
 
@@ -124,6 +136,32 @@ class CNNFeatureExtractor(object):
                 pbar.update(X.shape[0])
                 if pbar.n >= data_gen.nb_sample:
                     break
+
+    def convert(self, img):
+        x = image.img_to_array(img)
+        x = np.expand_dims(x, axis=0)
+        return preprocess_input(x)
+
+    def visualize_intermediate(self, img_path, output_dir, architecture='vgg16', target_size=(256, 256)):
+        model = self.select_architecture(architecture)
+
+        img = image.load_img(img_path, target_size=target_size)
+        x = self.convert(img)
+
+        middle_layers = [layer for layer in model.layers if isinstance(layer, Convolution2D)]
+        get_features = K.function([model.layers[0].input, K.learning_phase()], [l.output for l in middle_layers])
+        # we only have one sample of dim: (height, width, features)
+        all_features = (f[0].transpose(2, 0, 1) for f in get_features([x, 1]))
+        all_names = (l.name for l in middle_layers)
+
+        with tqdm(total=sum(l.shape[0] for l in all_features)) as pbar:
+            for layer_name, features_of_layer in zip(all_names, all_features):
+                dir_path = os.path.join(output_dir, layer_name)
+                os.makedirs(dir_path, exist_ok=True)
+                for j in range(features_of_layer.shape[0]):
+                    output_path = os.path.join(dir_path, 'feature_%s.jpg' % j)
+                    plt.imsave(output_path, features_of_layer[j])
+                    pbar.update(1)
 
     def load_features(self, feature_file):
         with tables.open_file(feature_file, mode='r') as f:

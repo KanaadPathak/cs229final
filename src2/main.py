@@ -9,7 +9,10 @@ def main(args):
         CNNFeatureExtractor().extract_feature(args.data_dir, args.feature_file, architecture=args.architecture,
                                               target_size=(args.image_height, args.image_width),
                                               batch_size=args.batch_size)
-
+    elif args.goal == 'viz':
+        from cnn_feature import CNNFeatureExtractor
+        CNNFeatureExtractor().visualize_intermediate(args.image_file, args.output_dir, architecture=args.architecture,
+                                                     target_size=(args.image_height, args.image_width))
     elif args.goal == 'classify':
         from cnn_feature import ClassifierPool, CNNFeatureExtractor
         X, y, classes = CNNFeatureExtractor().load_features(feature_file=args.feature_file)
@@ -42,10 +45,19 @@ if __name__ == '__main__':
     extract_parser.add_argument('-f', '--feature_file', required=True, help="the feature file to save to")
     extract_parser.add_argument('-W', '--image_width', type=int, default=255, help="the target image width")
     extract_parser.add_argument('-H', '--image_height', type=int, default=255, help="the target image height")
-    extract_parser.add_argument('--batch_size', type=int, default=32, help="batch size")
+    extract_parser.add_argument('--batch_size', type=int, default=8, help="batch size")
     extract_parser.add_argument('data_dir', help="the path to the config")
     extract_parser.add_argument('-a', '--architecture', default='vgg16', choices=['vgg16', 'vgg19', 'resnet50'],
                                 help="the CNN architecture to use")
+    # ------------------------------------------------
+    # viz
+    viz_parser = subparsers.add_parser("viz")
+    viz_parser.add_argument('-f', '--output_dir', required=True, help="the feature file to save to")
+    viz_parser.add_argument('-W', '--image_width', type=int, default=255, help="the target image width")
+    viz_parser.add_argument('-H', '--image_height', type=int, default=255, help="the target image height")
+    viz_parser.add_argument('image_file', help="the path to the image")
+    viz_parser.add_argument('-a', '--architecture', default='vgg16', choices=['vgg16', 'vgg19', 'resnet50'],
+                            help="the CNN architecture to use")
     # ------------------------------------------------
     # classify
     classify_parser = subparsers.add_parser("classify")
