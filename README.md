@@ -11,13 +11,21 @@ data/train.csv
 ```
 
 ### software prerequiste
+python 2 w/o gpu:
 ```bash
 brew install opencv3 --HEAD --with-contrib
-echo /usr/local/opt/opencv3/lib/python2.7/site-packages >> $PYTHON_PATH/site-packages/opencv3.pth
+echo /usr/local/opt/opencv3/lib/python2.7/site-packages > $PYTHON_PATH/site-packages/opencv3.pth
+pip install -U https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-0.11.0-py2-none-any.whl
 pip install -r requirements
 ```
 
-or you can just install above packages with `pip`
+python 3 w/ gpu:
+```bash
+brew install opencv3 --with-contrib --with-cuda --with-python3 --c++11
+echo /usr/local/opt/opencv3/lib/python3.5/site-packages > $PYTHON_PATH/site-packages/opencv3.pth
+pip install -U https://storage.googleapis.com/tensorflow/mac/gpu/tensorflow-0.11.0-py3-none-any.whl
+pip install -r requirements
+```
 
 ### bootstrap
 in command line enter the following:

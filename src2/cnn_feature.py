@@ -11,7 +11,7 @@ from vgg16 import VGG16
 from vgg19 import VGG19
 from imagenet_utils import preprocess_input
 
-from matplotlib import pyplot as plt
+import cv2
 import tables
 import numpy as np
 import pandas as pd
@@ -151,8 +151,9 @@ class CNNFeatureExtractor(object):
         middle_layers = [layer for layer in model.layers if isinstance(layer, Convolution2D)]
         get_features = K.function([model.layers[0].input, K.learning_phase()], [l.output for l in middle_layers])
         # we only have one sample of dim: (height, width, features)
-        all_features = (f[0].transpose(2, 0, 1) for f in get_features([x, 1]))
-        all_names = (l.name for l in middle_layers)
+        all_features = [f[0].transpose(2, 0, 1) for f in get_features([x, 1])]
+        all_names = [l.name for l in middle_layers]
+        print(all_names)
 
         with tqdm(total=sum(l.shape[0] for l in all_features)) as pbar:
             for layer_name, features_of_layer in zip(all_names, all_features):
@@ -160,8 +161,19 @@ class CNNFeatureExtractor(object):
                 os.makedirs(dir_path, exist_ok=True)
                 for j in range(features_of_layer.shape[0]):
                     output_path = os.path.join(dir_path, 'feature_%s.jpg' % j)
-                    plt.imsave(output_path, features_of_layer[j])
+                    feat_normalized = self._normalize(features_of_layer[j])
+                    im_color = cv2.applyColorMap(feat_normalized, cv2.COLORMAP_HOT)
+                    cv2.imwrite(output_path, im_color)
                     pbar.update(1)
+
+    @staticmethod
+    def _normalize(img):
+        img_max = img.max()
+        img_min = img.min()
+        img -= img_min
+        if img_max == img_min:
+            img *= 255 / (img_max - img_min)
+        return np.uint8(img)
 
     def load_features(self, feature_file):
         with tables.open_file(feature_file, mode='r') as f:
