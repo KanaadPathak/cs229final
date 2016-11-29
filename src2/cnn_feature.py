@@ -146,6 +146,7 @@ class CNNFeatureExtractor(object):
         model = self.select_architecture(architecture)
 
         img = image.load_img(img_path, target_size=target_size)
+        img_name = os.path.splitext(os.path.basename(img_path))[0]
         x = self.convert(img)
 
         middle_layers = [layer for layer in model.layers if isinstance(layer, Convolution2D)]
@@ -157,12 +158,12 @@ class CNNFeatureExtractor(object):
 
         with tqdm(total=sum(l.shape[0] for l in all_features)) as pbar:
             for layer_name, features_of_layer in zip(all_names, all_features):
-                dir_path = os.path.join(output_dir, layer_name)
+                dir_path = os.path.join(output_dir, img_name, layer_name)
                 os.makedirs(dir_path, exist_ok=True)
                 for j in range(features_of_layer.shape[0]):
                     output_path = os.path.join(dir_path, 'feature_%s.jpg' % j)
                     feat_normalized = self._normalize(features_of_layer[j])
-                    im_color = cv2.applyColorMap(feat_normalized, cv2.COLORMAP_HOT)
+                    im_color = cv2.applyColorMap(feat_normalized, cv2.COLORMAP_JET)
                     cv2.imwrite(output_path, im_color)
                     pbar.update(1)
 
@@ -171,7 +172,7 @@ class CNNFeatureExtractor(object):
         img_max = img.max()
         img_min = img.min()
         img -= img_min
-        if img_max == img_min:
+        if img_max != img_min:
             img *= 255 / (img_max - img_min)
         return np.uint8(img)
 
