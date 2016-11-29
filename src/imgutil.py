@@ -135,11 +135,17 @@ def rotate(image, angle):
   diagonal = int(math.sqrt(pow(image.shape[0], 2) + pow(image.shape[1], 2)))
   offset_x = (diagonal - image.shape[0]) / 2
   offset_y = (diagonal - image.shape[1]) / 2
-  dst_image = np.zeros((diagonal, diagonal), dtype='uint8')
+  if len(image.shape) > 2:
+    dst_image = np.zeros((diagonal, diagonal, image.shape[2]), dtype='uint8')
+  else:
+    dst_image = np.zeros((diagonal, diagonal), dtype='uint8')
   image_center = (diagonal / 2, diagonal / 2)
 
   R = cv2.getRotationMatrix2D(image_center, angle, 1.0)
-  dst_image[offset_x:(offset_x + image.shape[0]), offset_y:(offset_y + image.shape[1])] = image
+  if len(image.shape) > 2:
+    dst_image[offset_x:(offset_x + image.shape[0]), offset_y:(offset_y + image.shape[1]), :] = image
+  else:
+    dst_image[offset_x:(offset_x + image.shape[0]), offset_y:(offset_y + image.shape[1])] = image
   dst_image = cv2.warpAffine(dst_image, R, (diagonal, diagonal), flags=cv2.INTER_LINEAR)
 
   # Calculate the rotated bounding rect
@@ -183,6 +189,10 @@ def rotate(image, angle):
   h = down - up
   w = right - left
 
-  cropped = np.zeros((w, h), dtype='uint8')
-  cropped[:, :] = dst_image[left:(left + w), up:(up + h)]
+  if len(image.shape) > 2:
+    cropped = np.zeros((w, h, 3), dtype='uint8')
+    cropped[:, :, :] = dst_image[left:(left + w), up:(up + h), :]
+  else:
+    cropped = np.zeros((w, h), dtype='uint8')
+    cropped[:, :] = dst_image[left:(left + w), up:(up + h)]
   return cropped

@@ -5,13 +5,13 @@
 __version__ = "0.1"
 import argparse, sys, os
 import logging
-import pickle
 import time
 from codebook import *
 from image_feature import *
 from preprocess import *
 from sklearn.cluster import KMeans
 from sklearn.feature_extraction.text import TfidfTransformer
+from sklearn.externals import joblib
 
 class TermSerializer(object):
   @classmethod
@@ -24,16 +24,14 @@ class TermSerializer(object):
       'labels': labels,
       'term_vector': term_vector,
     }
-    with open(filename, 'w') as fd:
-      pickle.dump(d, fd)
+    joblib.dump(d, filename)
 
   @classmethod
   def deserialize(clf, filename):
     """ read BoF terms from file
     output: BoF term counts list
     """
-    with open(filename, 'r') as fd:
-      d = pickle.load(fd)
+    d = joblib.load(filename)
     return zip(d['labels'], d['term_vector'])
 
 class BoFDataSet(object):

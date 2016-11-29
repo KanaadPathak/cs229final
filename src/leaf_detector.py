@@ -69,7 +69,6 @@ class HogDetector(object):
       suffix = ''
       if not once:
         suffix =  '_'  + str(int(m*100)) + '_' + str(i)
-      filename = os.path.join(output_path, os.path.basename(image_name).split('.')[0] + suffix + '.jpg')
       if y + h > img.shape[0]:
         y = 0; h = img.shape[0]
       elif x + w > img.shape[1]:
@@ -77,7 +76,11 @@ class HogDetector(object):
       logging.debug(" writing detection: margin=%(m).2f (%(x)d, %(y)d, %(w)d, %(h)d)" % locals())
       #apply background removal
       crop = img[y:y + h, x:x + w]
+      basename = os.path.basename(image_name).split('.')[0] + suffix
+      filename = os.path.join(output_path, basename + '_detected' + '.jpg')
+      cv2.imwrite(filename, crop)
       output = threshold.remove_background(crop, visual)
+      filename = os.path.join(output_path, basename + '_br' + '.jpg')
       cv2.imwrite(filename, output)
 
   def show_window(self, img, (x,y), window_size, color=(255,255,255)):
@@ -146,7 +149,7 @@ class HogDetector(object):
     assert resized is not None and resized.shape[1]>=window_size[0] and resized.shape[0] >= window_size[1]
 
     detected_window = [] ; best_img = None; best_margin = 0; best_window = []
-    for degree in (0,):
+    for degree in (90,):
       logging.debug("scanning with %(degree)d degree" % locals())
       #rotate and gray scale before processing
       rotated = imgutil.rotate(resized.copy(), degree)

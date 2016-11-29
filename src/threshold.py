@@ -22,37 +22,38 @@ from matplotlib import pyplot as plt
 
 def showImages(imgs,titles):
   ''' show images with tilels '''
-  for i in range(0,4):
+  for i in range(0,len(imgs)):
     if len(imgs[i].shape) == 3:
       converted = cv2.cvtColor(imgs[i], cv2.COLOR_BGR2RGB)
-      plt.subplot(141+i),plt.imshow(converted),plt.title(titles[i])
+      plt.subplot(1, len(imgs), 1+i),plt.imshow(converted),plt.title(titles[i])
     else:
-      plt.subplot(141+i),plt.imshow(imgs[i], cmap='gray'),plt.title(titles[i])
+      plt.subplot(1, len(imgs), 1+i),plt.imshow(imgs[i], cmap='gray'),plt.title(titles[i])
     plt.xticks([]), plt.yticks([])
   plt.show()
 
 
 def kmeans_threshold(img, visualize=False):
-  img = cv2.imread(img)
-  img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+  #img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
   orig = img.copy()
-
   (h,w,d) = img.shape
   img = img.reshape((h * w, d))
   clt = KMeans(2)
   clt.fit(img)
 
+  green = np.uint8([[[0,255,0]]])
+  #green = cv2.cvtColor(green,cv2.COLOR_BGR2HSV)
+  pos_label = clt.predict(green[0,0])
   labels = clt.predict(img)
 
   for i in range(len(labels)):
-    if labels[i]  == labels[0]:
+    if labels[i]  !=  pos_label:
       img[i] = [0, 0, 0]
 
-  print "done, drawing..."
   img = img.reshape((h, w, d))
-  cv2.imshow('original', orig)
-  cv2.imshow('threshold', img)
-  cv2.waitKey(0)
+  #img = cv2.cvtColor(img, cv2.COLOR_HSV2BGR)
+  if visualize:
+    showImages((orig, img), ("origin", "kmeans"))
+  return img
 
 def filtering(img_gray,esp):
   if esp == "median":
@@ -72,8 +73,14 @@ a bounding box around them, th bounding box, the contours and perimeters sorted
 '''
 def largestContours(canny,img,img_gray, visualize = False):
   # Perform morphology
+  logging.info("applying morphology")
+  #se = np.ones((2, 2), dtype='uint8')
+  #canny = cv2.morphologyEx(canny, cv2.MORPH_OPEN, se)
+
   #se = np.ones((7, 7), dtype='uint8')
   #canny = cv2.morphologyEx(canny, cv2.MORPH_CLOSE, se)
+  #canny = cv2.dilate(canny, se )
+
 
   canny, contours, hierarchy = cv2.findContours(canny,cv2.RETR_TREE,cv2.CHAIN_APPROX_NONE)
   img_contour = np.copy(img) # Contours change original image.
@@ -148,15 +155,15 @@ def cut_graph_from_hull(hull,img):
   #method #2 use GC_INIT_WITH_MASK
   rect = None
   contours = [hull]
-  cv2.drawContours(mask, contours,-1, (cv2.GC_PR_FGD,cv2.GC_PR_FGD,cv2.GC_PR_FGD) ,-1)
+  cv2.drawContours(mask, contours,-1, (cv2.GC_FGD,cv2.GC_FGD,cv2.GC_FGD) ,-1)
   cv2.grabCut(img,mask,rect,bgdModel,fgdModel,5,cv2.GC_INIT_WITH_MASK)
 
   #apply mask to the image
   mask2 = np.where((mask==cv2.GC_PR_BGD)|(mask==cv2.GC_BGD),0,1).astype('uint8')
   img = img*mask2[:,:,np.newaxis]
-  return img
+  return (img, mask)
 
-def auto_canny(image, sigma=0.33):
+def auto_canny(image, sigma=0.35):
   # compute the median of the single channel pixel intensities
   #canny = cv2.Canny(filtered,100,200)
   #canny_unfiltered = cv2.Canny(img_gray,100,200)
@@ -187,11 +194,11 @@ def remove_background(orig, visualize=False):
     return orig
 
   # Grabcut - Same bounding box than contours...
-  img_grcut = cut_graph_from_hull(hull,img)
+  (img_grcut, mask) = cut_graph_from_hull(hull,img)
 
   ## Show images
-  images = [img, canny, img_contour, img_grcut ]
-  titles = ["original", "edges", "largest contour", "graph cut"]
+  images = [img, canny, img_contour, mask, img_grcut ]
+  titles = ["original", "edges", "largest contour", "mask", "graph cut"]
   if visualize:
     showImages(images, titles)
   return img_grcut
@@ -206,9 +213,11 @@ def process(img_path, output_path, visualize=False):
       filename = os.path.join(subdir,f)
       logging.info("working on %(filename)s" % locals())
       img = cv2.imread(filename)
+      #img = kmeans_threshold(img, visualize)
       img = remove_background(img, visualize)
       output_filename = os.path.join(output_path, m.group(1) + '.jpg')
       cv2.imwrite(output_filename, img)
+      logging.info("writing to %(output_filename)s" % locals())
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser(description=__doc__, version=__version__)

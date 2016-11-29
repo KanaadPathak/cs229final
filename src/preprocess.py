@@ -211,7 +211,8 @@ class ImageCLEF2013(LeafPreprocessor):
     if m is None:
       return None
     #read property xml
-    xml_f = os.path.join( path, m.group(1) + '.xml')
+    xml_path = self.parameters['xml_path'] if 'xml_path' in self.parameters else path
+    xml_f = os.path.join( xml_path, m.group(1) + '.xml')
     if not (os.path.exists(xml_f) and os.path.isfile(xml_f)):
       raise ValueError("jpg without property xml")
     with open(xml_f, 'r') as fd:
@@ -406,6 +407,7 @@ if __name__ == "__main__":
   parser.add_argument('--subtype,', dest='subtype', help = "subtype of data set")
   parser.add_argument('--pos_path,', dest='pos_path', help = "positive sample path (for HOG)")
   parser.add_argument('--neg_path,', dest='neg_path', help = "negative sample path (for HOG)")
+  parser.add_argument('--xml_path,', dest='xml_path', help = "path XML file (for CLEF)")
   parser.add_argument('type', help = "supply dataset type: {swedish}")
   parser.add_argument('img_path', help = "supply path to database images")
   parser.add_argument('record_file', help = "supply filename for preprocessed records")

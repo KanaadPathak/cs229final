@@ -28,7 +28,11 @@ class Codebook(object):
     records = ImageRecordSerializer.deserialize(filename)
     #TODO: For performance, we use parts of images for building the codebook
     for (i,r) in enumerate(records[:100]):
-      vectors = np.concatenate((vectors,descriptor.extract(r[2])))
+      vec = descriptor.extract(r[2])
+      if vec is not None and len(vec):
+        vectors = np.concatenate((vectors,vec))
+      else:
+        logging.error("no features extracted for img: %s", r[1])
     #TODO: PCA
     estimator = ClusterKMeans.fit(K, vectors)
     logging.debug("distortion function: %f"%estimator.inertia_)
