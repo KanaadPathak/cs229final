@@ -458,9 +458,8 @@
 \section{Introduction}
 The number of plant species is estimated to be over 220000 in the world \cite{Charles13}. 
 Automatic plant species recognition with image processing has gained increasing
-interests recently. The main application are crop/weeds identification, plan
-biology research and species tracking \cite{Pedro13}. 
-We discuss a implementation that is suitable to identify leaf based on camera picture captured from natural background.
+interests recently. The main application are crop/weeds identification, plan biology research and species tracking \cite{Pedro13}. 
+We compare the results of traditional handcrafted features and features extracted from pre-trained convolutional neural network, particularly on natural images, which can may have mutiple objects, various shape, color and texture due to viewpoint and occlusion.
 % IEEEtran.cls defaults to using nonbold math in the Abstract.
 % This preserves the distinction between vectors and scalars. However,
 % if the journal you are submitting to favors bold math in the abstract,
@@ -471,11 +470,18 @@ We discuss a implementation that is suitable to identify leaf based on camera pi
 
 
 \section{Related Work }
+There are lots of research on leaf classification and most of them focus on shape, texture and margin features,  \cite{Charles13} \cite{Pedro13}. These features can achieve very good accuracy on ideal images, which consist of single well aligned object on a contrasting background, such as data set [TODO ].
+Recently, with the huge success of Convnets [TODO]
+
 
 \section{Approach}
 
 \subsection{Overview}
-We break down the problem into two pieces. Firstly, we want to locate the leaf in the image which is an object detection problem. This becomes more important if the leaf is not the single salient object in the image. We use typical method which is to scan the image and determine where the match may occur by a constructed binary classifier.  The variations of leaves can this harder.  Then, optionally we can apply background removal on the detected image.  Finally, we identify the leaf to one of the varied classes, which is a category recognition problem. For which we explore traditional method Bag of Feature method and CNN. 
+
+
+We break down the problem into two pieces. Firstly, we want to locate the leaf in the image which is an object detection problem. This becomes more important if the leaf is not the single salient object in the image. We use typical method which is to scan the image and determine where the match may occur by a constructed binary classifier.  
+
+The variations of leaves can this harder.  Then, optionally we can apply background removal on the detected image.  Finally, we identify the leaf to one of the varied classes, which is a category recognition problem. For which we explore traditional method Bag of Feature method and CNN. 
 
 \newpage
 \graphicspath{{../design/}}
@@ -486,22 +492,27 @@ We break down the problem into two pieces. Firstly, we want to locate the leaf i
   \label{fig:pipeline}
 \end{figure}
 
+\subsection{CNN}
+We use transfer learning method i.e., pre-trained model as feature extractor and then fine-tune the model to fit our data. [Explain the data set for our pre-trained model and why this is this is applicable to our problem, i.e. same feature space.]
 
-The subsequent sections are organized as following
+The rest of the report is organized as follows. In section \ref{DataSet}
 
 \section{DataSet}
+\label{DataSet}
 We found these datasets.
 \begin{enumerate}
+  \item ImageCLEF \cite{ImageCLEF2013}: the most challenging dataset as images are collected through crowd sourced application. 250 species with 26077 images.
   \item UCI leaf dataset \cite{UCIDataSet}: 40 species with 5 to 16 samples per specie
   \item Kaggle leaf dataset\cite{Pedro13}: 99 species with 16 samples per specie
   \item Swedish leaf dataset \cite{SwedishLeafDataset}: 15 species with 952 samples (roughly 60 samples per specie)
   \item Flavia leaf dataset \cite{FlaviaDataset}: 33 species with roughly 60 samples per specie
-  \item Pl@ntNet \cite{PlanetNet}: the most challenging dataset as images are collected through crowd sourced application. 71 species with 5436 images.
 \end{enumerate}
 
-\newpage
+\section{Object Detection}
 \subsection{Object Detection with HOG}
-\section{Object Detection \& Segmentation}
+We use tranditional exhuastive search method to scan through all scales
+
+\newpage
 \begin{figure} 
   \center
   \includegraphics[scale=0.5]{detection}
@@ -510,12 +521,7 @@ We found these datasets.
 \end{figure}
 
 
-\subsection{Object Detection with CNN}
-
-\subsection{Object Segmentation}
-
 \section{Object recognition}
-
 \subsection{Bag of Features (BoF) + local feature descriptors}
    Due to the simplicity and performance, this well established approach was taken at first. Interest points are detected from the raw images and then local invariant feature descriptors are collected, which are clustered to form the visual vocabulary/codebook. Afterwards, each raw image can be represented with histograms of visual words, i.e. term vectors.  We have prototyped a BoF system, based on the OpenCV package.  Here is the illustration of the system \ref{fig:bofsystemdesign}.
 \newpage
@@ -564,10 +570,10 @@ During preprocessing, raw images are converted to gray-scaled images and resized
 \appendices
 
 % use section* for acknowledgement
-\section*{Acknowledgment}
+%\section*{Acknowledgment}
 
 
-The authors would like to thank...
+%The authors would like to thank...
 
 
 % Can use something like this to put references on a page
@@ -601,11 +607,33 @@ The authors would like to thank...
 % set second argument of \begin to the number of references
 % (used to reserve space for the reference number labels box)
 \begin{thebibliography}{1}
+
+
   \bibitem{Charles13}
   Charles Mallah, James Cope, James Orwell. Plant Leaf Classification Using Probabilistic Integration of Shape, Texture and Margin Features. Signal Processing, Pattern Recognition and Applications, in press. 2013
 
   \bibitem{Itheri}
   Itheri Yahiaoui, Nicolas Herve, and Nozha Boujemaa. Shape-based image re-trieval in botanical collections, Lecture Notes in Computer Science including subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinfor matics, vol. 4261 LNCS, pp 357-364, 2006.
+
+  \bibitem{CNNLeaf}
+  Jassmann TJ, Tashakkori R, Parry RM (2015) Leaf classification utilizing a convolutional neural network. In: SoutheastCon
+
+  \bibitem{Neeraj}
+  Neeraj Kumar, Peter N Belhumeur, Arijit Biswas, David W Jacobs, W John Kress, Ida C Lopez, and João VB Soares, “Leafsnap: A computer vision system for automatic plant species identification,” in ECCV, pp. 502–516. Springer, 2012.
+
+  \bibitem{David2015}
+  DavidHall,ChrisMcCool,FerasDayoub,NikoSunder- hauf, and Ben Upcroft, “Evaluation of features for leaf classification in challenging conditions,” 2015.
+
+  \bibitem{Monica2014}
+  Mónica G Larese, Ariel E Bayá, Roque M Craviotto, Miriam R Arango, Carina Gallo, and Pablo M Granitto, “Multiscale recognition of legume varieties based on leaf venation images,” Expert Systems with Applica- tions, vol. 41, no. 10, pp. 4638–4647, 2014.
+
+  \bibitem{Hasim2016}
+  Hasim A, Herdiyeni Y, Douady S (2016) Leaf shape recognition using centroid contour distance. In: IOP conference series: earth and environmental science, p 012002
+
+  \bibitem{Hall2015}
+  Hall, David, McCool, Chris, Dayoub, Feras, Sunderhauf, Niko, & Upcroft, Ben (2015), Evaluation of features for leaf classification in challenging conditions. In IEEE Winter Conference on Applications of Computer Vision (WACV 2015), 6-9 January 2015, Big Island, Hawaii, USA.
+
+
 
   \bibitem{Pedro13}
   Pedro F. B. Silva, Andre R.S. Marcal, Rubim M. Almeida da Silva. Evaluation of Features for Leaf Discrimination. 2013. Springer Lecture Notes in Computer Science, Vol. 7950, 197-204.
@@ -619,8 +647,8 @@ The authors would like to thank...
   \bibitem{FlaviaDataset}
   Stephen Gang Wu, Forrest Sheng Bao, Eric You Xu, Yu-Xuan Wang, Yi-Fan Chang and Chiao-Liang Shiang, A Leaf Recognition Algorithm for Plant classification Using Probabilistic Neural Network, IEEE 7th International Symposium on Signal Processing and Information Technology, Dec. 2007, Cario, Egypt
 
-  \bibitem{PlanetNet}
-  http://www.imageclef.org/2011/Plants
+  \bibitem{ImageCLEF2013}
+  http://www.imageclef.org/2013/plant
 \end{thebibliography}
 
 % biography section
