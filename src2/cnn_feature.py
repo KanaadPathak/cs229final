@@ -36,29 +36,36 @@ from sklearn.metrics import accuracy_score, log_loss
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import StratifiedShuffleSplit, cross_val_score, train_test_split, GridSearchCV, KFold
 from sklearn.feature_selection import VarianceThreshold, SelectKBest, f_classif, f_regression
+from sklearn.decomposition import PCA
+from sklearn.decomposition import IncrementalPCA
 
 
 class ClassifierPool(object):
     def __init__(self):
         self.classifiers = [
-            ('KNN', KNeighborsClassifier(), {'n_neighbors': [5, 10]})
-            , ('Linear SVM', SVC(), {'kernel': ["linear", 'rbf'], 'C': [0.01, 0.025]})
+            #('KNN', KNeighborsClassifier(), {'n_neighbors': [5, 10]})
+            ('Linear SVM', SVC(), {'kernel': ["linear"], 'C': np.logspace(-4, 6, 11)} )
+            #('RBF SVM', SVC(), {'kernel': ['rbf'], 'C': np.logspace(-4, 6, 11), 'gamma': np.logspace(-5,9 ,15)})
             # , ('Nu SVM', NuSVC(probability=True), {})
             # , ('Gaussian Process', GaussianProcessClassifier(1.0 * RBF(1.0), warm_start=True))
             # , ('Decision Tree', DecisionTreeClassifier(), {})
             # , ('Random Forest', RandomForestClassifier(), {})
             # , ('AdaBoost', AdaBoostClassifier(), {})
             # , ('GradientBoost', GradientBoostingClassifier(), {})
-            , ('Neural Network', MLPClassifier(), {})
-            , ('Naive Bayes', GaussianNB(), {})
-            , ('LDA', LinearDiscriminantAnalysis(), {})
+            #, ('Neural Network', MLPClassifier(), {})
+            #, ('Naive Bayes', GaussianNB(), {})
+            #, ('LDA', LinearDiscriminantAnalysis(), {})
             # ,('QDA', QuadraticDiscriminantAnalysis(), {})
         ]
 
     def feature_selection(self, X, y):
         X = VarianceThreshold(threshold=(.9 * (1 - .9))).fit_transform(X, y)
         X = SelectKBest(f_classif, k=min(X.shape[1], 3000)).fit_transform(X, y)
-
+        #X = self.scale(X)
+        #pca = PCA(n_components=1000)
+        #pca.fit(X,y)
+        #X = pca.transform(X)
+        #print(X.shape)
         return X
 
     def scale(self, X):
@@ -77,12 +84,13 @@ class ClassifierPool(object):
             print("=" * 30)
             print(name, )
             # cv = KFold(2)
-            clf = GridSearchCV(clf, param_grid, n_jobs=1)
-            # clf.fit(X, y)
-            # print('Training Accuracy %.4f with params: %s' % (clf.best_score_, clf.best_params_))
+            clf = GridSearchCV(clf, param_grid, verbose=9, n_jobs=-1)
+            clf.fit(X, y)
+            print('Training Accuracy %.4f with params: %s' % (clf.best_score_, clf.best_params_))
 
-            score = cross_val_score(clf, X, y).min()
-            print("Accuracy Score: %.4f" % score)
+            #score = cross_val_score(clf, X, y).min()
+            #score = clf.fit(X, y)
+            #print("Accuracy Score: %.4f" % score)
 
             # log_entry = pd.DataFrame([[name, score]], columns=log_cols)
             # log = log.append(log_entry)
