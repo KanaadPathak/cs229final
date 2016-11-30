@@ -211,7 +211,9 @@ class ImageCLEF2013(LeafPreprocessor):
     if m is None:
       return None
     #read property xml
-    xml_path = self.parameters['xml_path'] if 'xml_path' in self.parameters else path
+    xml_path = self.parameters['xml_path']
+    if xml_path is None:
+      xml_path = path
     xml_f = os.path.join( xml_path, m.group(1) + '.xml')
     if not (os.path.exists(xml_f) and os.path.isfile(xml_f)):
       raise ValueError("jpg without property xml")
@@ -221,8 +223,8 @@ class ImageCLEF2013(LeafPreprocessor):
 
   def downsize(self, img):
     #~300 KP with original size and SIFT detector. requires dense detector
-    #return self.resize(img, 128.0)
-    return img
+    return self.resize(img, 128.0)
+    #return img
 
   def read_record(self, path, basename):
     tree = self.read_property_xml(path, basename)
@@ -238,7 +240,9 @@ class ImageCLEF2013(LeafPreprocessor):
     species = tree.find('ClassId').text
     dict = self.meta_info['species_names']
     if species not in dict:
-      assert not self.species_name_import, 'cannot find species in meta info'
+      if self.species_name_import:
+        logging.info('cannot find species in meta info')
+        return (False, None, None)
       dict[species] = len(dict) + 1
     label = dict[species]
     #read image

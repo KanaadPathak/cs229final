@@ -77,9 +77,9 @@ def largestContours(canny,img,img_gray, visualize = False):
   #se = np.ones((2, 2), dtype='uint8')
   #canny = cv2.morphologyEx(canny, cv2.MORPH_OPEN, se)
 
-  #se = np.ones((7, 7), dtype='uint8')
-  #canny = cv2.morphologyEx(canny, cv2.MORPH_CLOSE, se)
-  #canny = cv2.dilate(canny, se )
+  se = np.ones((7, 7), dtype='uint8')
+  canny = cv2.morphologyEx(canny, cv2.MORPH_CLOSE, se)
+  canny = cv2.dilate(canny, se )
 
 
   canny, contours, hierarchy = cv2.findContours(canny,cv2.RETR_TREE,cv2.CHAIN_APPROX_NONE)
@@ -163,7 +163,7 @@ def cut_graph_from_hull(hull,img):
   img = img*mask2[:,:,np.newaxis]
   return (img, mask)
 
-def auto_canny(image, sigma=0.35):
+def auto_canny(image, sigma=0.80):
   # compute the median of the single channel pixel intensities
   #canny = cv2.Canny(filtered,100,200)
   #canny_unfiltered = cv2.Canny(img_gray,100,200)

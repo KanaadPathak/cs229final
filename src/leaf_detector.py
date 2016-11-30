@@ -149,7 +149,7 @@ class HogDetector(object):
     assert resized is not None and resized.shape[1]>=window_size[0] and resized.shape[0] >= window_size[1]
 
     detected_window = [] ; best_img = None; best_margin = 0; best_window = []
-    for degree in (90,):
+    for degree in (0, 180, 90, -90, 45, -45, -5, 5, 15, -15):
       logging.debug("scanning with %(degree)d degree" % locals())
       #rotate and gray scale before processing
       rotated = imgutil.rotate(resized.copy(), degree)
