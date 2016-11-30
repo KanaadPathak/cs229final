@@ -459,7 +459,9 @@
 The number of plant species is estimated to be over 220000 in the world \cite{Charles13}. 
 Automatic plant species recognition with image processing has gained increasing
 interests recently. The main application are crop/weeds identification, plan biology research and species tracking \cite{Pedro13}. 
-We compare the results of traditional handcrafted features and features extracted from pre-trained convolutional neural network, particularly on natural images, which can may have mutiple objects, various shape, color and texture due to viewpoint and occlusion.
+
+In this report, we explore the problem of identify leaf based on natural image.  We describe our methods based on traditional handcrafted features and features extracted from pre-trained deep convolution neural network (ConvNets).
+
 % IEEEtran.cls defaults to using nonbold math in the Abstract.
 % This preserves the distinction between vectors and scalars. However,
 % if the journal you are submitting to favors bold math in the abstract,
@@ -467,35 +469,31 @@ We compare the results of traditional handcrafted features and features extracte
 % of the abstract to achieve this. Many IEEE journals frown on math
 % in the abstract anyway.
 
-
-
 \section{Related Work }
-There are lots of research on leaf classification and most of them focus on shape, texture and margin features,  \cite{Charles13} \cite{Pedro13}. These features can achieve very good accuracy on ideal images, which consist of single well aligned object on a contrasting background, such as data set [TODO ].
-Recently, with the huge success of Convnets [TODO]
-
+Research on automatic leaf classification from image has been active since 2000. Many hand-crafted features have since proposed, ranging from shape based, to statistical texture and margin \cite{Charles13} \cite{Pedro13} \cite{Cho2002}. Also other computer vision image features, such SIFT and HOG are studied for this problem. [TODO]
+Most of such manually engineered features can achieve very good accuracy on clean images, which consist of one single well aligned object on contrasting background, such as data set [TODO ].
+Recently, with the huge success of ConvNets, particularly in annual ImageNet Large Scale Visual Recognition Challenge \cite{Alex2014}, researchers start to learn features using ConvNets on this problem [TODO].
 
 \section{Approach}
 
 \subsection{Overview}
-
-
-We break down the problem into two pieces. Firstly, we want to locate the leaf in the image which is an object detection problem. This becomes more important if the leaf is not the single salient object in the image. We use typical method which is to scan the image and determine where the match may occur by a constructed binary classifier.  
-
-The variations of leaves can this harder.  Then, optionally we can apply background removal on the detected image.  Finally, we identify the leaf to one of the varied classes, which is a category recognition problem. For which we explore traditional method Bag of Feature method and CNN. 
+Images captured in the field, such as those from ImageCLEF \cite{ImageCLEF2013}, are more challenging as there are much intra class variations due to viewpoint, lighting condition and occlusion. We break down the problem into two pieces. Firstly, we want to locate the leaf in the image which is an single object localization problem. 
+This step becomes necessary if the image have multiple objects and possibly leaf is not the most salient object.  Then, we predict the specie of the leaf 
+, which is a category recognition problem. This is the main task and for most data set, we only need to perform this task. Here we explore both traditional method, such as Bag of Features,  and ConvNets based method. 
 
 \newpage
 \graphicspath{{../design/}}
 \begin{figure} 
   \center
   \includegraphics[scale=0.2]{overview}
-  \caption{ Pipeline of the system }
+  \caption{ Overview of the system }
   \label{fig:pipeline}
 \end{figure}
 
-\subsection{CNN}
+\subsection{ConvNets}
 We use transfer learning method i.e., pre-trained model as feature extractor and then fine-tune the model to fit our data. [Explain the data set for our pre-trained model and why this is this is applicable to our problem, i.e. same feature space.]
 
-The rest of the report is organized as follows. In section \ref{DataSet}
+The rest of the report is organized as follows. In section \ref{DataSet}, we describe the data set. Section.
 
 \section{DataSet}
 \label{DataSet}
@@ -507,19 +505,6 @@ We found these datasets.
   \item Swedish leaf dataset \cite{SwedishLeafDataset}: 15 species with 952 samples (roughly 60 samples per specie)
   \item Flavia leaf dataset \cite{FlaviaDataset}: 33 species with roughly 60 samples per specie
 \end{enumerate}
-
-\section{Object Detection}
-\subsection{Object Detection with HOG}
-We use tranditional exhuastive search method to scan through all scales
-
-\newpage
-\begin{figure} 
-  \center
-  \includegraphics[scale=0.5]{detection}
-  \caption{ Leaf Detection }
-  \label{fig:detection}
-\end{figure}
-
 
 \section{Object recognition}
 \subsection{Bag of Features (BoF) + local feature descriptors}
@@ -533,7 +518,19 @@ We use tranditional exhuastive search method to scan through all scales
   \label{fig:bofsystemdesign}
 \end{figure}
 During preprocessing, raw images are converted to gray-scaled images and resized to reduce computation complexity. We extract SIFT descriptors from the pixels after detecting the key points. Limiting the width of image to 128 pixels, we have roughly 200 SIFT descriptors per image. Then all the descriptors are clustered to build visual words via K-Means. Due to computation complexity, we pick randomly 100 training images to build the visual vocabulary for the initial run.  
-\subsection{CNN}
+\subsection{Background removal}
+[Discribe OpenCV GrapCut]
+\newpage
+\graphicspath{{../design/}}
+\begin{figure} 
+  \centering
+  \includegraphics[scale=0.2]{backgroundremoval}
+  \caption{ Background Remove }
+  \label{fig:backgroundremoval}
+\end{figure}
+
+
+\subsection{ConvNets}
 
 % Note that IEEE does not put floats in the very first column - or typically
 % anywhere on the first page for that matter. Also, in-text middle ("here")
@@ -542,11 +539,29 @@ During preprocessing, raw images are converted to gray-scaled images and resized
 % floats. This can be corrected via the \fnbelowfloat command of the
 % stfloats package.
 
+\section{Object detection }
+[TODO describe why we need this]
+We use traditional exhaustive search method to scan through all window, scales.
 
-\section{Results}
+\newpage
+\graphicspath{{../design/}}
+\begin{figure} 
+  \center
+  \includegraphics[scale=0.5]{detection}
+  \caption{ Leaf Detection }
+  \label{fig:detection}
+\end{figure}
+
+\section{Experimental Results}
+[Explain cross validation approach we used]
+
+We use prediction rank-1 identification (i.e. accuracy) as our performance metric, which is defined as $Accurary = \frac{N_c}{N_t} \times 100 \%$, where  $N_c$ represents the number of correct match and $N_t$ is the total number of test samples.
+
+[Test results as table.]
+[Analysis of the results.]
 
 
-\section{Conclusion}
+\section{Conclusion and Future work}
 
 
 
@@ -609,13 +624,20 @@ During preprocessing, raw images are converted to gray-scaled images and resized
 \begin{thebibliography}{1}
 
 
+
+  \bibitem{Cho2002}
+  S. Cho, D. Lee, and J. Jeong. Automation and emerg- ing technologies: Weed–plant discrimination by machine vi- sion and artificial neural network. Biosystems Engineering, 83(3):275–280, 2002.
+
   \bibitem{Charles13}
   Charles Mallah, James Cope, James Orwell. Plant Leaf Classification Using Probabilistic Integration of Shape, Texture and Margin Features. Signal Processing, Pattern Recognition and Applications, in press. 2013
+
+  \bibitem{Pedro13}
+  Pedro F. B. Silva, Andre R.S. Marcal, Rubim M. Almeida da Silva. Evaluation of Features for Leaf Discrimination. 2013. Springer Lecture Notes in Computer Science, Vol. 7950, 197-204.
 
   \bibitem{Itheri}
   Itheri Yahiaoui, Nicolas Herve, and Nozha Boujemaa. Shape-based image re-trieval in botanical collections, Lecture Notes in Computer Science including subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinfor matics, vol. 4261 LNCS, pp 357-364, 2006.
 
-  \bibitem{CNNLeaf}
+  \bibitem{ConvNetsLeaf}
   Jassmann TJ, Tashakkori R, Parry RM (2015) Leaf classification utilizing a convolutional neural network. In: SoutheastCon
 
   \bibitem{Neeraj}
@@ -631,12 +653,17 @@ During preprocessing, raw images are converted to gray-scaled images and resized
   Hasim A, Herdiyeni Y, Douady S (2016) Leaf shape recognition using centroid contour distance. In: IOP conference series: earth and environmental science, p 012002
 
   \bibitem{Hall2015}
-  Hall, David, McCool, Chris, Dayoub, Feras, Sunderhauf, Niko, & Upcroft, Ben (2015), Evaluation of features for leaf classification in challenging conditions. In IEEE Winter Conference on Applications of Computer Vision (WACV 2015), 6-9 January 2015, Big Island, Hawaii, USA.
+  Hall, David, McCool, Chris, Dayoub, Feras, Sunderhauf, Niko, \& Upcroft, Ben (2015), Evaluation of features for leaf classification in challenging conditions. In IEEE Winter Conference on Applications of Computer Vision (WACV 2015), 6-9 January 2015, Big Island, Hawaii, USA.
 
 
+ \bibitem{Alex2014}
+     A. Krizhevsky, I. Sutskever, and G. E. Hinton. Imagenet classification with deep convolutional neural networks. In F. Pereira, C. Burges, L. Bottou, and K. Weinberger, edi- tors, Advances in Neural Information Processing Systems 25, pages 1097–1105. Curran Associates, Inc., 2012.
 
-  \bibitem{Pedro13}
-  Pedro F. B. Silva, Andre R.S. Marcal, Rubim M. Almeida da Silva. Evaluation of Features for Leaf Discrimination. 2013. Springer Lecture Notes in Computer Science, Vol. 7950, 197-204.
+     \bibitem{Caffe}
+  Y. Jia. Caffe: An open source convolutional architecture for fast feature embedding. http://caffe.berkeleyvision.org, 2013.
+
+  \bibitem{ILSVRC2014}
+  O. Russakovsky, J. Deng, H. Su, J. Krause, S. Satheesh, S. Ma, Z. Huang, A. Karpathy, A. Khosla, M. Bernstein, A. C. Berg, and L. Fei-Fei. Imagenet large scale visual recog- nition challenge. arXiv preprint arXiv:1409.0575, 2014.
 
   \bibitem{UCIDataSet}
   https://archive.ics.uci.edu/ml/datasets/Leaf
