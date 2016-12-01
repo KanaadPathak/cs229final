@@ -137,7 +137,8 @@ class CNNFeatureExtractor(object):
                 if pbar.n >= data_gen.nb_sample:
                     break
 
-    def convert(self, img):
+    @staticmethod
+    def _convert(img):
         x = image.img_to_array(img)
         x = np.expand_dims(x, axis=0)
         return preprocess_input(x)
@@ -147,14 +148,14 @@ class CNNFeatureExtractor(object):
 
         img = image.load_img(img_path, target_size=target_size)
         img_name = os.path.splitext(os.path.basename(img_path))[0]
-        x = self.convert(img)
+        x = self._convert(img)
 
         middle_layers = [layer for layer in model.layers if isinstance(layer, Convolution2D)]
         get_features = K.function([model.layers[0].input, K.learning_phase()], [l.output for l in middle_layers])
         # we only have one sample of dim: (height, width, features)
         all_features = [f[0].transpose(2, 0, 1) for f in get_features([x, 1])]
         all_names = [l.name for l in middle_layers]
-        print(all_names)
+        print('all layers: %s' % ', '.join(all_names))
 
         with tqdm(total=sum(l.shape[0] for l in all_features)) as pbar:
             for layer_name, features_of_layer in zip(all_names, all_features):
