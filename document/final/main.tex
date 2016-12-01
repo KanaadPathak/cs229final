@@ -458,9 +458,9 @@
 \section{Introduction}
 The number of plant species is estimated to be over 220000 in the world \cite{Charles13}. 
 Automatic plant species recognition with image processing has gained increasing
-interests recently. The main application are crop/weeds identification, plan biology research and species tracking \cite{Pedro13}. 
+interests recently. The main application are weeds identification, species discovery, plant taxonomy, natural reserve park management and so on \cite{Pedro13}. 
 
-In this report, we explore the problem of identify leaf based on natural image.  We describe our methods based on traditional handcrafted features and features extracted from pre-trained deep convolution neural network (ConvNets).
+In this report, we describe our experiments with traditional handcrafted features and features extracted from pretrained deep convolution neural network (ConvNets).
 
 % IEEEtran.cls defaults to using nonbold math in the Abstract.
 % This preserves the distinction between vectors and scalars. However,
@@ -470,28 +470,28 @@ In this report, we explore the problem of identify leaf based on natural image. 
 % in the abstract anyway.
 
 \section{Related Work }
-Research on automatic leaf classification from image has been active since 2000. Many hand-crafted features have since proposed, ranging from shape based, to statistical texture and margin \cite{Charles13} \cite{Pedro13} \cite{Cho2002}. Also other computer vision image features, such SIFT and HOG are studied for this problem. [TODO]
-Most of such manually engineered features can achieve very good accuracy on clean images, which consist of one single well aligned object on contrasting background, such as data set [TODO ].
-Recently, with the huge success of ConvNets, particularly in annual ImageNet Large Scale Visual Recognition Challenge \cite{Alex2014}, researchers start to learn features using ConvNets on this problem [TODO].
+Research on automatic leaf classification from image has been active since 2000. Lots of hand-crafted features have since proposed, ranging from shape based, to statistical texture and margin \cite{Charles13} \cite{Pedro13} \cite{Cho2002}. Also generic computer vision object recognition/detection features, such SIFT and HOG are studied for this problem. [TODO]
+Most of such manually engineered features achieve excellent accuracy on clean images, which consist of one single well aligned leave on contrasting background, such as those images in data set [TODO ].
+Recently, with the huge success of ConvNets, particularly in annual ImageNet Large Scale Visual Recognition Challenge \cite{Alex2014}, researchers start to apply ConvNets to this problem [TODO].  [TODO] have suggested that generic features can be extracted from large ConvNet and yield very good results on fine-grained classification problems even without fine-tuning the pretrained model.
 
 \section{Approach}
 
 \subsection{Overview}
-Images captured in the field, such as those from ImageCLEF \cite{ImageCLEF2013}, are more challenging as there are much intra class variations due to viewpoint, lighting condition and occlusion. We break down the problem into two pieces. Firstly, we want to locate the leaf in the image which is an single object localization problem. 
-This step becomes necessary if the image have multiple objects and possibly leaf is not the most salient object.  Then, we predict the specie of the leaf 
-, which is a category recognition problem. This is the main task and for most data set, we only need to perform this task. Here we explore both traditional method, such as Bag of Features,  and ConvNets based method. 
+Images captured in the field, such as those from ImageCLEF \cite{ImageCLEF2013}, are more challenging as there are much more intra class variations due to viewpoint, lighting condition and occlusion.  We break down the problem into two pieces. Firstly, we want to locate the leaf in the image which is an single object localization problem.  This step becomes necessary if the image have multiple objects and possibly leaf is not the most salient object.  Then, we predict the specie of the leaf, which is a fine-grained classification problem. This is the main task and for most data set, we only need to perform this task. Here we explore both traditional method, such as Bag of Features,  and ConvNets based method. 
 
 \newpage
 \graphicspath{{../design/}}
 \begin{figure} 
   \center
-  \includegraphics[scale=0.2]{overview}
+  \includegraphics[scale=0.5]{overview}
   \caption{ Overview of the system }
   \label{fig:pipeline}
 \end{figure}
 
 \subsection{ConvNets}
-We use transfer learning method i.e., pre-trained model as feature extractor and then fine-tune the model to fit our data. [Explain the data set for our pre-trained model and why this is this is applicable to our problem, i.e. same feature space.]
+We use the transfer learning approach. Specifically, we take a couple of ConvNets what are pretrained on ImageNet  VGGNet/ResNet [TODO quote], remove the last fully connected layers and then treat the rest of the ConvNet as fixed feature extractor for the our data set. This gives us a large dimension codes and we need to select/reduce the features.
+-our dataset is relatively small compared to ImageNet
+[Explain the data set for our pretrained model and why this is this is applicable to our problem, i.e. same feature space.]
 
 The rest of the report is organized as follows. In section \ref{DataSet}, we describe the data set. Section.
 

@@ -16,7 +16,11 @@ from collections import OrderedDict
 from sklearn import linear_model, datasets, svm
 from sklearn.model_selection import cross_val_score, GridSearchCV, StratifiedShuffleSplit, train_test_split
 from sklearn.preprocessing import StandardScaler
+from sklearn.feature_selection import VarianceThreshold, SelectKBest, f_classif, f_regression, RFECV
+from sklearn.model_selection import StratifiedKFold
+
 from sklearn.svm import SVC
+from sklearn.decomposition import PCA
 
 class Classifier(object):
   def score(self, data_set):
@@ -36,7 +40,10 @@ class SoftMax(Classifier):
 class SVM(Classifier):
   def __init__(self, data_set, parameters):
     svr = SVC()
-    self.clf = GridSearchCV(svr, parameters, verbose=9, n_jobs=-1)
+    verbose = 0
+    if 'verbose' in parameters:
+      verbose = parameters['verbose']
+    self.clf = GridSearchCV(svr, parameters, verbose=verbose, n_jobs=-1)
     self.clf.fit(data_set.X_train, data_set.y_train)
 
 class SVMGaussianKernel(SVM):
@@ -55,6 +62,32 @@ class SVMLinearKernel(SVM):
     logging.info("Training Accuracy(C=%f) %.4f" % (self.clf.best_params_['C'], self.clf.best_score_))
 
 def selectModel(data_set, models):
+  scaler = StandardScaler()
+  data_set.X_train = scaler.fit_transform(data_set.X_train)
+  data_set.X_test = scaler.transform(data_set.X_test)
+  #print("after scaling")
+  #print(data_set.X_train.shape)
+  # selector1= VarianceThreshold(threshold=(.9 * (1 - .9)))
+  # X_train = selector1.fit_transform(X_train, y_train)
+  # selector2 = SelectKBest(f_classif, k=min(X_train.shape[1], 3000))
+  # X_train = selector2.fit_transform(X_train, y_train)
+
+  # dimension reduction
+  #pca = PCA()
+  #data_set.X_train = pca.fit_transform(data_set.X_train)
+  #print("after PCA")
+  #print(data_set.X_train.shape)
+
+  # feature selection
+  # backward search
+  #svc = SVC(kernel="linear", C=0.001)
+  #rfecv = RFECV(estimator=svc, step=10, cv=StratifiedKFold(3), n_jobs=-1, scoring='accuracy', verbose=9)
+  #data_set.X_train = rfecv.fit_transform(data_set.X_train, data_set.y_train)
+  #print("Backward search gives number of features : %d" % rfecv.n_features_)
+
+  #data_set.X_test = scaler.transform(data_set.X_test)
+  #data_set.X_test = rfecv.predict(data_set.X_test)
+
   for (model, configs) in models:
     if 'skip' in configs and configs['skip']: continue
     t0 = time.time()
@@ -82,20 +115,20 @@ if __name__ == "__main__":
   configs=(
     {
       #SVMGaussianKernel
-     'c_range' : np.logspace(-4, 6, 11), #np.logspace(1, 9, 6, endpoint=True),
+     'c_range' : np.logspace(2, 6, 2), #np.logspace(1, 9, 6, endpoint=True),
       #gamma = 1/(2*tao^2)
-     'gamma_range' : np.logspace(-5, 9, 15), #np.linspace(1.0/(2*8*8), 1, 1, endpoint=True),
+     'gamma_range' : np.logspace(-3, 2, 5), #np.linspace(1.0/(2*8*8), 1, 1, endpoint=True),
      'skip' : False,
     },
     {
       #SVMGaussianLinear
-      'c_range' : np.logspace(-4, 9, 11, endpoint=True), #np.logspace(-4, 6, 11),
+      'c_range' : np.logspace(-1, 5, 6, endpoint=True), #np.logspace(-4, 6, 11),
       'skip' : False,
     },
     {
       #Softmax
       'c_range' : np.logspace(-4, 6, 11, endpoint=True), #np.logspace(-4, 6, 11)
-      'skip' : False,
+      'skip' : True,
     },
   )
   selectModel(data_set, zip(classifiers, configs))
