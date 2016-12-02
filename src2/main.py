@@ -1,14 +1,26 @@
 #!/usr/bin/env python
 import argparse
+
+import yaml
+
+from cnn_feature import CustomMLPClassifier
+from preprocess_utils import create_from_dict, GeneratorLoader
+
 __version__ = "0.1"
 
 
 def main(args):
     if args.goal == 'extract':
         from cnn_feature import CNNFeatureExtractor
-        CNNFeatureExtractor().extract_feature(args.data_dir, args.feature_file, architecture=args.architecture,
-                                              target_size=(args.image_height, args.image_width),
-                                              batch_size=args.batch_size, aug=args.aug)
+        with open(args.config_file, 'r') as stream:
+            conf = yaml.load(stream)
+
+        CNNFeatureExtractor().extract_feature(
+            data_gen=create_from_dict(conf),
+            feature_file=args.feature_file,
+            architecture=args.architecture,
+            nb_factor=conf.get('factor', 1))
+
     elif args.goal == 'viz':
         from cnn_feature import CNNFeatureExtractor
         CNNFeatureExtractor().visualize_intermediate(args.image_file, args.output_dir, architecture=args.architecture,
@@ -16,14 +28,12 @@ def main(args):
     elif args.goal == 'classify':
         from cnn_feature import ClassifierPool, CNNFeatureExtractor
         X_train, y_train, train_classes = CNNFeatureExtractor().load_features(feature_file=args.feature_file)
-        reverse = dict(zip( train_classes.values(), train_classes.keys()))
+        reverse = dict(zip(train_classes.values(), train_classes.keys()))
         X_test, y_test, test_classes = CNNFeatureExtractor().load_features(feature_file=args.test_feature)
-        y_test_new = []
-        for label in y_test:
-            y_test_new.append(reverse[test_classes[label]])
-        print("Training has %d species, test has %d species"%(len(train_classes), len(test_classes)))
-        ClassifierPool().classify(X_train, y_train, X_test, y_test_new, test_classes, args.results)
-
+        y_test_new = [reverse[test_classes[label]] for label in y_test]
+        print("Training has %d species, test has %d species" % (len(train_classes), len(test_classes)))
+        ClassifierPool().train_and_score(X_train, y_train, X_test, y_test_new, test_class=test_classes,
+                                         model_file=args.model_file, results_file=args.result_file)
 
     elif args.goal == 'cnn_classify':
         from cnn import run_cnn_classify
@@ -33,11 +43,13 @@ def main(args):
         from preprocess_utils import split_images
         split_images(args.data_dir, args.train_size, args.test_size)
 
-    elif args.goal == 'top_cnn_classify':
+    elif args.goal == 'mlp':
         from preprocess_utils import split_images
         from cnn_feature import ClassifierPool, CNNFeatureExtractor
-        CNNFeatureExtractor().train_top_model(feature_file=args.feature_file, weight_file=args.save_file,
-                                              batch_size=args.batch_size, nb_epoch=args.epoch)
+        X_train, y_train, train_classes = CNNFeatureExtractor().load_features(feature_file=args.feature_file)
+        CustomMLPClassifier()\
+            .fit(X_train, y_train, batch_size=args.batch_size, nb_epoch=args.epoch)\
+            .save(args.save_file)
 
 
 if __name__ == '__main__':
@@ -50,11 +62,7 @@ if __name__ == '__main__':
     # extract
     extract_parser = subparsers.add_parser("extract")
     extract_parser.add_argument('-f', '--feature_file', required=True, help="the feature file to save to")
-    extract_parser.add_argument('-W', '--image_width', type=int, default=255, help="the target image width")
-    extract_parser.add_argument('-H', '--image_height', type=int, default=255, help="the target image height")
-    extract_parser.add_argument('--batch_size', type=int, default=8, help="batch size")
-    extract_parser.add_argument('--aug', action='store_true', default=False, help="turn on image augmentation")
-    extract_parser.add_argument('data_dir', help="the path to the config")
+    extract_parser.add_argument('config_file', help="the path to the config")
     extract_parser.add_argument('-a', '--architecture', default='vgg16', choices=['vgg16', 'vgg19', 'resnet50'],
                                 help="the CNN architecture to use")
     # ------------------------------------------------
@@ -71,7 +79,8 @@ if __name__ == '__main__':
     classify_parser = subparsers.add_parser("classify")
     classify_parser.add_argument('-f', '--feature_file', required=True, help="train feature file to load from")
     classify_parser.add_argument('-t', '--test_feature', required=True, help="test feature file to load from")
-    classify_parser.add_argument('-r', '--results', help="file to write test results")
+    classify_parser.add_argument('-m', '--model_file', help="file to save model and weight")
+    classify_parser.add_argument('-r', '--result_file', help="file to write test results")
     # ------------------------------------------------
     cnn_parser = subparsers.add_parser('cnn_classify')
     cnn_parser.add_argument('-e', '--epoch', type=int, default=50, help="the number of epochs to run")
@@ -83,8 +92,8 @@ if __name__ == '__main__':
     split_parser.add_argument('--test_size', help="num of samples or proportion of samples for validation")
     split_parser.add_argument('data_dir', help="the data dir with a images folder")
     # ------------------------------------------------
-    top_cnn_parser = subparsers.add_parser('top_cnn_classify', description='train top layer with pre-trained weights')
-    top_cnn_parser.add_argument('--batch_size', type=int, default=32,  help="batch size")
+    top_cnn_parser = subparsers.add_parser('mlp', description='train top layer with pre-trained weights')
+    top_cnn_parser.add_argument('--batch_size', type=int, default=8,  help="batch size")
     top_cnn_parser.add_argument('-e',  '--epoch', type=int, default=10, help="the number of epochs to run")
     top_cnn_parser.add_argument('-f', '--feature_file', help="the feature file to load from")
     top_cnn_parser.add_argument('-s', '--save_file', help="the file that the weight are saved to")

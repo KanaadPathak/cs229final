@@ -1,8 +1,11 @@
 import os
 import shutil
 
+import sys
+import yaml
 from keras.preprocessing.image import ImageDataGenerator
 import pandas as pd
+from tqdm import tqdm
 
 
 def get_classes(data_dir):
@@ -23,21 +26,33 @@ def count_image(data_dir):
 
 
 def create_from_dict(conf):
-    batch_size = conf.get('batch_size', 32)
+    batch_size = conf.get('batch_size', 8)
     target_size = (conf.get('img_height', 256), conf.get('img_width', 256))
+    factor = conf.get('factor', 10)
     generator_params = conf.get('gen_params', {})
     data_dir = conf.get('data_dir')
+
+    print("Image augmentation is %s" % 'on' if len(generator_params) > 0 else 'off')
+
     return GeneratorLoader(
         target_size=target_size,
         batch_size=batch_size,
+        factor=factor,
         generator_params=generator_params
     ).load_generator(data_dir)
 
 
+def create_from_yaml(yaml_file):
+    with open(yaml_file, 'r') as stream:
+        conf = yaml.load(stream)
+    return create_from_dict(conf)
+
+
 class GeneratorLoader(object):
-    def __init__(self, target_size=(256, 256), batch_size=32, generator_params=None):
+    def __init__(self, target_size=(256, 256), batch_size=32, factor=1, generator_params=None):
         self.batch_size = batch_size
         self.target_size = target_size
+        self.factor = factor
         if generator_params is None:
             self.generator_params = {}
         else:
@@ -48,6 +63,7 @@ class GeneratorLoader(object):
         class_mode = 'binary' if len(classes_) <= 2 else 'categorical'
 
         data_gen = ImageDataGenerator(**self.generator_params)
+
         return data_gen.flow_from_directory(
             data_dir,
             target_size=self.target_size,
@@ -99,3 +115,8 @@ def split_images(data_dir, test_size=None, train_size=None):
                     shutil.copy('%s/%s' % (class_dir, f),
                                 '%s/%s' % (val_class_dir, f))
                 count += 1
+
+if __name__ == '__main__':
+    gen = create_from_yaml(sys.argv[1])
+    print(sum(x.shape[0] for x, y in tqdm(gen)))
+

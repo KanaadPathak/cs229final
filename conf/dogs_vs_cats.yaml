@@ -15,4 +15,3 @@ val:
   data_dir: data/dogs_vs_cats/validation
   gen_params:
     rescale: 0.003921568627
-...

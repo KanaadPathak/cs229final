@@ -1,20 +1,10 @@
 ---
-train:
-  img_width: 240
-  img_height: 180
-  data_dir: data/uci/train
-  gen_params:
-    rescale: 0.003921568627
-    rotation_range: 90
-    height_shift_range: 0.2
-    width_shift_range: 0.2
-    zoom_range: 0.2
-    horizontal_flip: True
-    vertical_flip: True
-val:
-  img_width: 240
-  img_height: 180
-  data_dir: data/uci/validation
-  gen_params:
-    rescale: 0.003921568627
-...
+data_dir: data/uci/train
+gen_params:
+  rescale: 0.003921568627
+  rotation_range: 90
+  height_shift_range: 0.2
+  width_shift_range: 0.2
+  zoom_range: 0.2
+  horizontal_flip: True
+  vertical_flip: True

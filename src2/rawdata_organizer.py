@@ -1,3 +1,5 @@
+import argparse
+
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 import pandas as pd
 import csv
@@ -6,6 +8,8 @@ import os
 import shutil
 
 from xml.dom import minidom
+
+from tqdm import tqdm
 
 from preprocess_utils import transform_values
 
@@ -111,20 +115,28 @@ class UCILoader(object):
 
 
 class ImageClefLoader(object):
-    def extract_leaves(self, root_dir):
-        # root_dir = sys.argv[1]
-        image_dir = '%s/train' % root_dir
-        for f in os.listdir(image_dir):
-            if f.endswith('.xml'):
-                filename = '%s/%s' % (image_dir, f)
-                xmldoc = minidom.parse(filename)
-                the_content = xmldoc.getElementsByTagName('Content')[0].firstChild.data
-                the_type = xmldoc.getElementsByTagName('Type')[0].firstChild.data
-                the_classid = xmldoc.getElementsByTagName('ClassId')[0].firstChild.data
-                the_filename = xmldoc.getElementsByTagName('FileName')[0].firstChild.data
-                if the_content == 'Leaf':
-                    print(','.join([the_type, the_classid, the_content, the_filename]))
-                    dest_dir = '%s/ready' % root_dir
-                    os.makedirs(dest_dir, exist_ok=True)
-                    shutil.copy('%s/%s' % (image_dir, the_filename), '%s/%s' % (dest_dir, the_filename))
+    @staticmethod
+    def extract(src_dir, dest_dir):
+        all_xml = [f for f in os.listdir(src_dir) if f.endswith('.xml')]
+        for file in tqdm(all_xml):
+            filename = '%s/%s' % (src_dir, file)
+            xmldoc = minidom.parse(filename)
+            the_content = xmldoc.getElementsByTagName('Content')[0].firstChild.data
+            the_type = xmldoc.getElementsByTagName('Type')[0].firstChild.data
+            the_classid = xmldoc.getElementsByTagName('ClassId')[0].firstChild.data
+            the_filename = xmldoc.getElementsByTagName('FileName')[0].firstChild.data
+            if the_content == 'Leaf':
+                final_dir = os.path.join(dest_dir, the_type, the_classid)
+                os.makedirs(final_dir, exist_ok=True)
+                shutil.copy(os.path.join(src_dir, the_filename), os.path.join(final_dir, the_filename))
 
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('-s', '--src_dir', required=True, help="the source dir to read from")
+    parser.add_argument('-d', '--dest_dir', required=True, help="the destination dir to write to")
+    parser.add_argument('dataset', required=True, default='imageclef', choices=['imageclef'])
+    args = parser.parse_args()
+
+    if args.dataset == 'imageclef':
+        ImageClefLoader.extract(args.src_dir, args.dest_dir)
