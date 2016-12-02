@@ -18,11 +18,15 @@ def main(args):
         X_train, y_train, train_classes = CNNFeatureExtractor().load_features(feature_file=args.feature_file)
         reverse = dict(zip( train_classes.values(), train_classes.keys()))
         X_test, y_test, test_classes = CNNFeatureExtractor().load_features(feature_file=args.test_feature)
-        y_test_new = []
+        y_test_new = []; test_classes_new = {}
         for label in y_test:
-            y_test_new.append(reverse[test_classes[label]])
-        print("Training has %d species, test has %d species"%(len(train_classes), len(test_classes)))
-        ClassifierPool().classify(X_train, y_train, X_test, y_test_new, test_classes, args.results)
+            species_name = test_classes[label]
+            new_label = reverse[species_name]
+            y_test_new.append(new_label)
+            if new_label not in test_classes_new:
+                test_classes_new[new_label] = species_name
+        print("Training has %d species, test has %d species"%(len(train_classes), len(test_classes_new)))
+        ClassifierPool().classify(X_train, y_train, X_test, y_test_new, test_classes_new, args.results)
 
 
     elif args.goal == 'cnn_classify':

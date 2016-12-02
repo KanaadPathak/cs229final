@@ -46,8 +46,9 @@ class ClassifierPool(object):
     def __init__(self):
         self.classifiers = [
             #('KNN', KNeighborsClassifier(), {'n_neighbors': [5, 10]})
-            ('Linear SVM', SVC(), {'kernel': ["linear"], 'C': np.logspace(-2, -1, 3, endpoint=True)})
-            # , ('RBF SVM', SVC(), {'kernel': ['rbf'], 'C': np.logspace(-4, 6, 11), 'gamma': np.logspace(-5,9 ,15)})
+             ('Linear SVM', SVC(), {'kernel': ["linear"], 'C': np.logspace(-2, -1, 3, endpoint=True)})
+            #('RBF SVM', SVC(), {'kernel': ['rbf'], 'C': np.logspace(-2, 1, 4, endpoint=True),
+            #                    'gamma': np.logspace(-1,3,5, endpoint=True)})
             # , ('Nu SVM', NuSVC(probability=True), {})
             # , ('Gaussian Process', GaussianProcessClassifier(1.0 * RBF(1.0), warm_start=True))
             # , ('Decision Tree', DecisionTreeClassifier(), {})
@@ -114,7 +115,7 @@ class ClassifierPool(object):
         #normalizatoin first!
         (X_train, X_test, scaler) = self.scale(X_train, X_test)
 
-        X_train, X_test = self.pca(X_train, X_test, scaler)
+        #X_train, X_test = self.pca(X_train, X_test, scaler)
 
         #feature selection
         #(X_train, X_test) = self.feature_selection(X_train, y_train, X_test)
@@ -163,8 +164,8 @@ class CNNFeatureExtractor(object):
                 width_shift_range=0.2,
                 height_shift_range=0.2,
             )
-            print("Image augementation is on")
-            nb_factor = 10
+            nb_factor = 5 
+            print("Image augementation is on, factor=%d"%factor)
         else:
             data_gen_args = None
             print("Image augementation is off")
