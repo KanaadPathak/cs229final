@@ -114,6 +114,7 @@ class CNNFeatureExtractor(object):
             atom = tables.Float64Atom()
             cnn_input_shape = (batch_size, *data_gen.image_shape)
             cnn_output_shape = model.get_output_shape_for(cnn_input_shape)
+            print(cnn_output_shape)
             single_sample_feature_shape = reduce(mul, cnn_output_shape[1:])
             feature_arr = f.create_earray(f.root, 'features', atom, (0, single_sample_feature_shape))
             label_arr = f.create_earray(f.root, 'labels', atom, (0, ))
@@ -162,9 +163,10 @@ class CNNFeatureExtractor(object):
                 dir_path = os.path.join(output_dir, img_name, layer_name)
                 os.makedirs(dir_path, exist_ok=True)
                 for j in range(features_of_layer.shape[0]):
-                    output_path = os.path.join(dir_path, 'feature_%s.jpg' % j)
                     feat_normalized = self._normalize(features_of_layer[j])
-                    im_color = cv2.applyColorMap(feat_normalized, cv2.COLORMAP_JET)
+                    dims = '_'.join(map(lambda i: str(i), feat_normalized.shape))
+                    output_path = os.path.join(dir_path, 'feature_%s_%s.jpg' % (j, dims))
+                    im_color = cv2.applyColorMap(feat_normalized, cv2.COLORMAP_AUTUMN)
                     cv2.imwrite(output_path, im_color)
                     pbar.update(1)
 
@@ -186,7 +188,7 @@ class CNNFeatureExtractor(object):
 
     def train_top_model(self, feature_file, weight_file=None, batch_size=32, nb_epoch=10):
         X, y, classes = self.load_features(feature_file)
-        X_train, X_val, y_train, y_val = train_test_split(X, y, train_size=.8, stratify=y)
+        X_train, X_val, y_train, y_val = train_test_split(X, y, train_size=.7, stratify=y)
         y_train = np_utils.to_categorical(y_train)
         y_val = np_utils.to_categorical(y_val)
 
@@ -200,9 +202,10 @@ class CNNFeatureExtractor(object):
 
         model = Sequential()
         model.add(Dense(4096, activation='relu', input_dim=X_train.shape[1]))
-        model.add(Dropout(0.5))
-        model.add(Dense(1024, activation='relu', name='fc2'))
+        model.add(Dense(4096, activation='relu', name='fc2'))
         model.add(Dense(output_dim, activation=final_activation, name='predictions'))
+
+        print(loss, output_dim, final_activation)
 
         model.compile(optimizer='rmsprop', loss=loss, metrics=['accuracy'])
 
