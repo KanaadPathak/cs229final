@@ -35,17 +35,19 @@ from sklearn.gaussian_process.kernels import RBF
 from sklearn.metrics import accuracy_score, log_loss
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import StratifiedShuffleSplit, cross_val_score, train_test_split, GridSearchCV, KFold
-from sklearn.feature_selection import VarianceThreshold, SelectKBest, f_classif, f_regression
+from sklearn.model_selection import StratifiedKFold
+from sklearn.feature_selection import VarianceThreshold, SelectKBest, mutual_info_classif, f_classif, f_regression, RFECV
 from sklearn.decomposition import PCA
 from sklearn.decomposition import IncrementalPCA
+from sklearn.externals import joblib
 
 
 class ClassifierPool(object):
     def __init__(self):
         self.classifiers = [
             #('KNN', KNeighborsClassifier(), {'n_neighbors': [5, 10]})
-            ('Linear SVM', SVC(), {'kernel': ["linear"], 'C': np.logspace(-4, 6, 11)} )
-            #('RBF SVM', SVC(), {'kernel': ['rbf'], 'C': np.logspace(-4, 6, 11), 'gamma': np.logspace(-5,9 ,15)})
+            ('Linear SVM', SVC(), {'kernel': ["linear"], 'C': np.logspace(-2, -1, 3, endpoint=True)})
+            # , ('RBF SVM', SVC(), {'kernel': ['rbf'], 'C': np.logspace(-4, 6, 11), 'gamma': np.logspace(-5,9 ,15)})
             # , ('Nu SVM', NuSVC(probability=True), {})
             # , ('Gaussian Process', GaussianProcessClassifier(1.0 * RBF(1.0), warm_start=True))
             # , ('Decision Tree', DecisionTreeClassifier(), {})
@@ -58,44 +60,85 @@ class ClassifierPool(object):
             # ,('QDA', QuadraticDiscriminantAnalysis(), {})
         ]
 
-    def feature_selection(self, X, y):
-        X = VarianceThreshold(threshold=(.9 * (1 - .9))).fit_transform(X, y)
-        X = SelectKBest(f_classif, k=min(X.shape[1], 3000)).fit_transform(X, y)
-        #X = self.scale(X)
-        #pca = PCA(n_components=1000)
-        #pca.fit(X,y)
-        #X = pca.transform(X)
-        #print(X.shape)
-        return X
+    def feature_selection(self, X_train, y_train, X_test):
+        print("before selection")
+        print(X_train.shape)
 
-    def scale(self, X):
+        selector1= VarianceThreshold(threshold=(.9 * (1 - .9)))
+        X_train = selector1.fit_transform(X_train, y_train)
+        selector2 = SelectKBest(mutual_info_classif, k=min(X_train.shape[1], 3000))
+        X_train = selector2.fit_transform(X_train, y_train)
+
+        #backword search
+        #svc = SVC(kernel="linear", C=0.001)
+        #rfecv = RFECV(estimator=svc, step=10, cv=StratifiedKFold(3), n_jobs=-1, scoring='accuracy', verbose=9)
+        #X_train = rfecv.fit_transform(X_train, y_train)
+        #print("Backward search gives number of features : %d" % rfecv.n_features_)
+        #print("before selection")
+        #print(X_train.shape)
+
+        X_test = selector1.transform(X_test)
+        X_test = selector2.transform(X_test)
+        #X_test = rfecv.predict(X_test)
+
+        print("after selection")
+        print(X_train.shape)
+        print(X_test.shape)
+
+        return (X_train, X_test)
+
+    def scale(self, X_train, X_test):
         scaler = StandardScaler()
-        return scaler.fit_transform(X)
+        X_train = scaler.fit_transform(X_train)
+        X_test = scaler.transform(X_test)
+        print("after scaling")
+        print(X_train.shape)
+        return (X_train, X_test, scaler)
 
-    def classify(self, X, y):
-        X = self.feature_selection(X, y)
-        X = self.scale(X)
-        print(X.shape)
+    def pca(self, X_train, X_test, scaler):
+        #dimension reduction + whitening
+        pca = PCA(n_components=min(1000, X_train.shape[1]), whiten=True)
+        X_train = pca.fit_transform(X_train)
+        print("after PCA")
+        print(X_train.shape)
+        #normalize against, per suggested in the paper
+        X_train = scaler.fit_transform(X_train)
 
-        # log_cols = ["Classifier", "Accuracy"]
-        # log = pd.DataFrame(columns=log_cols)
+        #feature scaling
+        X_test = pca.transform(X_test)
+        #normalize after PCA
+        X_test = scaler.transform(X_test)
+        return (X_train, X_test)
 
+    def classify(self, X_train, y_train, X_test, y_test, test_class=None, results_file=None):
+        #normalizatoin first!
+        (X_train, X_test, scaler) = self.scale(X_train, X_test)
+
+        X_train, X_test = self.pca(X_train, X_test, scaler)
+
+        #feature selection
+        #(X_train, X_test) = self.feature_selection(X_train, y_train, X_test)
+
+        best_score = 0.0; best_predict = []
         for name, clf, param_grid in self.classifiers:
             print("=" * 30)
             print(name, )
             # cv = KFold(2)
-            clf = GridSearchCV(clf, param_grid, verbose=9, n_jobs=-1)
-            clf.fit(X, y)
+            clf = GridSearchCV(clf, param_grid, verbose=9, cv=KFold(n_splits=3), n_jobs=-1)
+            clf.fit(X_train, y_train)
             print('Training Accuracy %.4f with params: %s' % (clf.best_score_, clf.best_params_))
 
-            #score = cross_val_score(clf, X, y).min()
-            #score = clf.fit(X, y)
-            #print("Accuracy Score: %.4f" % score)
-
-            # log_entry = pd.DataFrame([[name, score]], columns=log_cols)
-            # log = log.append(log_entry)
+            y_predict = clf.predict(X_test)
+            score = clf.score(X_test, y_test)
+            print("%s Test Accuracy: %0.4f" % (str(clf), score))
+            if score > best_score:
+                best_score = score
+                best_predict = y_predict
 
         print("=" * 30)
+        if results_file is not None:
+            d = {'y_predict': best_predict, 'y_test': y_test, 'score': best_score,'y_class': test_class}
+            joblib.dump(d, results_file)
 
 
 class CNNFeatureExtractor(object):
@@ -111,12 +154,25 @@ class CNNFeatureExtractor(object):
         elif architecture == 'resnet50':
             return ResNet50(weights='imagenet', include_top=False)
 
-    def extract_feature(self, data_dir, feature_file, architecture='vgg16', target_size=(256, 256), batch_size=8):
+    def extract_feature(self, data_dir, feature_file, architecture='vgg16', target_size=(256, 256), batch_size=8, aug=False):
         model = self.select_architecture(architecture)
 
-        data_gen = GeneratorLoader(target_size=target_size, batch_size=batch_size).load_generator(data_dir)
+        if aug:
+            data_gen_args = dict(
+                rotation_range=360,
+                width_shift_range=0.2,
+                height_shift_range=0.2,
+            )
+            print("Image augementation is on")
+            nb_factor = 10
+        else:
+            data_gen_args = None
+            print("Image augementation is off")
+            nb_factor = 1
+        data_gen = GeneratorLoader(target_size=target_size, batch_size=batch_size, generator_params=data_gen_args).load_generator(data_dir)
 
-        with tqdm(total=data_gen.nb_sample) as pbar, \
+
+        with tqdm(total=data_gen.nb_sample * nb_factor) as pbar, \
                 tables.open_file(feature_file, mode='w') as f:
 
             atom = tables.Float64Atom()
@@ -137,12 +193,13 @@ class CNNFeatureExtractor(object):
                 row.append()
             class_table.flush()
 
+            print("feature dimension: %d" % single_sample_feature_shape)
             for X, y in data_gen:
                 features = model.predict(X).reshape((X.shape[0], single_sample_feature_shape))
                 feature_arr.append(features)
                 label_arr.append(y.argmax(1))
                 pbar.update(X.shape[0])
-                if pbar.n >= data_gen.nb_sample:
+                if pbar.n >= data_gen.nb_sample * nb_factor:
                     break
 
     def convert(self, img):
