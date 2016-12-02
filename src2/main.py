@@ -8,15 +8,22 @@ def main(args):
         from cnn_feature import CNNFeatureExtractor
         CNNFeatureExtractor().extract_feature(args.data_dir, args.feature_file, architecture=args.architecture,
                                               target_size=(args.image_height, args.image_width),
-                                              batch_size=args.batch_size)
+                                              batch_size=args.batch_size, aug=args.aug)
     elif args.goal == 'viz':
         from cnn_feature import CNNFeatureExtractor
         CNNFeatureExtractor().visualize_intermediate(args.image_file, args.output_dir, architecture=args.architecture,
                                                      target_size=(args.image_height, args.image_width))
     elif args.goal == 'classify':
         from cnn_feature import ClassifierPool, CNNFeatureExtractor
-        X, y, classes = CNNFeatureExtractor().load_features(feature_file=args.feature_file)
-        ClassifierPool().classify(X, y)
+        X_train, y_train, train_classes = CNNFeatureExtractor().load_features(feature_file=args.feature_file)
+        reverse = dict(zip( train_classes.values(), train_classes.keys()))
+        X_test, y_test, test_classes = CNNFeatureExtractor().load_features(feature_file=args.test_feature)
+        y_test_new = []
+        for label in y_test:
+            y_test_new.append(reverse[test_classes[label]])
+        print("Training has %d species, test has %d species"%(len(train_classes), len(test_classes)))
+        ClassifierPool().classify(X_train, y_train, X_test, y_test_new, test_classes, args.results)
+
 
     elif args.goal == 'cnn_classify':
         from cnn import run_cnn_classify
@@ -46,6 +53,7 @@ if __name__ == '__main__':
     extract_parser.add_argument('-W', '--image_width', type=int, default=255, help="the target image width")
     extract_parser.add_argument('-H', '--image_height', type=int, default=255, help="the target image height")
     extract_parser.add_argument('--batch_size', type=int, default=8, help="batch size")
+    extract_parser.add_argument('--aug', action='store_true', default=False, help="turn on image augmentation")
     extract_parser.add_argument('data_dir', help="the path to the config")
     extract_parser.add_argument('-a', '--architecture', default='vgg16', choices=['vgg16', 'vgg19', 'resnet50'],
                                 help="the CNN architecture to use")
@@ -61,7 +69,9 @@ if __name__ == '__main__':
     # ------------------------------------------------
     # classify
     classify_parser = subparsers.add_parser("classify")
-    classify_parser.add_argument('-f', '--feature_file', required=True, help="the feature file to load from")
+    classify_parser.add_argument('-f', '--feature_file', required=True, help="train feature file to load from")
+    classify_parser.add_argument('-t', '--test_feature', required=True, help="test feature file to load from")
+    classify_parser.add_argument('-r', '--results', help="file to write test results")
     # ------------------------------------------------
     cnn_parser = subparsers.add_parser('cnn_classify')
     cnn_parser.add_argument('-e', '--epoch', type=int, default=50, help="the number of epochs to run")
