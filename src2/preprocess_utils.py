@@ -116,6 +116,7 @@ def split_images(data_dir, test_size=None, train_size=None):
                                 '%s/%s' % (val_class_dir, f))
                 count += 1
 
+
 if __name__ == '__main__':
     gen = create_from_yaml(sys.argv[1])
     print(sum(x.shape[0] for x, y in tqdm(gen)))

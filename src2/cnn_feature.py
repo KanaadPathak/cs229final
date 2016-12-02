@@ -1,42 +1,37 @@
-from keras.layers import Dense, Dropout
+import os
+from functools import reduce
+from operator import mul
+
+import cv2
+import numpy as np
+import tables
+from keras import backend as K
+from keras.layers import Dense
 from keras.layers.convolutional import Convolution2D
 from keras.models import Sequential, load_model
-from keras.utils import np_utils
-from keras import backend as K
 from keras.preprocessing import image
+from keras.utils import np_utils
 from sklearn.base import ClassifierMixin
+from sklearn.decomposition import PCA
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, GradientBoostingClassifier
+from sklearn.externals import joblib
+from sklearn.feature_selection import VarianceThreshold, SelectKBest, mutual_info_classif
+from sklearn.gaussian_process import GaussianProcessClassifier
+from sklearn.gaussian_process.kernels import RBF
+from sklearn.model_selection import train_test_split, GridSearchCV, KFold
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.neural_network import MLPClassifier
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
+from tqdm import tqdm
 
+from imagenet_utils import preprocess_input
 from resnet50 import ResNet50
 from vgg16 import VGG16
 from vgg19 import VGG19
-from imagenet_utils import preprocess_input
-
-import cv2
-import tables
-import numpy as np
-
-from preprocess_utils import GeneratorLoader
-from tqdm import tqdm
-from operator import mul
-from functools import reduce
-import os
-
-from sklearn.neural_network import MLPClassifier
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, GradientBoostingClassifier
-from sklearn.naive_bayes import GaussianNB
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
-from sklearn.svm import SVC
-from sklearn.gaussian_process import GaussianProcessClassifier
-from sklearn.gaussian_process.kernels import RBF
-
-from sklearn.metrics import accuracy_score, log_loss
-from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import StratifiedKFold, cross_val_score, train_test_split, GridSearchCV, KFold
-from sklearn.feature_selection import VarianceThreshold, SelectKBest, mutual_info_classif, f_classif, RFECV
-from sklearn.decomposition import PCA, IncrementalPCA
-from sklearn.externals import joblib
 
 classifiers = {
     'SVC': (SVC(), {'kernel': ["linear"], 'C': np.logspace(-2, -1, 3, endpoint=True)}),
@@ -66,8 +61,8 @@ class ClassifierPool(object):
             # normalize against after pca, per suggested in the paper
             scaler,
             # feature selection
-            # VarianceThreshold(threshold=(.9 * (1 - .9))),
-            # SelectKBest(mutual_info_classif, k=min(nb_features, 3000)),
+            VarianceThreshold(threshold=(.9 * (1 - .9))),
+            SelectKBest(mutual_info_classif, k=min(nb_features, 3000)),
         ]
 
     def save(self, model_file):

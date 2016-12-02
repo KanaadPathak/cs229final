@@ -1,10 +1,7 @@
 #!/usr/bin/env python
 import argparse
 
-import yaml
-
-from cnn_feature import CustomMLPClassifier
-from preprocess_utils import create_from_dict, GeneratorLoader
+from cnn_feature import CustomMLPClassifier, classifiers
 
 __version__ = "0.1"
 
@@ -12,14 +9,13 @@ __version__ = "0.1"
 def main(args):
     if args.goal == 'extract':
         from cnn_feature import CNNFeatureExtractor
-        with open(args.config_file, 'r') as stream:
-            conf = yaml.load(stream)
+        from preprocess_utils import create_from_yaml
 
         CNNFeatureExtractor().extract_feature(
-            data_gen=create_from_dict(conf),
+            data_gen=create_from_yaml(args.gen_conf),
             feature_file=args.feature_file,
             architecture=args.architecture,
-            nb_factor=conf.get('factor', 1))
+            nb_factor=args.factor)
 
     elif args.goal == 'viz':
         from cnn_feature import CNNFeatureExtractor
@@ -32,8 +28,9 @@ def main(args):
         X_test, y_test, test_classes = CNNFeatureExtractor().load_features(feature_file=args.test_feature)
         y_test_new = [reverse[test_classes[label]] for label in y_test]
         print("Training has %d species, test has %d species" % (len(train_classes), len(test_classes)))
-        ClassifierPool().train_and_score(X_train, y_train, X_test, y_test_new, test_class=test_classes,
-                                         model_file=args.model_file, results_file=args.result_file)
+        clf = ClassifierPool(classifier_name='', nb_features=X_train.shape[1])
+        clf.train_and_score(X_train, y_train, X_test, y_test_new, test_class=test_classes,
+                            model_file=args.model_file, results_file=args.result_file)
 
     elif args.goal == 'cnn_classify':
         from cnn import run_cnn_classify
@@ -61,22 +58,23 @@ if __name__ == '__main__':
     # ------------------------------------------------
     # extract
     extract_parser = subparsers.add_parser("extract")
+    extract_parser.add_argument('-x', '--factor', default=1, help="factor for data augumentation")
     extract_parser.add_argument('-f', '--feature_file', required=True, help="the feature file to save to")
-    extract_parser.add_argument('config_file', help="the path to the config")
+    extract_parser.add_argument('gen_conf', help="the path to the generator config")
     extract_parser.add_argument('-a', '--architecture', default='vgg16', choices=['vgg16', 'vgg19', 'resnet50'],
                                 help="the CNN architecture to use")
     # ------------------------------------------------
     # viz
     viz_parser = subparsers.add_parser("viz")
     viz_parser.add_argument('-f', '--output_dir', required=True, help="the feature file to save to")
-    viz_parser.add_argument('-W', '--image_width', type=int, default=255, help="the target image width")
-    viz_parser.add_argument('-H', '--image_height', type=int, default=255, help="the target image height")
+    extract_parser.add_argument('gen_conf', help="the path to the config")
     viz_parser.add_argument('image_file', help="the path to the image")
     viz_parser.add_argument('-a', '--architecture', default='vgg16', choices=['vgg16', 'vgg19', 'resnet50'],
                             help="the CNN architecture to use")
     # ------------------------------------------------
     # classify
     classify_parser = subparsers.add_parser("classify")
+    viz_parser.add_argument('-c', '--classifier', default='SVC', choices=classifiers.keys(), help="classifier name")
     classify_parser.add_argument('-f', '--feature_file', required=True, help="train feature file to load from")
     classify_parser.add_argument('-t', '--test_feature', required=True, help="test feature file to load from")
     classify_parser.add_argument('-m', '--model_file', help="file to save model and weight")
@@ -85,7 +83,7 @@ if __name__ == '__main__':
     cnn_parser = subparsers.add_parser('cnn_classify')
     cnn_parser.add_argument('-e', '--epoch', type=int, default=50, help="the number of epochs to run")
     cnn_parser.add_argument('-s', '--save_file', help="the file that the weight are saved to")
-    cnn_parser.add_argument('config_file', help="the path to the config")
+    cnn_parser.add_argument('gen_conf', help="the path to the config")
     # ------------------------------------------------
     split_parser = subparsers.add_parser('split', description='split images in a folder to train and val')
     split_parser.add_argument('--train_size', help="num of samples or proportion of samples for train")

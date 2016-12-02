@@ -60,7 +60,7 @@ class CNNClassifier(object):
 
 
 def run_cnn_classify(args):
-    with open(args.config_file, 'r') as stream:
+    with open(args.gen_conf, 'r') as stream:
         conf = yaml.load(stream)
 
     train_gen = create_from_dict(conf.get('train'))

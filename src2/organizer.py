@@ -135,7 +135,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('-s', '--src_dir', required=True, help="the source dir to read from")
     parser.add_argument('-d', '--dest_dir', required=True, help="the destination dir to write to")
-    parser.add_argument('dataset', required=True, default='imageclef', choices=['imageclef'])
+    parser.add_argument('--dataset', default='imageclef', choices=['imageclef'])
     args = parser.parse_args()
 
     if args.dataset == 'imageclef':
