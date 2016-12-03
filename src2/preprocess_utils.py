@@ -32,7 +32,7 @@ def create_from_dict(conf):
     generator_params = conf.get('gen_params', {})
     data_dir = conf.get('data_dir')
 
-    print("Image augmentation is %s" % 'on' if len(generator_params) > 0 else 'off')
+    print("Image augmentation is %s" % ('on' if len(generator_params) > 0 else 'off'))
 
     return GeneratorLoader(
         target_size=target_size,

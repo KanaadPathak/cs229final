@@ -72,7 +72,7 @@ imageclef end to end instruction:
 python src2/organizer.py -s data/imageclef/ImageCLEF2013PlantTaskTrainPackage-PART-1/train/ -d data/imageclef/train
 cp -rv data/imageclef/TestAndTaskPackage/Data/GroundTruth data/imageclef/TestAndTaskPackage/Data/Test
 python src2/organizer.py -s data/imageclef/TestAndTaskPackage/Data/Test -d data/imageclef/test
-python src2/main.py extract -f history/imageclef_train_resnet50.h5 -a resnet50 conf/imageclef-train.yaml
+python src2/main.py extract -f history/imageclef_train_resnet50.h5 -x 10 -a resnet50 conf/imageclef-train.yaml
 python src2/main.py extract -f history/imageclef_test_resnet50.h5 -a resnet50 conf/imageclef-test.yaml
 python src2/main.py classify -f history/imageclef_train_resnet50.h5 -t history/imageclef_test_resnet50.h5 -m history/imageclef_model.pkl
 ```

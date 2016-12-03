@@ -19,7 +19,8 @@ from sklearn.externals import joblib
 from sklearn.feature_selection import VarianceThreshold, SelectKBest, mutual_info_classif
 from sklearn.gaussian_process import GaussianProcessClassifier
 from sklearn.gaussian_process.kernels import RBF
-from sklearn.model_selection import train_test_split, GridSearchCV, KFold
+from sklearn.model_selection import StratifiedKFold
+from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.neural_network import MLPClassifier
@@ -34,16 +35,16 @@ from vgg16 import VGG16
 from vgg19 import VGG19
 
 classifiers = {
-    'SVC': (SVC(), {'kernel': ["linear"], 'C': np.logspace(-2, -1, 3, endpoint=True)}),
+    'SVC': (SVC(), {'kernel': ["linear"], 'C': [0.01]}),
     'KNN': (KNeighborsClassifier(), {'n_neighbors': [5, 10]}),
     'GaussianProcess': (GaussianProcessClassifier(), {'kernel': 1.0 * RBF(1.0), 'warm_start': True}),
-    'DecisionTree': (DecisionTreeClassifier()),
-    'RandomForest': (RandomForestClassifier()),
-    'AdaBoost': (AdaBoostClassifier()),
-    'GradientBoosting': (GradientBoostingClassifier()),
-    'NeuralNetwork': (MLPClassifier()),
-    'NaiveBayes': (GaussianNB()),
-    'LDA': ('LDA', LinearDiscriminantAnalysis()),
+    'DecisionTree': (DecisionTreeClassifier(), {}),
+    'RandomForest': (RandomForestClassifier(), {}),
+    'AdaBoost': (AdaBoostClassifier(), {}),
+    'GradientBoosting': (GradientBoostingClassifier(), {}),
+    'MLP': (MLPClassifier(), {}),
+    'NaiveBayes': (GaussianNB(), {}),
+    'LDA': (LinearDiscriminantAnalysis(), {}),
 }
 
 
@@ -62,7 +63,7 @@ class ClassifierPool(object):
             scaler,
             # feature selection
             VarianceThreshold(threshold=(.9 * (1 - .9))),
-            SelectKBest(mutual_info_classif, k=min(nb_features, 3000)),
+            # SelectKBest(mutual_info_classif, k=min(nb_features, 3000)),
         ]
 
     def save(self, model_file):
@@ -75,13 +76,17 @@ class ClassifierPool(object):
         print("initial shape")
         print(X.shape)
         for estimator in self.preprocessors:
+            try:
+                estimator.k = min(estimator.k, X.shape[1])
+            except AttributeError:
+                pass
             X = estimator.fit_transform(X, y)
-            print("after %s" % estimator.__class__)
+            print("after %s" % estimator.__class__.__name__)
             print(X.shape)
 
         print("=" * 30)
         print(self.classifier_name, )
-        clf = GridSearchCV(self.classifier, self.param_grid, verbose=9, cv=KFold(n_splits=3), n_jobs=-1)
+        clf = GridSearchCV(self.classifier, self.param_grid, verbose=9, cv=StratifiedKFold(n_splits=3), n_jobs=-1)
         clf.fit(X, y)
         print('Training Accuracy %.4f with params: %s' % (clf.best_score_, clf.best_params_))
         return X
@@ -195,13 +200,13 @@ class CNNFeatureExtractor(object):
             img *= 255 / (img_max - img_min)
         return np.uint8(img)
 
-    def load_features(self, feature_file):
+    @staticmethod
+    def load_features(feature_file):
         with tables.open_file(feature_file, mode='r') as f:
             X = f.root.features[:, :].astype(float)
             y = f.root.labels[:].astype(int)
             classes = dict((int(r['classid']), r['name']) for r in f.root.classes.iterrows())
         return X, y, classes
-
 
 class CustomMLPClassifier(ClassifierMixin):
     def __init__(self, batch_size=32, nb_epoch=10):

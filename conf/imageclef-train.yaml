@@ -1,6 +1,5 @@
 ---
 data_dir: data/imageclef/images/NaturalBackground
-factor: 10
 gen_params:
   rotation_range: 90
   width_shift_range: 0.2

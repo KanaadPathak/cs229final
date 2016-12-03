@@ -1,11 +1,2 @@
 ---
 data_dir: data/imageclef/test/NaturalBackground
-factor: 10
-gen_params:
-  rotation_range: 90
-  width_shift_range: 0.2
-  height_shift_range: 0.2
-  channel_shift_range: 0.1
-  zoom_range: 0.2
-  horizontal_flip: True
-  vertical_flip: True
