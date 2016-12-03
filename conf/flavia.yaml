@@ -1,12 +1,2 @@
 ---
 data_dir: data/flavia/images
-factor: 10
-gen_params:
-  rescale: 0.00392156862745098
-  rotation_range: 90
-  height_shift_range: 0.1
-  width_shift_range: 0.1
-  channel_shift_range: 0.1
-  zoom_range: 0.2
-  horizontal_flip: True
-  vertical_flip: True

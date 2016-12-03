@@ -54,15 +54,14 @@ class ClassifierPool(object):
         self.classifier_name = classifier_name
         self.classifier, self.param_grid = classifiers[classifier_name]
 
-        scaler = StandardScaler()
         self.preprocessors = [
-            scaler,
+            StandardScaler(),
             # feature scaling
-            PCA(n_components=min(1000, nb_features), whiten=True),
+            # PCA(n_components=min(1000, nb_features), whiten=True),
             # normalize against after pca, per suggested in the paper
-            scaler,
+            # StandardScaler(),
             # feature selection
-            VarianceThreshold(threshold=(.9 * (1 - .9))),
+            # VarianceThreshold(threshold=(.9 * (1 - .9))),
             # SelectKBest(mutual_info_classif, k=min(nb_features, 3000)),
         ]
 
@@ -73,40 +72,45 @@ class ClassifierPool(object):
         self.__dict__.update(joblib.load(model_file))
 
     def fit(self, X, y):
-        print("initial shape")
-        print(X.shape)
+        print('initial shape:', X.shape)
         for estimator in self.preprocessors:
             try:
                 estimator.k = min(estimator.k, X.shape[1])
             except AttributeError:
                 pass
             X = estimator.fit_transform(X, y)
-            print("after %s" % estimator.__class__.__name__)
-            print(X.shape)
+            print("after %s:" % estimator.__class__.__name__, X.shape)
 
         print("=" * 30)
-        print(self.classifier_name, )
-        clf = GridSearchCV(self.classifier, self.param_grid, verbose=9, cv=StratifiedKFold(n_splits=3), n_jobs=-1)
+        print('using classifier: %s' % self.classifier_name, )
+        cv = StratifiedKFold(n_splits=3)
+        clf = GridSearchCV(self.classifier, self.param_grid, verbose=9, cv=cv, n_jobs=-1)
         clf.fit(X, y)
+        self.classifier = clf.best_estimator_
         print('Training Accuracy %.4f with params: %s' % (clf.best_score_, clf.best_params_))
+
+    def transform(self, X, y=None):
+        print('initial shape:', X.shape)
+        for estimator in self.preprocessors:
+            X = estimator.transform(X)
+            print("after %s:" % estimator.__class__.__name__, X.shape)
         return X
 
     def predict(self, X):
-        for estimator in self.preprocessors:
-            X = estimator.transform(X)
-        y = self.classifier.predict(X)
-        return y
+        return self.classifier.predict(X)
 
     def train_and_score(self, X_train, y_train, X_test, y_test, test_class=None, model_file=None, results_file=None):
         self.fit(X_train, y_train)
 
+        if model_file is not None:
+            self.save(model_file)
+        print("%s model saved" % self.classifier_name)
+        print('Testing flavia')
+        X_test = self.transform(X_test)
         y_predict = self.predict(X_test)
         score = self.classifier.score(X_test, y_test)
 
         print("%s Test Accuracy: %0.4f" % (self.classifier_name, score))
-
-        if model_file is not None:
-            self.save(model_file)
 
         if results_file is not None:
             d = {'y_predict': y_predict, 'y_test': y_test, 'score': score, 'y_class': test_class}
