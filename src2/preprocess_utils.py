@@ -25,27 +25,33 @@ def count_image(data_dir):
     return image_count
 
 
-def create_from_dict(conf):
-    batch_size = conf.get('batch_size', 8)
-    target_size = (conf.get('img_height', 256), conf.get('img_width', 256))
-    factor = conf.get('factor', 10)
-    generator_params = conf.get('gen_params', {})
-    data_dir = conf.get('data_dir')
+class Configuration:
+    def __init__(self, yaml_file):
+        with open(yaml_file, 'r') as stream:
+            _conf = yaml.load(stream)
+        self.architecture = _conf.get('architecture', 'vgg16')
+        self.target_size = (_conf.get('img_height', 256), _conf.get('img_width', 256))
+        self.batch_size = _conf.get('batch_size', 8)
+        self.epoch = _conf.get('epoch', 50)
+        self.classifier_name = _conf.get('classifier', 'SVC')
+        self.model_file = _conf.get('model_file')
+        self.feature_file = _conf.get('feature_file')
+        self.factor = _conf.get('factor', 1)
 
-    print("Image augmentation is %s" % ('on' if len(generator_params) > 0 else 'off'))
+        data_dir = _conf.get('data_dir')
+        generator_params = _conf.get('gen_params', {})
 
-    return GeneratorLoader(
-        target_size=target_size,
-        batch_size=batch_size,
-        factor=factor,
-        generator_params=generator_params
-    ).load_generator(data_dir)
+        if len(generator_params) > 0:
+            print("Image augmentation is %s with factor: %i and options: %s" % ('on', self.factor, generator_params))
+        else:
+            print("Image augmentation is %s with factor: %i" % ('off', self.factor))
 
-
-def create_from_yaml(yaml_file):
-    with open(yaml_file, 'r') as stream:
-        conf = yaml.load(stream)
-    return create_from_dict(conf)
+        self.data_gen = GeneratorLoader(
+            target_size=self.target_size,
+            batch_size=self.batch_size,
+            factor=self.factor,
+            generator_params=generator_params
+        ).load_generator(data_dir)
 
 
 class GeneratorLoader(object):
@@ -118,6 +124,5 @@ def split_images(data_dir, test_size=None, train_size=None):
 
 
 if __name__ == '__main__':
-    gen = create_from_yaml(sys.argv[1])
+    gen = Configuration(sys.argv[1]).data_gen
     print(sum(x.shape[0] for x, y in tqdm(gen)))
-

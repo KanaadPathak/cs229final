@@ -35,7 +35,7 @@ from vgg16 import VGG16
 from vgg19 import VGG19
 
 classifiers = {
-    'SVC': (SVC(), {'kernel': ["linear"], 'C': [0.01]}),
+    'SVC': (SVC(), {'kernel': ["linear"], 'C': [0.01, 0.025, 0.05]}),
     'KNN': (KNeighborsClassifier(), {'n_neighbors': [5, 10]}),
     'GaussianProcess': (GaussianProcessClassifier(), {'kernel': 1.0 * RBF(1.0), 'warm_start': True}),
     'DecisionTree': (DecisionTreeClassifier(), {}),
@@ -57,12 +57,12 @@ class ClassifierPool(object):
         self.preprocessors = [
             StandardScaler(),
             # feature scaling
-            # PCA(n_components=min(1000, nb_features), whiten=True),
+            PCA(n_components=min(1000, nb_features), whiten=True),
             # normalize against after pca, per suggested in the paper
-            # StandardScaler(),
+            StandardScaler(),
             # feature selection
-            # VarianceThreshold(threshold=(.9 * (1 - .9))),
-            # SelectKBest(mutual_info_classif, k=min(nb_features, 3000)),
+            VarianceThreshold(threshold=(.9 * (1 - .9))),
+            SelectKBest(mutual_info_classif, k=min(nb_features, 3000)),
         ]
 
     def save(self, model_file):

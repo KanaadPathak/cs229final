@@ -1,2 +1,4 @@
 ---
 data_dir: data/imageclef/test/NaturalBackground
+architecture: resnet50
+feature_file: history/imageclef_test_resnet50.h5
