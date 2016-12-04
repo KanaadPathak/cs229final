@@ -1,2 +1,6 @@
 ---
 data_dir: data/uci/train
+architecture: resnet50
+epoch: 10
+feature_file: history/uci_train_resnet50.h5
+model_file: history/uci_classifier.pkl

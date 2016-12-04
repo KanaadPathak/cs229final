@@ -6,7 +6,7 @@ import cv2
 import numpy as np
 import tables
 from keras import backend as K
-from keras.layers import Dense
+from keras.layers import Dense, Dropout
 from keras.layers.convolutional import Convolution2D
 from keras.models import Sequential, load_model
 from keras.preprocessing import image
@@ -212,6 +212,7 @@ class CNNFeatureExtractor(object):
             classes = dict((int(r['classid']), r['name']) for r in f.root.classes.iterrows())
         return X, y, classes
 
+
 class CustomMLPClassifier(ClassifierMixin):
     def __init__(self, batch_size=32, nb_epoch=10):
         self.batch_size = batch_size
@@ -232,8 +233,8 @@ class CustomMLPClassifier(ClassifierMixin):
         print(loss, output_dim, final_activation)
 
         model = Sequential()
-        model.add(Dense(4096, activation='relu', input_dim=nb_features))
-        model.add(Dense(4096, activation='relu', name='fc2'))
+        model.add(Dense(256, activation='relu', input_dim=nb_features))
+        model.add(Dense(256, activation='relu', name='fc2'))
         model.add(Dense(output_dim, activation=final_activation, name='predictions'))
         model.compile(optimizer='rmsprop', loss=loss, metrics=['accuracy'])
         return model
@@ -241,11 +242,13 @@ class CustomMLPClassifier(ClassifierMixin):
     def predict(self, X):
         return self.model.predict(X, self.batch_size)
 
-    def fit(self, X, y, batch_size=32, nb_epoch=10):
-        nb_classes = len(np.unique(y))
-        nb_features = X.shape[1]
+    def fit(self, X_train, y_train, X_val, y_val, batch_size=32, nb_epoch=10):
+        nb_classes = len(np.unique(y_train))
+        nb_features = X_train.shape[1]
 
-        X_train, X_val, y_train, y_val = train_test_split(X, y, train_size=.7, stratify=y)
+        PCA(n_components=min(1000, nb_features), whiten=True)
+
+        # X_train, X_val, y_train, y_val = train_test_split(X, y, train_size=.7, stratify=y)
         y_train = np_utils.to_categorical(y_train, nb_classes=nb_classes)
         y_val = np_utils.to_categorical(y_val, nb_classes=nb_classes)
 

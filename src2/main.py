@@ -59,11 +59,20 @@ def main(args):
         from cnn_feature import ClassifierPool, CNNFeatureExtractor
         from preprocess_utils import Configuration
 
-        conf = Configuration(args.conf_file)
-        X_train, y_train, train_classes = CNNFeatureExtractor.load_features(feature_file=conf.feature_file)
-        CustomMLPClassifier()\
-            .fit(X_train, y_train, batch_size=conf.batch_size, nb_epoch=conf.epoch)\
-            .save(args.save_file)
+        train_conf = Configuration(args.train_conf)
+        test_conf = Configuration(args.test_conf)
+
+        X_train, y_train, train_classes = CNNFeatureExtractor.load_features(feature_file=train_conf.feature_file)
+        reverse = dict(zip(train_classes.values(), train_classes.keys()))
+        X_test, y_test, test_classes = CNNFeatureExtractor.load_features(feature_file=test_conf.feature_file)
+        y_test = [reverse[test_classes[label]] for label in y_test]
+        print("Training has %d species, test has %d species" % (len(train_classes), len(test_classes)))
+
+        # conf = Configuration(args.conf_file)
+        # X_train, y_train, train_classes = CNNFeatureExtractor.load_features(feature_file=conf.feature_file)
+        clf = CustomMLPClassifier()
+        clf.fit(X_train, y_train, X_test, y_test, batch_size=train_conf.batch_size, nb_epoch=train_conf.epoch)
+        clf.save(args.save_file)
 
 
 if __name__ == '__main__':
@@ -101,7 +110,8 @@ if __name__ == '__main__':
     # ------------------------------------------------
     top_cnn_parser = subparsers.add_parser('mlp', description='train top layer with pre-trained weights')
     top_cnn_parser.add_argument('-s', '--save_file', help="the file that the weight are saved to")
-    top_cnn_parser.add_argument('conf_file', help="the path to the config")
+    top_cnn_parser.add_argument('-f', '--train_conf', help="train config file to load from")
+    top_cnn_parser.add_argument('-t', '--test_conf', help="test config file to load from")
     # ================================================
 
     main(parser.parse_args())

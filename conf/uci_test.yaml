@@ -1,2 +1,4 @@
 ---
-data_dir: data/uci/validation
+data_dir: data/uci/test
+architecture: resnet50
+feature_file: history/uci_train_resnet50.h5
