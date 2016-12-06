@@ -6,6 +6,7 @@ __version__ = "0.2"
 import argparse, sys, os
 import bof
 import dataset
+import confusion_matrix
 import json
 import logging
 import numpy as np
@@ -61,7 +62,7 @@ class SVMLinearKernel(SVM):
     SVM.__init__(self, data_set, parameters)
     logging.info("Training Accuracy(C=%f) %.4f" % (self.clf.best_params_['C'], self.clf.best_score_))
 
-def selectModel(data_set, models):
+def selectModel(data_set, models, visual=False, plist_file=None):
   scaler = StandardScaler()
   data_set.X_train = scaler.fit_transform(data_set.X_train)
   data_set.X_test = scaler.transform(data_set.X_test)
@@ -92,13 +93,25 @@ def selectModel(data_set, models):
     if 'skip' in configs and configs['skip']: continue
     t0 = time.time()
     clf = model(data_set, configs)
-    score = clf.score(data_set)
+    y_predict = clf.predict(data_set)
+    score = clf.clf.best_score_
     logging.info("%s (%.2f) Test Accuracy: %0.4f" % (str(model), time.time()-t0, score))
+    # Plot normalized confusion matrix
+    if plist_file is not None:
+      with open(plist_file,'r') as fd:
+        label_names = json.load(fd).keys()
+    else:
+      label_names = [str(x) for x in range(1, max(data_set.y_train)+1)]
+    if visual:
+      confusion_matrix.plot_confusion_matrix(data_set.y_test, y_predict, classes=label_names,
+                          normalize=True, title='Normalized confusion matrix')
+
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser(description=__doc__, version=__version__)
-  parser.add_argument('-l', dest='logLevel', default='info',
-                      help="logging level: {debug, info, error}")
+  parser.add_argument('-l', dest='logLevel', default='info', help="logging level: {debug, info, error}")
+  parser.add_argument('--visual', dest='visual', action='store_true', help = "visualize results")
+  parser.add_argument('--plist_file', dest='plist_file',help = "plist file")
   parser.add_argument('train_file', help = "supply train file")
   parser.add_argument('test_file', help = "supply test file")
   args = parser.parse_args()
@@ -110,6 +123,7 @@ if __name__ == "__main__":
   #data_set = dataset.PSDataSet(args.train_file, args.test_file)
   logging.info("Train data: %d x %d"%(len(data_set.X_train), data_set.X_train[0].size))
   logging.info("Test data: %d x %d"%(len(data_set.X_test), data_set.X_test[0].size))
+  logging.info("number of species: %d"%(max(data_set.y_train)))
 
   classifiers = (SVMGaussianKernel, SVMLinearKernel, SoftMax)
   configs=(
@@ -118,11 +132,11 @@ if __name__ == "__main__":
      'c_range' : np.logspace(2, 6, 2), #np.logspace(1, 9, 6, endpoint=True),
       #gamma = 1/(2*tao^2)
      'gamma_range' : np.logspace(-3, 2, 5), #np.linspace(1.0/(2*8*8), 1, 1, endpoint=True),
-     'skip' : False,
+     'skip' : True,
     },
     {
       #SVMGaussianLinear
-      'c_range' : np.logspace(-1, 5, 6, endpoint=True), #np.logspace(-4, 6, 11),
+      'c_range' : np.logspace(-1, 5, 1, endpoint=True), #np.logspace(-4, 6, 11),
       'skip' : False,
     },
     {
@@ -131,4 +145,6 @@ if __name__ == "__main__":
       'skip' : True,
     },
   )
-  selectModel(data_set, zip(classifiers, configs))
+  selectModel(data_set, zip(classifiers, configs), args.visual, args.plist_file)
+
+
