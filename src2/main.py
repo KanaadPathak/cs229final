@@ -19,14 +19,22 @@ def main(args):
         reverse = dict(zip( train_classes.values(), train_classes.keys()))
         X_test, y_test, test_classes = CNNFeatureExtractor().load_features(feature_file=args.test_feature)
         y_test_new = []; test_classes_new = {}
+        test_cnt = {}
         for label in y_test:
             species_name = test_classes[label]
             new_label = reverse[species_name]
             y_test_new.append(new_label)
             if new_label not in test_classes_new:
                 test_classes_new[new_label] = species_name
+            if new_label not in test_cnt:
+                test_cnt[new_label] = 1
+            else:
+                test_cnt[new_label] += 1
         print("Training has %d species, test has %d species"%(len(train_classes), len(test_classes_new)))
-        ClassifierPool().classify(X_train, y_train, X_test, y_test_new, test_classes_new, args.results)
+        if args.print_test:
+            for (k, cnt) in test_cnt.items():
+                print("%s(%d) has samples=%d" % (train_classes[k], k, cnt))
+        ClassifierPool().classify(X_train, y_train, X_test, y_test_new, train_classes, args.results, args.load_clf)
 
 
     elif args.goal == 'cnn_classify':
@@ -76,6 +84,8 @@ if __name__ == '__main__':
     classify_parser.add_argument('-f', '--feature_file', required=True, help="train feature file to load from")
     classify_parser.add_argument('-t', '--test_feature', required=True, help="test feature file to load from")
     classify_parser.add_argument('-r', '--results', help="file to write test results")
+    classify_parser.add_argument('--load_clf', help="load input clf")
+    classify_parser.add_argument('--print_test', action='store_true', help="give more info on test")
     # ------------------------------------------------
     cnn_parser = subparsers.add_parser('cnn_classify')
     cnn_parser.add_argument('-e', '--epoch', type=int, default=50, help="the number of epochs to run")

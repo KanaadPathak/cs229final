@@ -21,6 +21,7 @@ from tqdm import tqdm
 from operator import mul
 from functools import reduce
 import os
+import time
 
 from sklearn.neural_network import MLPClassifier
 from sklearn.neighbors import KNeighborsClassifier
@@ -46,7 +47,7 @@ class ClassifierPool(object):
     def __init__(self):
         self.classifiers = [
             #('KNN', KNeighborsClassifier(), {'n_neighbors': [5, 10]})
-             ('Linear SVM', SVC(), {'kernel': ["linear"], 'C': np.logspace(-2, -1, 3, endpoint=True)})
+             ('Linear SVM', SVC(), {'kernel': ["linear"], 'C': np.logspace(-2, -1, 1, endpoint=True)})
             #('RBF SVM', SVC(), {'kernel': ['rbf'], 'C': np.logspace(-2, 1, 4, endpoint=True),
             #                    'gamma': np.logspace(-1,3,5, endpoint=True)})
             # , ('Nu SVM', NuSVC(probability=True), {})
@@ -62,13 +63,17 @@ class ClassifierPool(object):
         ]
 
     def feature_selection(self, X_train, y_train, X_test):
+        t0 = time.time()
         print("before selection")
         print(X_train.shape)
 
+        print("fitting first selector")
         selector1= VarianceThreshold(threshold=(.9 * (1 - .9)))
         X_train = selector1.fit_transform(X_train, y_train)
-        selector2 = SelectKBest(mutual_info_classif, k=min(X_train.shape[1], 3000))
+        print("fitting second selector")
+        selector2 = SelectKBest(mutual_info_classif, k=min(X_train.shape[1], 500))
         X_train = selector2.fit_transform(X_train, y_train)
+        print("transforming on test")
 
         #backword search
         #svc = SVC(kernel="linear", C=0.001)
@@ -82,7 +87,7 @@ class ClassifierPool(object):
         X_test = selector2.transform(X_test)
         #X_test = rfecv.predict(X_test)
 
-        print("after selection")
+        print("after selection: %.2f" % (time.time() - t0))
         print(X_train.shape)
         print(X_test.shape)
 
@@ -98,7 +103,7 @@ class ClassifierPool(object):
 
     def pca(self, X_train, X_test, scaler):
         #dimension reduction + whitening
-        pca = PCA(n_components=min(1000, X_train.shape[1]), whiten=True)
+        pca = PCA(n_components=min(1500, X_train.shape[1]), whiten=True)
         X_train = pca.fit_transform(X_train)
         print("after PCA")
         print(X_train.shape)
@@ -111,35 +116,47 @@ class ClassifierPool(object):
         X_test = scaler.transform(X_test)
         return (X_train, X_test)
 
-    def classify(self, X_train, y_train, X_test, y_test, test_class=None, results_file=None):
+    def classify(self, X_train, y_train, X_test, y_test, test_class=None, results_file=None, load_clf=None):
         #normalizatoin first!
         (X_train, X_test, scaler) = self.scale(X_train, X_test)
 
         #X_train, X_test = self.pca(X_train, X_test, scaler)
 
         #feature selection
-        #(X_train, X_test) = self.feature_selection(X_train, y_train, X_test)
+        (X_train, X_test) = self.feature_selection(X_train, y_train, X_test)
 
-        best_score = 0.0; best_predict = []
-        for name, clf, param_grid in self.classifiers:
-            print("=" * 30)
-            print(name, )
-            # cv = KFold(2)
-            clf = GridSearchCV(clf, param_grid, verbose=9, cv=KFold(n_splits=3), n_jobs=-1)
-            clf.fit(X_train, y_train)
-            print('Training Accuracy %.4f with params: %s' % (clf.best_score_, clf.best_params_))
+        if load_clf is not None:
+            print("loading clf from %s"%(load_clf))
+            d = joblib.load(load_clf)
+            clf = d['clf']
+            best_clf = clf
+            best_predict = clf.predict(X_test)
+            best_score = clf.score(X_test, y_test)
+            print("%s Test Accuracy: %0.4f" % (str(clf), best_score))
+            for (truth, predicted) in zip(y_test, best_predict):
+                print ("%s(%d) -> %s(%d)" % (test_class[truth], truth, test_class[predicted], predicted))
+        else:
+            best_score = 0.0; best_predict = []; best_clf = None
+            for name, clf, param_grid in self.classifiers:
+                print("=" * 30)
+                print(name, )
+                # cv = KFold(2)
+                clf = GridSearchCV(clf, param_grid, verbose=9, cv=KFold(n_splits=3), n_jobs=-1)
+                clf.fit(X_train, y_train)
+                print('Training Accuracy %.4f with params: %s' % (clf.best_score_, clf.best_params_))
 
-            y_predict = clf.predict(X_test)
-            score = clf.score(X_test, y_test)
-            print("%s Test Accuracy: %0.4f" % (str(clf), score))
-            if score > best_score:
-                best_score = score
-                best_predict = y_predict
+                y_predict = clf.predict(X_test)
+                score = clf.score(X_test, y_test)
+                print("%s Test Accuracy: %0.4f" % (str(clf), score))
+                if score > best_score:
+                    best_score = score
+                    best_predict = y_predict
+                    best_clf = clf
 
         print("=" * 30)
         if results_file is not None:
-            d = {'y_predict': best_predict, 'y_test': y_test, 'score': best_score,'y_class': test_class}
-            joblib.dump(d, results_file)
+            d = {'clf':best_clf, 'y_predict': best_predict, 'y_test': y_test, 'score': best_score,'y_class': test_class}
+            joblib.dump(d, results_file, protocol=2)
 
 
 class CNNFeatureExtractor(object):
