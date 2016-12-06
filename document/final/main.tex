@@ -489,8 +489,11 @@ Images captured in the field, such as those from ImageCLEF \cite{ImageCLEF2013},
 \end{figure}
 
 \subsection{ConvNets}
-We use the transfer learning approach. Specifically, we take a couple of ConvNets what are pretrained on ImageNet  VGGNet/ResNet [TODO quote], remove the last fully connected layers and then treat the rest of the ConvNet as fixed feature extractor for the our data set. This gives us a large dimension codes and we need to select/reduce the features.
--our dataset is relatively small compared to ImageNet
+We use the transfer learning approach. Specifically, we take a couple of ConvNets what are pretrained on ImageNet  VGGNet/ResNet [TODO quote], remove the last fully connected layers and then treat the rest of the ConvNet as fixed feature extractor for the our data set.
+[This gives us a large dimension codes and we need to select/reduce the features., not true ResNet, which gives 2048-D code, whereas VGGNet\_-16 gives 7x7x512-D codes]
+-The CNN codes are trained for the object image classification task of ILSVRC (2013 for VGGNet and 2015 for ResNet), which is aligned with our task except that ours are more fine-grained classification.
+-Some of our data set [ImageCLEF2013] is more challenging in term of clutter and occlusion.
+
 [Explain the data set for our pretrained model and why this is this is applicable to our problem, i.e. same feature space.]
 
 The rest of the report is organized as follows. In section \ref{DataSet}, we describe the data set. Section.
