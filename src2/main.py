@@ -74,6 +74,25 @@ def main(args):
         clf.fit(X_train, y_train, X_test, y_test, batch_size=train_conf.batch_size, nb_epoch=train_conf.epoch)
         clf.save(args.save_file)
 
+    elif args.goal == 'mlp':
+        from preprocess_utils import split_images
+        from cnn_feature import ClassifierPool, CNNFeatureExtractor
+        from preprocess_utils import Configuration
+
+        train_conf = Configuration(args.train_conf)
+        test_conf = Configuration(args.test_conf)
+
+        X_train, y_train, train_classes = CNNFeatureExtractor.load_features(feature_file=train_conf.feature_file)
+        reverse = dict(zip(train_classes.values(), train_classes.keys()))
+        X_test, y_test, test_classes = CNNFeatureExtractor.load_features(feature_file=test_conf.feature_file)
+        y_test = [reverse[test_classes[label]] for label in y_test]
+        print("Training has %d species, test has %d species" % (len(train_classes), len(test_classes)))
+
+        # conf = Configuration(args.conf_file)
+        # X_train, y_train, train_classes = CNNFeatureExtractor.load_features(feature_file=conf.feature_file)
+        clf = CustomMLPClassifier()
+        clf.save(args.save_file)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
@@ -83,35 +102,35 @@ if __name__ == '__main__':
     subparsers = parser.add_subparsers(dest='goal')
     # ------------------------------------------------
     # extract
-    extract_parser = subparsers.add_parser("extract")
-    extract_parser.add_argument('conf_file', help="the path to the generator config")
+    cur_parser = subparsers.add_parser("extract")
+    cur_parser.add_argument('conf_file', help="the path to the generator config")
     # ------------------------------------------------
     # viz
-    viz_parser = subparsers.add_parser("viz")
-    viz_parser.add_argument('-o', '--output_dir', required=True, help="the feature file to save to")
-    viz_parser.add_argument('conf_file', help="the path to the config")
-    viz_parser.add_argument('image_file', help="the path to the image")
+    cur_parser = subparsers.add_parser("viz")
+    cur_parser.add_argument('-o', '--output_dir', required=True, help="the feature file to save to")
+    cur_parser.add_argument('conf_file', help="the path to the config")
+    cur_parser.add_argument('image_file', help="the path to the image")
     # ------------------------------------------------
     # classify
-    classify_parser = subparsers.add_parser("classify")
-    classify_parser.add_argument('-f', '--train_conf', help="train config file to load from")
-    classify_parser.add_argument('-t', '--test_conf', help="test config file to load from")
-    classify_parser.add_argument('-r', '--result_file', help="file to write test results")
+    cur_parser = subparsers.add_parser("classify")
+    cur_parser.add_argument('-f', '--train_conf', help="train config file to load from")
+    cur_parser.add_argument('-t', '--test_conf', help="test config file to load from")
+    cur_parser.add_argument('-r', '--result_file', help="file to write test results")
     # ------------------------------------------------
     cnn_parser = subparsers.add_parser('cnn_classify')
-    cnn_parser.add_argument('-e', '--epoch', type=int, default=50, help="the number of epochs to run")
-    cnn_parser.add_argument('-s', '--save_file', help="the file that the weight are saved to")
-    cnn_parser.add_argument('conf_file', help="the path to the config")
+    cur_parser.add_argument('-e', '--epoch', type=int, default=50, help="the number of epochs to run")
+    cur_parser.add_argument('-s', '--save_file', help="the file that the weight are saved to")
+    cur_parser.add_argument('conf_file', help="the path to the config")
     # ------------------------------------------------
-    split_parser = subparsers.add_parser('split', description='split images in a folder to train and val')
-    split_parser.add_argument('--train_size', help="num of samples or proportion of samples for train")
-    split_parser.add_argument('--test_size', help="num of samples or proportion of samples for validation")
-    split_parser.add_argument('data_dir', help="the data dir with a images folder")
+    cur_parser = subparsers.add_parser('split', description='split images in a folder to train and val')
+    cur_parser.add_argument('--train_size', help="num of samples or proportion of samples for train")
+    cur_parser.add_argument('--test_size', help="num of samples or proportion of samples for validation")
+    cur_parser.add_argument('data_dir', help="the data dir with a images folder")
     # ------------------------------------------------
-    top_cnn_parser = subparsers.add_parser('mlp', description='train top layer with pre-trained weights')
-    top_cnn_parser.add_argument('-s', '--save_file', help="the file that the weight are saved to")
-    top_cnn_parser.add_argument('-f', '--train_conf', help="train config file to load from")
-    top_cnn_parser.add_argument('-t', '--test_conf', help="test config file to load from")
+    cur_parser = subparsers.add_parser('mlp', description='train top layer with pre-trained weights')
+    cur_parser.add_argument('-s', '--save_file', help="the file that the weight are saved to")
+    cur_parser.add_argument('-f', '--train_conf', help="train config file to load from")
+    cur_parser.add_argument('-t', '--test_conf', help="test config file to load from")
     # ================================================
 
     main(parser.parse_args())

@@ -1,0 +1,16 @@
+---
+data_dir: data/imageclef/train/SheetAsBackground
+architecture: resnet50
+feature_file: history/imageclef_sheet_train_resnet50.h5
+model_file: history/imageclef_sheet_classifier.pkl
+#factor: 10
+batch_size: 8
+#gen_params:
+#  rescale: 0.003921568627
+#  rotation_range: 90
+#  width_shift_range: 0.2
+#  height_shift_range: 0.2
+#  channel_shift_range: 0.1
+#  zoom_range: 0.2
+#  horizontal_flip: True
+#  vertical_flip: True

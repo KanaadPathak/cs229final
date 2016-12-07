@@ -10,6 +10,7 @@ from keras.layers import Dense, Dropout
 from keras.layers.convolutional import Convolution2D
 from keras.models import Sequential, load_model
 from keras.preprocessing import image
+from keras.regularizers import l2, activity_l2
 from keras.utils import np_utils
 from sklearn.base import ClassifierMixin
 from sklearn.decomposition import PCA
@@ -35,7 +36,7 @@ from vgg16 import VGG16
 from vgg19 import VGG19
 
 classifiers = {
-    'SVC': (SVC(), {'kernel': ["linear"], 'C': [0.01, 0.025, 0.05]}),
+    'SVC': (SVC(), {'kernel': ["linear"], 'C': [0.01, 0.1, 1.0]}),
     'KNN': (KNeighborsClassifier(), {'n_neighbors': [5, 10]}),
     'GaussianProcess': (GaussianProcessClassifier(), {'kernel': 1.0 * RBF(1.0), 'warm_start': True}),
     'DecisionTree': (DecisionTreeClassifier(), {}),
@@ -233,8 +234,10 @@ class CustomMLPClassifier(ClassifierMixin):
         print(loss, output_dim, final_activation)
 
         model = Sequential()
-        model.add(Dense(256, activation='relu', input_dim=nb_features))
-        model.add(Dense(256, activation='relu', name='fc2'))
+        model.add(Dense(1024, activation='relu',# W_regularizer=l2(0.01),
+                        input_dim=nb_features))
+        # model.add(Dense(512, activation='relu', # W_regularizer=l2(0.01),
+        #                 name='fc2'))
         model.add(Dense(output_dim, activation=final_activation, name='predictions'))
         model.compile(optimizer='rmsprop', loss=loss, metrics=['accuracy'])
         return model
@@ -246,7 +249,7 @@ class CustomMLPClassifier(ClassifierMixin):
         nb_classes = len(np.unique(y_train))
         nb_features = X_train.shape[1]
 
-        PCA(n_components=min(1000, nb_features), whiten=True)
+        # PCA(n_components=min(1000, nb_features), whiten=True)
 
         # X_train, X_val, y_train, y_val = train_test_split(X, y, train_size=.7, stratify=y)
         y_train = np_utils.to_categorical(y_train, nb_classes=nb_classes)

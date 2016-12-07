@@ -119,7 +119,7 @@ class ImageClefLoader(object):
     def extract(src_dir, dest_dir):
         all_xml = [f for f in os.listdir(src_dir) if f.endswith('.xml')]
         for file in tqdm(all_xml):
-            filename = '%s/%s' % (src_dir, file)
+            filename = os.path.join(src_dir, file)
             xmldoc = minidom.parse(filename)
             the_content = xmldoc.getElementsByTagName('Content')[0].firstChild.data
             the_type = xmldoc.getElementsByTagName('Type')[0].firstChild.data
@@ -130,13 +130,27 @@ class ImageClefLoader(object):
                 os.makedirs(final_dir, exist_ok=True)
                 shutil.copy(os.path.join(src_dir, the_filename), os.path.join(final_dir, the_filename))
 
+    @staticmethod
+    def filter(train_dir, test_dir):
+        for d in os.listdir(train_dir):
+            sub_dir = os.path.join(train_dir, d)
+            if os.path.isdir(sub_dir):
+                if sum(f.endswith('.jpg') for f in os.listdir(sub_dir)) < 30:
+                    print('removing species: ', d)
+                    shutil.rmtree(os.path.join(train_dir, d), ignore_errors=True)
+                    shutil.rmtree(os.path.join(test_dir, d), ignore_errors=True)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('-s', '--src_dir', required=True, help="the source dir to read from")
     parser.add_argument('-d', '--dest_dir', required=True, help="the destination dir to write to")
     parser.add_argument('--dataset', default='imageclef', choices=['imageclef'])
+    parser.add_argument('method', action='store', default='extract')
     args = parser.parse_args()
 
     if args.dataset == 'imageclef':
-        ImageClefLoader.extract(args.src_dir, args.dest_dir)
+        if args.method == 'extract':
+            ImageClefLoader.extract(args.src_dir, args.dest_dir)
+        if args.method == 'filter':
+            ImageClefLoader.filter(args.src_dir, args.dest_dir)
