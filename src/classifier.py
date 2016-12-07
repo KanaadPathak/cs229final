@@ -44,8 +44,8 @@ class SVM(Classifier):
     verbose = 0
     if 'verbose' in parameters:
       verbose = parameters['verbose']
-    self.clf = GridSearchCV(svr, parameters, verbose=verbose, n_jobs=-1)
-    self.clf.fit(data_set.X_train, data_set.y_train)
+    clf = GridSearchCV(svr, parameters, verbose=verbose, n_jobs=-1)
+    self.clf = clf.fit(data_set.X_train, data_set.y_train).best_estimator_
 
 class SVMGaussianKernel(SVM):
   def __init__(self, data_set, configs):
@@ -92,9 +92,9 @@ def selectModel(data_set, models, visual=False, plist_file=None):
   for (model, configs) in models:
     if 'skip' in configs and configs['skip']: continue
     t0 = time.time()
-    clf = model(data_set, configs)
+    clf = model(data_set, configs).clf
     y_predict = clf.predict(data_set)
-    score = clf.clf.best_score_
+    score = clf.score(data_set.X_test, data_set.y_test)
     logging.info("%s (%.2f) Test Accuracy: %0.4f" % (str(model), time.time()-t0, score))
     # Plot normalized confusion matrix
     if plist_file is not None:
@@ -136,7 +136,7 @@ if __name__ == "__main__":
     },
     {
       #SVMGaussianLinear
-      'c_range' : np.logspace(-1, 5, 1, endpoint=True), #np.logspace(-4, 6, 11),
+      'c_range' : np.logspace(-1, 5, 6, endpoint=True), #np.logspace(-4, 6, 11),
       'skip' : False,
     },
     {
