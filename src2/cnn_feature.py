@@ -61,6 +61,9 @@ class ClassifierPool(object):
             #, ('LDA', LinearDiscriminantAnalysis(), {})
             # ,('QDA', QuadraticDiscriminantAnalysis(), {})
         ]
+        self.selector1 = None
+        self.selector2 = None
+        self.scaler = None
 
     def feature_selection(self, X_train, y_train, X_test):
         t0 = time.time()
@@ -68,11 +71,11 @@ class ClassifierPool(object):
         print(X_train.shape)
 
         print("fitting first selector")
-        selector1= VarianceThreshold(threshold=(.9 * (1 - .9)))
-        X_train = selector1.fit_transform(X_train, y_train)
-        print("fitting second selector")
-        selector2 = SelectKBest(mutual_info_classif, k=min(X_train.shape[1], 500))
-        X_train = selector2.fit_transform(X_train, y_train)
+        self.selector1= VarianceThreshold(threshold=(.9 * (1 - .9)))
+        X_train = self.selector1.fit_transform(X_train, y_train)
+        #print("fitting second selector")
+        #self.selector2 = SelectKBest(mutual_info_classif, k=min(X_train.shape[1], 500))
+        #X_train = self.selector2.fit_transform(X_train, y_train)
         print("transforming on test")
 
         #backword search
@@ -83,8 +86,8 @@ class ClassifierPool(object):
         #print("before selection")
         #print(X_train.shape)
 
-        X_test = selector1.transform(X_test)
-        X_test = selector2.transform(X_test)
+        X_test = self.selector1.transform(X_test)
+        #X_test = self.selector2.transform(X_test)
         #X_test = rfecv.predict(X_test)
 
         print("after selection: %.2f" % (time.time() - t0))
@@ -94,16 +97,16 @@ class ClassifierPool(object):
         return (X_train, X_test)
 
     def scale(self, X_train, X_test):
-        scaler = StandardScaler()
-        X_train = scaler.fit_transform(X_train)
-        X_test = scaler.transform(X_test)
+        self.scaler = StandardScaler()
+        X_train = self.scaler.fit_transform(X_train)
+        X_test = self.scaler.transform(X_test)
         print("after scaling")
         print(X_train.shape)
-        return (X_train, X_test, scaler)
+        return (X_train, X_test)
 
     def pca(self, X_train, X_test, scaler):
         #dimension reduction + whitening
-        pca = PCA(n_components=min(1500, X_train.shape[1]), whiten=True)
+        pca = PCA(n_components=min(1000, X_train.shape[1]), whiten=True)
         X_train = pca.fit_transform(X_train)
         print("after PCA")
         print(X_train.shape)
@@ -117,25 +120,35 @@ class ClassifierPool(object):
         return (X_train, X_test)
 
     def classify(self, X_train, y_train, X_test, y_test, test_class=None, results_file=None, load_clf=None):
-        #normalizatoin first!
-        (X_train, X_test, scaler) = self.scale(X_train, X_test)
-
-        #X_train, X_test = self.pca(X_train, X_test, scaler)
-
-        #feature selection
-        (X_train, X_test) = self.feature_selection(X_train, y_train, X_test)
-
         if load_clf is not None:
             print("loading clf from %s"%(load_clf))
             d = joblib.load(load_clf)
             clf = d['clf']
             best_clf = clf
+            if 'selector1' in d:
+                self.selector1 = d['selector1']
+            if 'selector2' in d:
+                self.selector2 = d['selector2']
+            if 'scaler' in d:
+                self.scaler = d['scaler']
+            test_class = d['y_class']
+
+            if self.scaler is not None:
+                X_test = self.scaler.transform(X_test)
+            if self.selector1 is not None:
+                X_test = self.selector1.transform(X_test)
+            if self.selector2 is not None:
+                X_test = self.selector2.transform(X_test)
             best_predict = clf.predict(X_test)
             best_score = clf.score(X_test, y_test)
             print("%s Test Accuracy: %0.4f" % (str(clf), best_score))
-            for (truth, predicted) in zip(y_test, best_predict):
-                print ("%s(%d) -> %s(%d)" % (test_class[truth], truth, test_class[predicted], predicted))
         else:
+            #normalizatoin first!
+            (X_train, X_test) = self.scale(X_train, X_test)
+
+            #X_train, X_test = self.pca(X_train, X_test, scaler)
+            #feature selection
+            (X_train, X_test) = self.feature_selection(X_train, y_train, X_test)
             best_score = 0.0; best_predict = []; best_clf = None
             for name, clf, param_grid in self.classifiers:
                 print("=" * 30)
@@ -154,8 +167,20 @@ class ClassifierPool(object):
                     best_clf = clf
 
         print("=" * 30)
+        for (truth, predicted) in zip(y_test, best_predict):
+            print("%s(%d) -> %s(%d)" % (test_class[truth], truth, test_class[predicted], predicted))
+
+
         if results_file is not None:
-            d = {'clf':best_clf, 'y_predict': best_predict, 'y_test': y_test, 'score': best_score,'y_class': test_class}
+            d = {
+                'scaler' : self.scaler,
+                'selector1':self.selector1,
+                'selector2':self.selector2,
+                'clf':best_clf,
+                'y_predict': best_predict,
+                'y_test': y_test,
+                'score': best_score,
+                'y_class': test_class}
             joblib.dump(d, results_file, protocol=2)
 
 
@@ -181,8 +206,8 @@ class CNNFeatureExtractor(object):
                 width_shift_range=0.2,
                 height_shift_range=0.2,
             )
-            nb_factor = 5 
-            print("Image augementation is on, factor=%d"%factor)
+            nb_factor = 10
+            print("Image augementation is on, factor=%d"%(nb_factor))
         else:
             data_gen_args = None
             print("Image augementation is off")
