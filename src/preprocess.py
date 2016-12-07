@@ -223,7 +223,7 @@ class ImageCLEF2013(LeafPreprocessor):
 
   def downsize(self, img):
     #~300 KP with original size and SIFT detector. requires dense detector
-    #return self.resize(img, 128.0)
+    return self.resize(img, 128.0)
     return img
 
   def read_record(self, path, basename):

@@ -25,13 +25,13 @@ def plot_confusion_matrix(y_test, y_pred,
       cm[i,j] += 1
     np.set_printoptions(precision=2)
 
-    plt.figure()
-    plt.imshow(cm, interpolation='nearest', cmap=cmap)
-    plt.title(title)
-    plt.colorbar()
-    tick_marks = np.arange(len(classes))
-    plt.xticks(tick_marks, classes, rotation=45)
-    plt.yticks(tick_marks, classes)
+    #plt.figure()
+    #plt.imshow(cm, interpolation='nearest', cmap=cmap)
+    #plt.title(title)
+    #plt.colorbar()
+    #tick_marks = np.arange(len(classes))
+    #plt.xticks(tick_marks, classes, rotation=45)
+    #plt.yticks(tick_marks, classes)
 
     if normalize:
         cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
@@ -52,10 +52,10 @@ def plot_confusion_matrix(y_test, y_pred,
       print('%s(%d)->%s(%d): %d' % (classes[item[1]], item[1], classes[item[2]], item[2], item[0]))
 
 
-    plt.tight_layout()
-    plt.ylabel('True label')
-    plt.xlabel('Predicted label')
-    plt.show()
+    #plt.tight_layout()
+    #plt.ylabel('True label')
+    #plt.xlabel('Predicted label')
+    #plt.show()
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser(description=__doc__)
