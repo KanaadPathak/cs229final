@@ -36,7 +36,10 @@ class SoftMax(Classifier):
 class SVM(Classifier):
   def __init__(self, data_set, parameters):
     svr = SVC()
-    self.clf = GridSearchCV(svr, parameters, verbose=9, n_jobs=-1)
+    verbose = 9
+    if 'verbose' in parameters:
+      verbose = parameters['verbose']
+    self.clf = GridSearchCV(svr, parameters, verbose=verbose, n_jobs=-1)
     self.clf.fit(data_set.X_train, data_set.y_train)
 
 class SVMGaussianKernel(SVM):
@@ -54,12 +57,15 @@ class SVMLinearKernel(SVM):
     SVM.__init__(self, data_set, parameters)
     logging.info("Training Accuracy(C=%f) %.4f" % (self.clf.best_params_['C'], self.clf.best_score_))
 
-def selectModel(data_set, models):
+def selectModel(data_set, models, visual=False, plist_file=None):
+  scaler = StandardScaler()
+  data_set.X_train = scaler.fit_transform(data_set.X_train)
+  data_set.X_test = scaler.transform(data_set.X_test)
   for (model, configs) in models:
     if 'skip' in configs and configs['skip']: continue
     t0 = time.time()
-    clf = model(data_set, configs)
-    score = clf.score(data_set)
+    clf = model(data_set, configs).clf
+    score = clf.score(data_set.X_test, data_set.y_test)
     logging.info("%s (%.2f) Test Accuracy: %0.4f" % (str(model), time.time()-t0, score))
 
 if __name__ == "__main__":
@@ -77,6 +83,7 @@ if __name__ == "__main__":
   #data_set = dataset.PSDataSet(args.train_file, args.test_file)
   logging.info("Train data: %d x %d"%(len(data_set.X_train), data_set.X_train[0].size))
   logging.info("Test data: %d x %d"%(len(data_set.X_test), data_set.X_test[0].size))
+  logging.info("number of species: %d"%(max(data_set.y_train)))
 
   classifiers = (SVMGaussianKernel, SVMLinearKernel, SoftMax)
   configs=(
@@ -85,17 +92,17 @@ if __name__ == "__main__":
      'c_range' : np.logspace(-4, 6, 11), #np.logspace(1, 9, 6, endpoint=True),
       #gamma = 1/(2*tao^2)
      'gamma_range' : np.logspace(-5, 9, 15), #np.linspace(1.0/(2*8*8), 1, 1, endpoint=True),
-     'skip' : False,
+     'skip' : True,
     },
     {
       #SVMGaussianLinear
-      'c_range' : np.logspace(-4, 9, 11, endpoint=True), #np.logspace(-4, 6, 11),
+      'c_range' : np.logspace(-3, 2, 6, endpoint=True), #np.logspace(-4, 6, 11),
       'skip' : False,
     },
     {
       #Softmax
       'c_range' : np.logspace(-4, 6, 11, endpoint=True), #np.logspace(-4, 6, 11)
-      'skip' : False,
+      'skip' : True,
     },
   )
   selectModel(data_set, zip(classifiers, configs))

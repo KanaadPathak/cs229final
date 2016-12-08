@@ -40,13 +40,15 @@ def kmeans_threshold(img, visualize=False):
   clt = KMeans(2)
   clt.fit(img)
 
-  green = np.uint8([[[0,255,0]]])
+  #green = np.uint8([[[0,255,0]]])
   #green = cv2.cvtColor(green,cv2.COLOR_BGR2HSV)
-  pos_label = clt.predict(green[0,0])
+  #pos_label = clt.predict(green[0,0])
+  neg_label = clt.predict(img[0,:])
   labels = clt.predict(img)
 
   for i in range(len(labels)):
-    if labels[i]  !=  pos_label:
+    #if labels[i]  !=  pos_label:
+    if labels[i]  ==  neg_label:
       img[i] = [0, 0, 0]
 
   img = img.reshape((h, w, d))
@@ -204,31 +206,56 @@ def remove_background(orig, visualize=False):
   return img_grcut
 
 
-def process(img_path, output_path, visualize=False):
+def normalize(img):
+  #http://stackoverflow.com/questions/24341114/simple-illumination-correction-in-images-opencv-c/24341809#24341809
+  lab = cv2.cvtColor(img, cv2.COLOR_BGR2LAB)
+  # -----Splitting the LAB image to different channels-------------------------
+  l, a, b = cv2.split(lab)
+
+  # -----Applying CLAHE to L-channel-------------------------------------------
+  clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+  cl = clahe.apply(l)
+
+  limg = cv2.merge((cl, a, b))
+
+  # -----Converting image from LAB Color model to RGB model--------------------
+  return cv2.cvtColor(limg, cv2.COLOR_LAB2BGR)
+
+
+def process(img_path, output_root, visualize=False, method='shape'):
   for subdir, dirs, files in os.walk(img_path):
     for f in files:
       m = re.match(r"(.*)[.]jpg", f)
       if m is None:
         continue
       filename = os.path.join(subdir,f)
-      logging.info("working on %(filename)s" % locals())
+      logging.debug("working on %(filename)s" % locals())
       img = cv2.imread(filename)
-      #img = kmeans_threshold(img, visualize)
-      img = remove_background(img, visualize)
+      if method == 'shape':
+        img = remove_background(img, visualize)
+      elif method == 'color':
+        img = normalize(img)
+        img = kmeans_threshold(img, visualize)
+      else:
+        raise ValueError('unknown method')
+      output_path = os.path.join(output_root, os.path.basename(subdir))
+      if not os.path.exists(output_path):
+        os.mkdir(output_path)
       output_filename = os.path.join(output_path, m.group(1) + '.jpg')
-      cv2.imwrite(output_filename, img)
-      logging.info("writing to %(output_filename)s" % locals())
+      assert cv2.imwrite(output_filename, img)
+      logging.debug("writing to %(output_filename)s" % locals())
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser(description=__doc__, version=__version__)
   parser.add_argument('-l', dest='logLevel', default='info', help="logging level: {debug, info, error}")
+  parser.add_argument('--method', dest='method', default="shape", help = "method to remove background {shape, color}")
   parser.add_argument('--visualize', action='store_true', dest="visualize", help = "visualize")
   parser.add_argument('img_path', help = "supply path to database images")
   parser.add_argument('output_path', help = "supply path to output images")
   args = parser.parse_args()
 
   logging.basicConfig(level=getattr(logging, args.logLevel.upper()), format='%(asctime)s %(levelname)s %(message)s')
-  process(args.img_path, args.output_path, args.visualize)
+  process(args.img_path, args.output_path, args.visualize, args.method)
 
 
 
