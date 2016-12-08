@@ -456,11 +456,13 @@
 %\begin{abstract}
 %\end{abstract}
 \section{Introduction}
-The number of plant species is estimated to be over 220000 in the world \cite{Charles13}. 
-Automatic plant species recognition with image processing has gained increasing
-interests recently. The main application are weeds identification, species discovery, plant taxonomy, natural reserve park management and so on \cite{Pedro13}. 
+Automatic plant species recognition with image processing has gained increasing interests recently. This is a fine-grained image recognition problem and generally considered a hard problem due to the subtle differences between different species in the same class. Sometime such fine differences can be even challenging to humans. Typically this requires large training data but it is not feasible due to the number of planets (over 220000 \cite{Charles13}).
 
-In this report, we describe our experiments with traditional handcrafted features and features extracted from pretrained deep convolution neural network (ConvNets).
+The main application are weeds identification, species discovery, plant taxonomy, natural reserve park management and so on \cite{Pedro13}. 
+
+In this report, we describe our exploration with this problem, using traditional handcrafted features and features extracted from pretrained deep convolution neural network (ConvNets).
+
+The rest of the report is organized as follows. In section \ref{DataSet}, we describe the data set. Section.
 
 % IEEEtran.cls defaults to using nonbold math in the Abstract.
 % This preserves the distinction between vectors and scalars. However,
@@ -471,7 +473,7 @@ In this report, we describe our experiments with traditional handcrafted feature
 
 \section{Related Work }
 Research on automatic leaf classification from image has been active since 2000. Lots of hand-crafted features have since proposed, ranging from shape based, to statistical texture and margin \cite{Charles13} \cite{Pedro13} \cite{Cho2002}. Also generic computer vision object recognition/detection features, such SIFT and HOG are studied for this problem. [TODO]
-Most of such manually engineered features achieve excellent accuracy on clean images, which consist of one single well aligned leave on contrasting background, such as those images in data set [TODO ].
+Most of such manually engineered features achieve excellent accuracy on clean images taken in controlled conditions, which consist of one single well aligned leave on contrasting background, such as those images in data set [TODO ].
 Recently, with the huge success of ConvNets, particularly in annual ImageNet Large Scale Visual Recognition Challenge \cite{Alex2014}, researchers start to apply ConvNets to this problem [TODO].  [TODO] have suggested that generic features can be extracted from large ConvNet and yield very good results on fine-grained classification problems even without fine-tuning the pretrained model.
 
 \section{Approach}
@@ -489,14 +491,25 @@ Images captured in the field, such as those from ImageCLEF \cite{ImageCLEF2013},
 \end{figure}
 
 \subsection{ConvNets}
-We use the transfer learning approach. Specifically, we take a couple of ConvNets what are pretrained on ImageNet  VGGNet/ResNet [TODO quote], remove the last fully connected layers and then treat the rest of the ConvNet as fixed feature extractor for the our data set.
-[This gives us a large dimension codes and we need to select/reduce the features., not true ResNet, which gives 2048-D code, whereas VGGNet\_-16 gives 7x7x512-D codes]
--The CNN codes are trained for the object image classification task of ILSVRC (2013 for VGGNet and 2015 for ResNet), which is aligned with our task except that ours are more fine-grained classification.
--Some of our data set [ImageCLEF2013] is more challenging in term of clutter and occlusion.
+We use the transfer learning approach, in order to make use of the power of ConvNets with the constrains of time and computations. Specifically, we take a couple of ConvNets what are pretrained on ImageNet  VGGNet/ResNet [TODO quote], remove the last fully connected layers and then treat the rest of the ConvNet as fixed feature extractor for the our data set.
+
+Part of reason 
 
 [Explain the data set for our pretrained model and why this is this is applicable to our problem, i.e. same feature space.]
 
-The rest of the report is organized as follows. In section \ref{DataSet}, we describe the data set. Section.
+[Explains architecture of ResNet50]
+
+The feature vector we get from ResNet50 is 2048 dimensions.
+We have two settings.
+\begin{itemize}
+  \item [--] [explain preprocessing] The feature vector is normalized with unit variance and we learn a linear SVM classifier [(or others)] from the features.
+  \item [--] We further augment the training set by adding rotated and shifted copies of samples.
+\end{itemize}
+
+[Explain if and how this method is suitable for our task]
+-The CNN codes are trained for the object image classification task of ILSVRC (2013 for VGGNet and 2015 for ResNet), which is aligned with our task except that ours are more fine-grained classification.
+-Some of our data set [ImageCLEF2013] is more challenging in term of clutter and occlusion.
+
 
 \section{DataSet}
 \label{DataSet}
@@ -679,6 +692,9 @@ We use prediction rank-1 identification (i.e. accuracy) as our performance metri
 
   \bibitem{ImageCLEF2013}
   http://www.imageclef.org/2013/plant
+
+  \bibitem{Keras}
+  Chollet, Fran\c{c}ois, 2015, \url{https://github.com/fchollet/keras},
 \end{thebibliography}
 
 % biography section
