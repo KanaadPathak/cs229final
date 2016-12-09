@@ -1,12 +1,16 @@
 ---
-data_dir: data/imageclef/train/SheetAsBackground
+name: imageclef_uniform
+
+train_dir: data/imageclef/train/SheetAsBackground
+test_dir: data/imageclef/test/SheetAsBackground
+train_feature: history/imageclef_sheet_train_resnet50.h5
+test_feature: history/imageclef_sheet_test_resnet50.h5
+
 architecture: resnet50
-feature_file: history/imageclef_sheet_train_resnet50.h5
 model_file: history/imageclef_sheet_classifier.pkl
 #factor: 10
 batch_size: 8
 #gen_params:
-#  rescale: 0.003921568627
 #  rotation_range: 90
 #  width_shift_range: 0.2
 #  height_shift_range: 0.2
