@@ -36,7 +36,9 @@ def find_surrounding_box(image, w, h):
   width = max(w, image.shape[1])
   dst_image = np.zeros((height, width, image.shape[2]), dtype='uint8')
   offset_y = (height-image.shape[0])/2; offset_x = (width-image.shape[1])/2
-  dst_image[offset_y:(offset_y + image.shape[0]), offset_x:(offset_x + image.shape[1]), :] = image
+  #dst_image[offset_y:(offset_y + image.shape[0]), offset_x:(offset_x + image.shape[1]), :] = image
+  #padding
+  dst_image = cv2.copyMakeBorder(image, offset_y, offset_y, offset_x, offset_x, cv2.BORDER_REPLICATE)
   return dst_image
 
 def shrink(image, width, height, inter=cv2.INTER_AREA):
