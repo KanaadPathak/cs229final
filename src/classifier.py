@@ -41,11 +41,11 @@ class SoftMax(Classifier):
 class SVM(Classifier):
   def __init__(self, data_set, parameters):
     svr = SVC()
-    verbose = 0
+    verbose = 9
     if 'verbose' in parameters:
-      verbose = parameters['verbose']
-    clf = GridSearchCV(svr, parameters, verbose=verbose, n_jobs=-1)
-    self.clf = clf.fit(data_set.X_train, data_set.y_train).best_estimator_
+      verbose = int(parameters['verbose'])
+    self.clf = GridSearchCV(svr, parameters, verbose=verbose, n_jobs=-1)
+    self.clf.fit(data_set.X_train, data_set.y_train)
 
 class SVMGaussianKernel(SVM):
   def __init__(self, data_set, configs):
@@ -93,7 +93,7 @@ def selectModel(data_set, models, visual=False, plist_file=None):
     if 'skip' in configs and configs['skip']: continue
     t0 = time.time()
     clf = model(data_set, configs).clf
-    y_predict = clf.predict(data_set)
+    #y_predict = clf.predict(data_set.X_test)
     score = clf.score(data_set.X_test, data_set.y_test)
     logging.info("%s (%.2f) Test Accuracy: %0.4f" % (str(model), time.time()-t0, score))
     # Plot normalized confusion matrix
@@ -129,15 +129,17 @@ if __name__ == "__main__":
   configs=(
     {
       #SVMGaussianKernel
-     'c_range' : np.logspace(2, 6, 2), #np.logspace(1, 9, 6, endpoint=True),
+     'c_range' : np.logspace(-1, 1, 3, endpoint=True), #np.logspace(1, 9, 6, endpoint=True),
       #gamma = 1/(2*tao^2)
-     'gamma_range' : np.logspace(-3, 2, 5), #np.linspace(1.0/(2*8*8), 1, 1, endpoint=True),
+     'gamma_range' : np.logspace(-1, 1, 3, endpoint=True), #np.linspace(1.0/(2*8*8), 1, 1, endpoint=True),
      'skip' : True,
+     'verbose' : 9,
     },
     {
       #SVMGaussianLinear
-      'c_range' : np.logspace(-1, 5, 6, endpoint=True), #np.logspace(-4, 6, 11),
+      'c_range' : np.logspace(-3, 0, 4, endpoint=True), #np.logspace(-4, 6, 11),
       'skip' : False,
+      'verbose' : 9,
     },
     {
       #Softmax
