@@ -1,0 +1,16 @@
+---
+name: flavia
+
+train_dir: data/flavia/train
+test_dir: data/flavia/test
+train_feature: history/flavia_train_vgg19.h5
+test_feature: history/flavia_test_vgg19.h5
+
+architecture: vgg19
+batch_size: 2
+#classifier: LDA
+epoch: 100
+model_file: classifier_vgg19.pkl
+weight_file: weight_vgg19.pkl
+result_file: result_vgg19.pkl
+

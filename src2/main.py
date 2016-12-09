@@ -43,7 +43,7 @@ def main(args):
         print("Training has %d species, test has %d species" % (len(train_classes), len(test_classes)))
         clf = ClassifierPool(classifier_name=conf.classifier_name, nb_features=X_train.shape[1])
         clf.train_and_score(X_train, y_train, X_test, y_test_new, test_class=test_classes,
-                            model_file=conf.model_file, results_file=args.result_file)
+                            model_file=conf.model_file, results_file=conf.result_file)
 
         # clf.fit(X_train, y_train)
         # if train_conf.model_file is not None:
@@ -61,7 +61,7 @@ def main(args):
         from preprocess_utils import split_images, Configuration
         from cnn_feature import ClassifierPool, CNNFeatureExtractor, CustomMLPClassifier
 
-        conf = Configuration(args.train_conf)
+        conf = Configuration(args.conf_file)
 
         X_train, y_train, train_classes = CNNFeatureExtractor.load_features(conf.train_feature)
         reverse = dict(zip(train_classes.values(), train_classes.keys()))
@@ -71,7 +71,7 @@ def main(args):
 
         clf = CustomMLPClassifier()
         clf.fit(X_train, y_train, X_test, y_test, batch_size=conf.batch_size, nb_epoch=conf.epoch)
-        clf.save(args.save_file)
+        clf.save(conf.result_file)
 
 
 if __name__ == '__main__':
@@ -98,7 +98,6 @@ if __name__ == '__main__':
     # ------------------------------------------------
     cnn_parser = subparsers.add_parser('cnn_classify')
     cur_parser.add_argument('-e', '--epoch', type=int, default=50, help="the number of epochs to run")
-    cur_parser.add_argument('-s', '--save_file', help="the file that the weight are saved to")
     # ------------------------------------------------
     cur_parser = subparsers.add_parser('split', description='split images in a folder to train and val')
     cur_parser.add_argument('--train_size', help="num of samples or proportion of samples for train")

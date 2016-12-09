@@ -42,6 +42,7 @@ class Configuration:
         self.epoch = _conf.get('epoch', 50)
         self.classifier_name = _conf.get('classifier', 'SVC')
         self.model_file = _conf.get('model_file')
+        self.result_file = _conf.get('result_file')
         self.factor = _conf.get('factor', 1)
 
         generator_params = _conf.get('gen_params', {})

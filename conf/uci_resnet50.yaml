@@ -8,7 +8,8 @@ test_feature: history/uci_test_resnet50.h5
 
 
 architecture: resnet50
-epoch: 10
+batch_size: 8
+epoch: 100
 model_file: classifier.pkl
 weight_file: weight.pkl
 result_file: result.pkl

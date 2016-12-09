@@ -7,7 +7,8 @@ train_feature: history/swedish_train_resnet50.h5
 test_feature: history/swedish_test_resnet50.h5
 
 architecture: resnet50
-epoch: 10
+batch_size: 8
+epoch: 100
 model_file: classifier.pkl
 weight_file: weight.pkl
 result_file: result.pkl

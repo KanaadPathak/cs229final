@@ -6,9 +6,11 @@ import cv2
 import numpy as np
 import tables
 from keras import backend as K
+from keras.callbacks import EarlyStopping
 from keras.layers import Dense, Dropout
 from keras.layers.convolutional import Convolution2D
 from keras.models import Sequential, load_model
+from keras.optimizers import SGD
 from keras.preprocessing import image
 from keras.regularizers import l2, activity_l2
 from keras.utils import np_utils
@@ -58,12 +60,12 @@ class ClassifierPool(object):
         self.preprocessors = [
             StandardScaler(),
             # feature scaling
-            PCA(n_components=min(1000, nb_features), whiten=True),
+            # PCA(n_components=min(256, nb_features), whiten=True),
             # normalize against after pca, per suggested in the paper
-            StandardScaler(),
+            # StandardScaler(),
             # feature selection
-            VarianceThreshold(threshold=(.9 * (1 - .9))),
-            SelectKBest(mutual_info_classif, k=min(nb_features, 3000)),
+            # VarianceThreshold(threshold=(.9 * (1 - .9))),
+            # SelectKBest(mutual_info_classif, k=min(nb_features, 1000)),
         ]
 
     def save(self, model_file):
@@ -222,24 +224,20 @@ class CustomMLPClassifier(ClassifierMixin):
 
     @staticmethod
     def _create_model(nb_classes, nb_features):
-        if nb_classes > 2:
-            loss = 'categorical_crossentropy'
-            output_dim = nb_classes
-            final_activation = 'softmax'
-        else:
-            loss = 'binary_crossentropy'
-            output_dim = 1
-            final_activation = 'sigmoid'
+        loss = 'categorical_crossentropy'
+        output_dim = nb_classes
+        final_activation = 'softmax'
 
         print(loss, output_dim, final_activation)
 
         model = Sequential()
-        model.add(Dense(1024, activation='relu',# W_regularizer=l2(0.01),
-                        input_dim=nb_features))
-        # model.add(Dense(512, activation='relu', # W_regularizer=l2(0.01),
-        #                 name='fc2'))
+        model.add(Dense(1024, activation='relu', input_dim=nb_features))
+        model.add(Dropout(0.2))
+        model.add(Dense(256, activation='relu'))
         model.add(Dense(output_dim, activation=final_activation, name='predictions'))
-        model.compile(optimizer='rmsprop', loss=loss, metrics=['accuracy'])
+        optimizer = SGD(lr=1e-4, momentum=0.9)
+        # optimizer = 'rmsprop'
+        model.compile(optimizer=optimizer, loss=loss, metrics=['accuracy'])
         return model
 
     def predict(self, X):
@@ -255,8 +253,12 @@ class CustomMLPClassifier(ClassifierMixin):
         y_train = np_utils.to_categorical(y_train, nb_classes=nb_classes)
         y_val = np_utils.to_categorical(y_val, nb_classes=nb_classes)
 
+        early_stopping = EarlyStopping(monitor='val_loss', patience=5)
+
         self.model = self._create_model(nb_classes, nb_features)
-        self.model.fit(X_train, y_train, batch_size=batch_size, nb_epoch=nb_epoch, validation_data=(X_val, y_val))
+        hist = self.model.fit(X_train, y_train, batch_size=batch_size, nb_epoch=nb_epoch, validation_data=(X_val, y_val),
+                       callbacks=[early_stopping])
+        print(hist.history)
 
     def load(self, model_file):
         self.model = load_model(model_file)

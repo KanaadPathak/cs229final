@@ -304,4 +304,6 @@ data/flavia
 data/dogs_vs_cats/
 data/imageclef/
 
-#notebook/
+notebook/
+~$*
+run.sh
