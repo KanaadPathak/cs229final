@@ -29,19 +29,18 @@ def sliding_window(image, window_size, step_size):
       yield (x, y, image[y:y + window_size[1], x:x + window_size[0]])
 
 def find_surrounding_box(image, w, h):
-  """ create a new image and draw "image in the center"""
+  """ create a new image and draw "image in the center, with bigger dimension of shape and (w,h) """
   if image.shape[0] >= h and image.shape[1] >= w:
     return image
   height = max(h, image.shape[0])
   width = max(w, image.shape[1])
-  dst_image = np.zeros((height, width), dtype='uint8')
+  dst_image = np.zeros((height, width, image.shape[2]), dtype='uint8')
   offset_y = (height-image.shape[0])/2; offset_x = (width-image.shape[1])/2
-  dst_image[offset_y:(offset_y + image.shape[0]), offset_x:(offset_x + image.shape[1])] = image
+  dst_image[offset_y:(offset_y + image.shape[0]), offset_x:(offset_x + image.shape[1]), :] = image
   return dst_image
 
 def shrink(image, width, height, inter=cv2.INTER_AREA):
   #create a new box with the desired dimension and draw the re_sized image
-  dim = (width, height)
   (h, w) = image.shape[:2]
   aspect_ratio = float(w)/float(h)
   assert w > width or h > height
@@ -56,7 +55,9 @@ def shrink(image, width, height, inter=cv2.INTER_AREA):
   return find_surrounding_box(image, width, height)
 
 def resize(image, width=None, height=None, inter=cv2.INTER_AREA):
-  """ resize and make sure new height and width are within limits"""
+  """ keep aspect ration and resize with either specified height or width
+  may not be both if aspect ration is not satisfied. it there is a conflict, use bigger dimension
+  """
   dim = (width, height)
   (h, w) = image.shape[:2]
   # if both the width and height are None, then return the # original image
