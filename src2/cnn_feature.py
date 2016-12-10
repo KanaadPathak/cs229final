@@ -160,7 +160,6 @@ class CNNFeatureExtractor(object):
 
     def _save(self, f, name_classid, shape):
         atom = tables.Float64Atom()
-        print(shape)
         feature_arr = f.create_earray(f.root, 'features', atom, shape)
         label_arr = f.create_earray(f.root, 'labels', atom, (0,))
         table_def = {
