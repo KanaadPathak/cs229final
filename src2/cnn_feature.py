@@ -7,11 +7,12 @@ import numpy as np
 import tables
 from keras import backend as K
 from keras.callbacks import EarlyStopping
-from keras.layers import Dense, Dropout
+from keras.layers import Dense, Dropout, Reshape, Flatten
 from keras.layers.convolutional import Convolution2D
 from keras.models import Sequential, load_model
 from keras.optimizers import SGD
 from keras.preprocessing import image
+from keras.preprocessing.image import ImageDataGenerator
 from keras.regularizers import l2, activity_l2
 from keras.utils import np_utils
 from sklearn.base import ClassifierMixin
@@ -60,11 +61,11 @@ class ClassifierPool(object):
         self.preprocessors = [
             StandardScaler(),
             # feature scaling
-            # PCA(n_components=min(256, nb_features), whiten=True),
+            PCA(n_components=min(1024, nb_features), whiten=True),
             # normalize against after pca, per suggested in the paper
-            # StandardScaler(),
+            StandardScaler(),
             # feature selection
-            # VarianceThreshold(threshold=(.9 * (1 - .9))),
+            VarianceThreshold(threshold=(.9 * (1 - .9))),
             # SelectKBest(mutual_info_classif, k=min(nb_features, 1000)),
         ]
 
@@ -198,6 +199,19 @@ class CNNFeatureExtractor(object):
                     cv2.imwrite(output_path, im_color)
                     pbar.update(1)
 
+    def augment(self, img_path, output_dir, generator_params, batch_size=32, target_size=(256, 256)):
+        img = image.load_img(img_path, target_size=target_size)
+        img_name = os.path.splitext(os.path.basename(img_path))[0]
+        x = image.img_to_array(img)
+        x = np.expand_dims(x, axis=0)
+
+        dest_dir = os.path.join(output_dir, img_name, 'augment')
+        os.makedirs(dest_dir, exist_ok=True)
+
+        gen = ImageDataGenerator(**generator_params).flow(x, batch_size=batch_size, save_to_dir=dest_dir)
+        for _ in range(20):
+            gen.next()
+
     @staticmethod
     def _normalize(img):
         img_max = img.max()
@@ -231,9 +245,8 @@ class CustomMLPClassifier(ClassifierMixin):
         print(loss, output_dim, final_activation)
 
         model = Sequential()
-        model.add(Dense(1024, activation='relu', input_dim=nb_features))
-        model.add(Dropout(0.2))
-        model.add(Dense(256, activation='relu'))
+        model.add(Dense(512, activation='relu', input_dim=nb_features, name='fc1'))
+        model.add(Dense(256, activation='relu', input_dim=nb_features, name='fc2'))
         model.add(Dense(output_dim, activation=final_activation, name='predictions'))
         optimizer = SGD(lr=1e-4, momentum=0.9)
         # optimizer = 'rmsprop'
@@ -256,8 +269,8 @@ class CustomMLPClassifier(ClassifierMixin):
         early_stopping = EarlyStopping(monitor='val_loss', patience=5)
 
         self.model = self._create_model(nb_classes, nb_features)
-        hist = self.model.fit(X_train, y_train, batch_size=batch_size, nb_epoch=nb_epoch, validation_data=(X_val, y_val),
-                       callbacks=[early_stopping])
+        hist = self.model.fit(X_train, y_train, batch_size=batch_size, nb_epoch=nb_epoch,
+                              validation_data=(X_val, y_val), callbacks=[early_stopping])
         print(hist.history)
 
     def load(self, model_file):

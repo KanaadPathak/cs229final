@@ -31,7 +31,7 @@ class Configuration:
         d = datetime()
         return '%s/%s/%s' % (self.base_dir, d.strftime("%m/%d %H:%M"), file_name)
 
-    def __init__(self, yaml_file):
+    def __init__(self, yaml_file, with_gen=True):
         with open(yaml_file, 'r') as stream:
             _conf = yaml.load(stream)
 
@@ -45,29 +45,30 @@ class Configuration:
         self.result_file = _conf.get('result_file')
         self.factor = _conf.get('factor', 1)
 
-        generator_params = _conf.get('gen_params', {})
+        self.generator_params = _conf.get('gen_params', {})
 
-        if len(generator_params) > 0:
-            print("Image augmentation is %s with factor: %i and options: %s" % ('on', self.factor, generator_params))
+        if len(self.generator_params) > 0:
+            print("Image augmentation is %s, factor: %i, params: %s" % ('on', self.factor, self.generator_params))
         else:
-            print("Image augmentation is %s with factor: %i" % ('off', self.factor))
+            print("Image augmentation is %s, factor: %i" % ('off', self.factor))
 
         train_dir = _conf.get('train_dir')
         test_dir = _conf.get('test_dir')
         self.train_feature = _conf.get('train_feature')
         self.test_feature = _conf.get('test_feature')
 
-        self.train_gen = GeneratorLoader(
-            target_size=self.target_size,
-            batch_size=self.batch_size,
-            factor=self.factor,
-            generator_params=generator_params
-        ).load_generator(train_dir)
+        if with_gen:
+            self.train_gen = GeneratorLoader(
+                target_size=self.target_size,
+                batch_size=self.batch_size,
+                factor=self.factor,
+                generator_params=self.generator_params
+            ).load_generator(train_dir)
 
-        self.test_gen = GeneratorLoader(
-            target_size=self.target_size,
-            batch_size=self.batch_size
-        ).load_generator(test_dir)
+            self.test_gen = GeneratorLoader(
+                target_size=self.target_size,
+                batch_size=self.batch_size
+            ).load_generator(test_dir)
 
 
 class GeneratorLoader(object):

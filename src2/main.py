@@ -49,6 +49,15 @@ def main(args):
         # if train_conf.model_file is not None:
         #     clf.save(train_conf.model_file)
 
+    elif args.goal == 'augment':
+        from cnn_feature import CNNFeatureExtractor
+        from preprocess_utils import Configuration
+
+        conf = Configuration(args.conf_file)
+
+        CNNFeatureExtractor().augment(args.image_file, args.output_dir, conf.generator_params,
+                                      batch_size=conf.batch_size, target_size=conf.target_size)
+
     elif args.goal == 'cnn_classify':
         from cnn import run_cnn_classify
         run_cnn_classify(args)
@@ -58,8 +67,8 @@ def main(args):
         split_images(args.data_dir, args.train_size, args.test_size)
 
     elif args.goal == 'mlp':
-        from preprocess_utils import split_images, Configuration
-        from cnn_feature import ClassifierPool, CNNFeatureExtractor, CustomMLPClassifier
+        from preprocess_utils import Configuration
+        from cnn_feature import CNNFeatureExtractor, CustomMLPClassifier
 
         conf = Configuration(args.conf_file)
 
@@ -90,6 +99,11 @@ if __name__ == '__main__':
     # ------------------------------------------------
     # classify
     cur_parser = subparsers.add_parser("classify")
+    # ------------------------------------------------
+    # augment
+    cur_parser = subparsers.add_parser("augment")
+    cur_parser.add_argument('-o', '--output_dir', required=True, help="the feature file to save to")
+    cur_parser.add_argument('image_file', help="the path to the image")
     # ------------------------------------------------
     # visualize middle layers
     cur_parser = subparsers.add_parser("viz")
