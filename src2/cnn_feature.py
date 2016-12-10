@@ -209,8 +209,6 @@ class CNNFeatureExtractor(object):
 
     def extract_any(self, data_gen, feature_file, nb_factor=1, layer_name='activation_46'):
         target_layer = self.model.get_layer(name=layer_name)
-        single_sample_feature_shape = target_layer.output_shape[1:]
-
         feature_func = K.function([self.model.layers[0].input, K.learning_phase()], [target_layer.output])
 
         with tqdm(total=data_gen.nb_sample * nb_factor) as pbar, \
@@ -226,6 +224,8 @@ class CNNFeatureExtractor(object):
                 pbar.update(X.shape[0])
                 if pbar.n >= data_gen.nb_sample * nb_factor:
                     break
+
+    # def fine_tune_any(self, layer_name=):
 
     @staticmethod
     def _convert(img):
@@ -315,19 +315,45 @@ class CustomMLPClassifier(ClassifierMixin):
     def predict(self, X):
         return self.model.predict(X, self.batch_size)
 
-    def fit(self, X_train, y_train, X_val, y_val, batch_size=32, nb_epoch=10):
+    @staticmethod
+    def _create_model2(nb_classes, input_shape):
+        input_tensor = Input(shape=input_shape)
+        print(input_tensor)
+        x = identity_block(input_tensor, 3, [512, 512, 2048], stage=5, block='c')
+
+        x = AveragePooling2D((7, 7), name='avg_pool')(x)
+
+        x = Flatten()(x)
+        x = Dense(nb_classes, activation='softmax', name='fc1000')(x)
+
+        model = Model(input_tensor, x)
+        optimizer = SGD(lr=1e-4, momentum=0.9)
+        # optimizer = 'rmsprop'
+        model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
+        return model
+
+    def fit2(self, X_train, y_train, X_val, y_val, batch_size=32, nb_epoch=10):
         nb_classes = len(np.unique(y_train))
-        nb_features = X_train.shape[1]
+        input_shape = X_train.shape[1:]
+        model = self._create_model2(nb_classes, input_shape)
 
-        # PCA(n_components=min(1000, nb_features), whiten=True)
-
-        # X_train, X_val, y_train, y_val = train_test_split(X, y, train_size=.7, stratify=y)
         y_train = np_utils.to_categorical(y_train, nb_classes=nb_classes)
         y_val = np_utils.to_categorical(y_val, nb_classes=nb_classes)
 
         early_stopping = EarlyStopping(monitor='val_loss', patience=5)
+        model.fit(X_train, y_train, batch_size=batch_size, nb_epoch=nb_epoch,
+                  validation_data=(X_val, y_val), callbacks=[early_stopping])
+
+    def fit(self, X_train, y_train, X_val, y_val, batch_size=32, nb_epoch=10):
+        nb_classes = len(np.unique(y_train))
+        nb_features = X_train.shape[1]
+
+        y_train = np_utils.to_categorical(y_train, nb_classes=nb_classes)
+        y_val = np_utils.to_categorical(y_val, nb_classes=nb_classes)
 
         self.model = self._create_model(nb_classes, nb_features)
+
+        early_stopping = EarlyStopping(monitor='val_loss', patience=5)
         hist = self.model.fit(X_train, y_train, batch_size=batch_size, nb_epoch=nb_epoch,
                               validation_data=(X_val, y_val), callbacks=[early_stopping])
         print(hist.history)

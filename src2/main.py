@@ -93,12 +93,15 @@ def main(args):
 
         X_train, y_train, train_classes = CNNFeatureExtractor.load_features(conf.train_feature)
         X_test, y_test, test_classes = CNNFeatureExtractor.load_features(conf.test_feature)
-        y_test = [conf.train_gen.class_indices[test_classes[label]] for label in y_test]
+
+        reverse = dict(zip(train_classes.values(), train_classes.keys()))
+        y_test = [reverse[test_classes[label]] for label in y_test]
+        # y_test = [conf.train_gen.class_indices[test_classes[label]] for label in y_test]
         print("Training has %d species, test has %d species" % (len(train_classes), len(test_classes)))
 
         clf = CustomMLPClassifier()
-        clf.fit(X_train, y_train, X_test, y_test, batch_size=conf.batch_size, nb_epoch=conf.epoch)
-        clf.save(conf.result_file)
+        clf.fit2(X_train, y_train, X_test, y_test, batch_size=conf.batch_size, nb_epoch=conf.epoch)
+        # clf.save(conf.result_file)
 
 
 if __name__ == '__main__':
