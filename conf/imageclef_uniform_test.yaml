@@ -1,6 +1,0 @@
----
-data_dir: data/imageclef/test/SheetAsBackground
-architecture: resnet50
-feature_file: history/imageclef_sheet_test_resnet50.h5
-#gen_params:
-  #rescale: 0.003921568627

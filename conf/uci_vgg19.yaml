@@ -1,0 +1,16 @@
+---
+name: uci
+
+train_dir: data/uci/train
+test_dir: data/uci/test
+train_feature: history/uci_train_vgg19.h5
+test_feature: history/uci_test_vgg19.h5
+
+
+architecture: vgg19
+batch_size: 8
+epoch: 100
+model_file: classifier_vgg19.pkl
+weight_file: weight_vgg19.pkl
+result_file: result_vgg19.pkl
+
