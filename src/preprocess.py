@@ -21,7 +21,7 @@ class ImageRecordSerializer(object):
   """
   Image Records is a list of ( record#1, record#2, ..., record#n)
   Each element is a tuple of
-    (labels, original image name, np array of an image, meta_info)
+    (labels, original image name, np array of an image)
   Optionally, meta info can be stored as well
   """
   @classmethod
@@ -129,6 +129,23 @@ class LeafPreprocessor(object):
       logging.info("\n\t%s" % files)
     logging.info("%s: total records %d with %d labels" % (filename, len(self.records), len(dict.keys())) )
 
+  def write_images(self, filename, output_root):
+    """write image records to individual files
+    """
+    (self.records, self.meta_info) = ImageRecordSerializer.deserialize_with_meta(filename)
+    dict = self.get_record_per_label()
+    for (label, records) in dict.items():
+      logging.info("species(%d): [%s] has %d samples", label, self.get_species(label), len(records))
+      species_name = self.get_species(label)
+      output_path = os.path.join(output_root, species_name)
+      if not os.path.exists(output_path):
+        os.makedirs(output_path)
+      for label, name, image  in records:
+        output_filename = os.path.join(output_path, name)
+        assert cv2.imwrite(output_path, image)
+        logging.debug("writing output %s" % output_filename)
+    logging.info("%s: total records %d with %d labels" % (filename, len(self.records), len(dict.keys())) )
+
   def resize(self, img, w_reduced):
     """ helper method to downsize image"""
     (h, w) = img.shape
@@ -175,7 +192,8 @@ class SwedishLP(LeafPreprocessor):
   """ Swedish data set"""
   def downsize(self, img):
     #SIFT can still give ~200 KP per image, verified manually on a few images
-    return self.resize(img, 128.0)
+    #return self.resize(img, 128.0)
+    return img
 
   def read_record(self, path, basename):
     m = re.match(r"l([0-9]+)nr[0-9]*[.]tif", basename)
@@ -400,10 +418,10 @@ def preprocess(args):
 if __name__ == "__main__":
   parser = argparse.ArgumentParser(description=__doc__, version=__version__)
   parser.add_argument('-l', dest='logLevel', default='info', help="logging level: {debug, info, error}")
-  parser.add_argument('--action,', dest='action', default='preprocess', help = "{verify, print, preprocess}")
-  parser.add_argument('--dump,', dest='dump', action='store_true', help = "dump records")
+  parser.add_argument('--action,', dest='action', default='preprocess', help = "{verify, print, preprocess, write}")
+  parser.add_argument('--output_image,', dest='output_image', help = "path for output image")
   parser.add_argument('--split_output,', dest='split_output', help = "split records into two file per split_ratio")
-  parser.add_argument('--split_ratio,', dest='split_ratio', default=0.7, type=float,
+  parser.add_argument('--split_ratio,', dest='split_ratio', default=0.75, type=float,
       help = "percentage of total data used for training")
   parser.add_argument('--output_label,', dest='output_json', help = "output species label json file")
   parser.add_argument('--input_label,', dest='input_json', help = "input species label json file")
@@ -426,6 +444,8 @@ if __name__ == "__main__":
     logging.info("verified successfully!")
   elif args.action.lower() == 'print':
     p.pretty_print(args.record_file)
+  elif args.action.lower() == 'write':
+    p.write_images(args.record_file, args.output_image)
   else:
     preprocess(args)
 

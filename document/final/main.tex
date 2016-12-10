@@ -457,8 +457,13 @@
 %\end{abstract}
 \section{Introduction}
 Automatic plant species recognition with image processing has gained increasing interests recently. This is a fine-grained image recognition problem and generally considered a hard problem due to the subtle differences between different species in the same class. Sometime such fine differences can be even challenging to humans. Typically this requires large training data but it is not feasible due to the number of planets (over 220000 \cite{Charles13}).
+\begin{enumerate}\compresslist
+      \item The subtle differences between different species in the same class. Sometime such fine differences can be even challenging to humans. 
+      \item Large number of categories, over 220000 \cite{Charles13}.
+\end{enumerate}
 
 The main application are weeds identification, species discovery, plant taxonomy, natural reserve park management and so on \cite{Pedro13}. 
+
 
 In this report, we describe our exploration with this problem, using traditional handcrafted features and features extracted from pretrained deep convolution neural network (ConvNets).
 
@@ -573,8 +578,9 @@ We use traditional exhaustive search method to scan through all window, scales.
 
 We use prediction rank-1 identification (i.e. accuracy) as our performance metric, which is defined as $Accurary = \frac{N_c}{N_t} \times 100 \%$, where  $N_c$ represents the number of correct match and $N_t$ is the total number of test samples.
 
+
 [Test results as table.]
-[Analysis of the results.]
+[Discussions of the results.]
 
 
 \section{Conclusion and Future work}
