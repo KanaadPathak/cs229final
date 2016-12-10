@@ -3,8 +3,8 @@ name: swedish
 
 train_dir: data/swedish/train
 test_dir: data/swedish/test
-train_feature: history/swedish_train_resnet50.h5
-test_feature: history/swedish_test_resnet50.h5
+train_feature: history/swedish2_train_resnet50.h5
+test_feature: history/swedish2_test_resnet50.h5
 
 architecture: resnet50
 batch_size: 8

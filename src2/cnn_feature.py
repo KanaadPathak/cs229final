@@ -127,8 +127,8 @@ class ClassifierPool(object):
 
 # noinspection PyPep8Naming
 class CNNFeatureExtractor(object):
-    def __init__(self):
-        pass
+    def __init__(self, architecture='vgg16', image_shape=(256, 256, 3)):
+        self.model = self.select_architecture(architecture, input_tensor=Input(image_shape))
 
     @staticmethod
     def select_architecture(architecture, input_tensor=None):
@@ -139,47 +139,49 @@ class CNNFeatureExtractor(object):
         elif architecture == 'resnet50':
             return ResNet50(weights='imagenet', include_top=False, input_tensor=input_tensor)
 
-    def extract_feature(self, data_gen, feature_file, architecture='vgg16', nb_factor=1):
-        model = self.select_architecture(architecture)
-
+    def extract_feature(self, data_gen, feature_file, nb_factor=1):
         with tqdm(total=data_gen.nb_sample * nb_factor) as pbar, \
                 tables.open_file(feature_file, mode='w') as f:
 
-            atom = tables.Float64Atom()
             cnn_input_shape = (data_gen.batch_size, *data_gen.image_shape)
-            cnn_output_shape = model.get_output_shape_for(cnn_input_shape)
+            cnn_output_shape = self.model.get_output_shape_for(cnn_input_shape)
             single_sample_feature_shape = reduce(mul, cnn_output_shape[1:])
-            feature_arr = f.create_earray(f.root, 'features', atom, (0, single_sample_feature_shape))
-            label_arr = f.create_earray(f.root, 'labels', atom, (0, ))
-            table_def = {
-                'classid': tables.Int32Col(),
-                'name': tables.StringCol(itemsize=60),
-            }
-            class_table = f.create_table(f.root, 'classes', table_def)
-            row = class_table.row
-            for name, classid in data_gen.class_indices.items():
-                row['classid'] = classid
-                row['name'] = name
-                row.append()
-            class_table.flush()
+
+            feature_arr, label_arr = self._save(f, name_classid=data_gen.class_indices.items(),
+                                                shape=(0, single_sample_feature_shape))
 
             for X, y in data_gen:
-                features = model.predict(X).reshape((X.shape[0], single_sample_feature_shape))
+                features = self.model.predict(X).reshape((X.shape[0], single_sample_feature_shape))
                 feature_arr.append(features)
                 label_arr.append(y.argmax(1))
                 pbar.update(X.shape[0])
                 if pbar.n >= data_gen.nb_sample * nb_factor:
                     break
 
-    def fine_tune(self, train_gen, test_gen, feature_file, architecture='vgg16', nb_epoch=10, nb_factor=1):
+    def _save(self, f, name_classid, shape):
+        atom = tables.Float64Atom()
+        print(shape)
+        feature_arr = f.create_earray(f.root, 'features', atom, shape)
+        label_arr = f.create_earray(f.root, 'labels', atom, (0,))
+        table_def = {
+            'classid': tables.Int32Col(),
+            'name': tables.StringCol(itemsize=60),
+        }
+        class_table = f.create_table(f.root, 'classes', table_def)
+        row = class_table.row
+        for name, classid in name_classid:
+            row['classid'] = classid
+            row['name'] = name
+            row.append()
+        class_table.flush()
+
+        return feature_arr, label_arr
+
+    def fine_tune(self, train_gen, test_gen, feature_file, nb_epoch=10, nb_factor=1):
         output_dim = train_gen.nb_class
 
-        # cnn_input_shape = (train_gen.batch_size, *train_gen.image_shape)
-        input_tensor = Input(train_gen.image_shape)
-        print(input_tensor)
-
         model = Sequential()
-        base_model = self.select_architecture(architecture, input_tensor=input_tensor)
+        base_model = self.model
         for layer in base_model.layers[:164]:
             layer.trainable = False
             # model.add(layer)
@@ -205,8 +207,25 @@ class CNNFeatureExtractor(object):
                                    callbacks=[early_stopping])
         print(hist.history)
 
+    def extract_any(self, data_gen, feature_file, nb_factor=1, layer_name='activation_46'):
+        target_layer = self.model.get_layer(name=layer_name)
+        single_sample_feature_shape = target_layer.output_shape[1:]
 
+        feature_func = K.function([self.model.layers[0].input, K.learning_phase()], [target_layer.output])
 
+        with tqdm(total=data_gen.nb_sample * nb_factor) as pbar, \
+                tables.open_file(feature_file, mode='w') as f:
+
+            kv = data_gen.class_indices.items()
+            feature_arr, label_arr = self._save(f, name_classid=kv, shape=(0, *target_layer.output_shape[1:]))
+
+            for X, y in data_gen:
+                features = feature_func([X, 1])[0]
+                feature_arr.append(features)
+                label_arr.append(y.argmax(1))
+                pbar.update(X.shape[0])
+                if pbar.n >= data_gen.nb_sample * nb_factor:
+                    break
 
     @staticmethod
     def _convert(img):
@@ -214,15 +233,13 @@ class CNNFeatureExtractor(object):
         x = np.expand_dims(x, axis=0)
         return preprocess_input(x)
 
-    def visualize_intermediate(self, img_path, output_dir, architecture='vgg16', target_size=(256, 256)):
-        model = self.select_architecture(architecture)
-
+    def visualize_intermediate(self, img_path, output_dir, target_size=(256, 256)):
         img = image.load_img(img_path, target_size=target_size)
         img_name = os.path.splitext(os.path.basename(img_path))[0]
         x = self._convert(img)
 
-        middle_layers = [layer for layer in model.layers if isinstance(layer, Convolution2D)]
-        get_features = K.function([model.layers[0].input, K.learning_phase()], [l.output for l in middle_layers])
+        middle_layers = [layer for layer in self.model.layers if isinstance(layer, Convolution2D)]
+        get_features = K.function([self.model.layers[0].input, K.learning_phase()], [l.output for l in middle_layers])
         # we only have one sample of dim: (height, width, features)
         all_features = [f[0].transpose(2, 0, 1) for f in get_features([x, 1])]
         all_names = [l.name for l in middle_layers]
@@ -240,7 +257,8 @@ class CNNFeatureExtractor(object):
                     cv2.imwrite(output_path, im_color)
                     pbar.update(1)
 
-    def augment(self, img_path, output_dir, generator_params, batch_size=32, target_size=(256, 256)):
+    @staticmethod
+    def augment(img_path, output_dir, generator_params, batch_size=32, target_size=(256, 256)):
         img = image.load_img(img_path, target_size=target_size)
         img_name = os.path.splitext(os.path.basename(img_path))[0]
         x = image.img_to_array(img)

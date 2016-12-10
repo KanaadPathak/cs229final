@@ -11,25 +11,29 @@ def main(args):
 
         conf = Configuration(args.conf_file)
 
-        CNNFeatureExtractor().extract_feature(
-            data_gen=conf.train_gen,
-            feature_file=conf.train_feature,
-            architecture=conf.architecture,
-            nb_factor=conf.factor)
-
-        CNNFeatureExtractor().extract_feature(
-            data_gen=conf.test_gen,
-            feature_file=conf.test_feature,
-            architecture=conf.architecture,
-            nb_factor=conf.factor)
+        extractor = CNNFeatureExtractor(architecture=conf.architecture, image_shape=conf.train_gen.image_shape)
+        extractor.extract_feature(data_gen=conf.train_gen, feature_file=conf.train_feature, nb_factor=conf.factor)
+        extractor.extract_feature(data_gen=conf.test_gen, feature_file=conf.test_feature)
 
     elif args.goal == 'viz':
         from cnn_feature import CNNFeatureExtractor
         from preprocess_utils import Configuration
 
         conf = Configuration(args.conf_file)
-        CNNFeatureExtractor().visualize_intermediate(args.image_file, args.output_dir, architecture=conf.architecture,
-                                                     target_size=conf.target_size)
+
+        extractor = CNNFeatureExtractor(architecture=conf.architecture, image_shape=conf.train_gen.image_shape)
+        extractor.visualize_intermediate(args.image_file, args.output_dir, target_size=conf.target_size)
+
+    elif args.goal == 'extract_any':
+        from cnn_feature import CNNFeatureExtractor
+        from preprocess_utils import Configuration
+
+        conf = Configuration(args.conf_file)
+
+        extractor = CNNFeatureExtractor(architecture='resnet50', image_shape=conf.train_gen.image_shape)
+        extractor.extract_any(data_gen=conf.train_gen, feature_file=conf.train_feature, nb_factor=conf.factor)
+        extractor.extract_any(data_gen=conf.test_gen, feature_file=conf.test_feature)
+
     elif args.goal == 'classify':
         from cnn_feature import ClassifierPool, CNNFeatureExtractor
         from preprocess_utils import Configuration
@@ -37,12 +41,11 @@ def main(args):
         conf = Configuration(args.conf_file)
 
         X_train, y_train, train_classes = CNNFeatureExtractor.load_features(feature_file=conf.train_feature)
-        reverse = dict(zip(train_classes.values(), train_classes.keys()))
         X_test, y_test, test_classes = CNNFeatureExtractor.load_features(feature_file=conf.test_feature)
-        y_test_new = [reverse[test_classes[label]] for label in y_test]
+        y_test = [conf.train_gen.class_indices[test_classes[label]] for label in y_test]
         print("Training has %d species, test has %d species" % (len(train_classes), len(test_classes)))
         clf = ClassifierPool(classifier_name=conf.classifier_name, nb_features=X_train.shape[1])
-        clf.train_and_score(X_train, y_train, X_test, y_test_new, test_class=test_classes,
+        clf.train_and_score(X_train, y_train, X_test, y_test, test_class=test_classes,
                             model_file=conf.model_file, results_file=conf.result_file)
 
         # clf.fit(X_train, y_train)
@@ -54,11 +57,13 @@ def main(args):
 
         conf = Configuration(args.conf_file)
 
-        CNNFeatureExtractor().fine_tune(
+        CNNFeatureExtractor(
+            architecture=conf.architecture,
+            image_shape=conf.train_gen.image_shape
+        ).fine_tune(
             train_gen=conf.train_gen,
             test_gen=conf.test_gen,
             feature_file=conf.train_feature,
-            architecture=conf.architecture,
             nb_epoch=conf.epoch,
             nb_factor=conf.factor)
 
@@ -69,8 +74,8 @@ def main(args):
 
         conf = Configuration(args.conf_file)
 
-        CNNFeatureExtractor().augment(args.image_file, args.output_dir, conf.generator_params,
-                                      batch_size=conf.batch_size, target_size=conf.target_size)
+        CNNFeatureExtractor.augment(args.image_file, args.output_dir, conf.generator_params,
+                                    batch_size=conf.batch_size, target_size=conf.target_size)
 
     elif args.goal == 'cnn_classify':
         from cnn import run_cnn_classify
@@ -87,9 +92,8 @@ def main(args):
         conf = Configuration(args.conf_file)
 
         X_train, y_train, train_classes = CNNFeatureExtractor.load_features(conf.train_feature)
-        reverse = dict(zip(train_classes.values(), train_classes.keys()))
         X_test, y_test, test_classes = CNNFeatureExtractor.load_features(conf.test_feature)
-        y_test = [reverse[test_classes[label]] for label in y_test]
+        y_test = [conf.train_gen.class_indices[test_classes[label]] for label in y_test]
         print("Training has %d species, test has %d species" % (len(train_classes), len(test_classes)))
 
         clf = CustomMLPClassifier()
@@ -116,6 +120,9 @@ if __name__ == '__main__':
     # ------------------------------------------------
     # classify
     cur_parser = subparsers.add_parser("fine_tune")
+    # ------------------------------------------------
+    # extract_any
+    cur_parser = subparsers.add_parser("extract_any")
     # ------------------------------------------------
     # augment
     cur_parser = subparsers.add_parser("augment")
