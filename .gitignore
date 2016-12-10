@@ -297,13 +297,9 @@ src/label.plist
 
 preview/
 
-data/kaggle/
-data/swedish
-data/uci
-data/flavia
-data/dogs_vs_cats/
-data/imageclef/
+data/
+!data/hog
 
-notebook/
-~$*
+resources/
+download/
 run.sh

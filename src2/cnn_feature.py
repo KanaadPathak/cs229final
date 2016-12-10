@@ -6,25 +6,34 @@ import cv2
 import numpy as np
 import tables
 from keras import backend as K
+from keras.applications.imagenet_utils import preprocess_input
+from keras.applications.resnet50 import ResNet50, identity_block, conv_block, TH_WEIGHTS_PATH_NO_TOP,\
+    TF_WEIGHTS_PATH_NO_TOP
+from keras.applications.vgg16 import VGG16
+from keras.applications.vgg19 import VGG19
 from keras.callbacks import EarlyStopping
-from keras.layers import Dense, Dropout, Reshape, Flatten
+from keras.engine import Input
+from keras.engine import Model
+from keras.layers import Dense, Flatten, ZeroPadding2D, AveragePooling2D, BatchNormalization, \
+    Activation, MaxPooling2D
 from keras.layers.convolutional import Convolution2D
 from keras.models import Sequential, load_model
 from keras.optimizers import SGD
 from keras.preprocessing import image
 from keras.preprocessing.image import ImageDataGenerator
-from keras.regularizers import l2, activity_l2
 from keras.utils import np_utils
+from keras.utils.data_utils import get_file
+from keras.utils.layer_utils import convert_all_kernels_in_model, warnings
 from sklearn.base import ClassifierMixin
 from sklearn.decomposition import PCA
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, GradientBoostingClassifier
 from sklearn.externals import joblib
-from sklearn.feature_selection import VarianceThreshold, SelectKBest, mutual_info_classif
+from sklearn.feature_selection import VarianceThreshold
 from sklearn.gaussian_process import GaussianProcessClassifier
 from sklearn.gaussian_process.kernels import RBF
+from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import StratifiedKFold
-from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.neural_network import MLPClassifier
@@ -32,11 +41,6 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 from tqdm import tqdm
-
-from imagenet_utils import preprocess_input
-from resnet50 import ResNet50
-from vgg16 import VGG16
-from vgg19 import VGG19
 
 classifiers = {
     'SVC': (SVC(), {'kernel': ["linear"], 'C': [0.01, 0.1, 1.0]}),
@@ -127,13 +131,13 @@ class CNNFeatureExtractor(object):
         pass
 
     @staticmethod
-    def select_architecture(architecture):
+    def select_architecture(architecture, input_tensor=None):
         if architecture == 'vgg16':
-            return VGG16(weights='imagenet', include_top=False)
+            return VGG16(weights='imagenet', include_top=False, input_tensor=input_tensor)
         elif architecture == 'vgg19':
-            return VGG19(weights='imagenet', include_top=False)
+            return VGG19(weights='imagenet', include_top=False, input_tensor=input_tensor)
         elif architecture == 'resnet50':
-            return ResNet50(weights='imagenet', include_top=False)
+            return ResNet50(weights='imagenet', include_top=False, input_tensor=input_tensor)
 
     def extract_feature(self, data_gen, feature_file, architecture='vgg16', nb_factor=1):
         model = self.select_architecture(architecture)
@@ -166,6 +170,43 @@ class CNNFeatureExtractor(object):
                 pbar.update(X.shape[0])
                 if pbar.n >= data_gen.nb_sample * nb_factor:
                     break
+
+    def fine_tune(self, train_gen, test_gen, feature_file, architecture='vgg16', nb_epoch=10, nb_factor=1):
+        output_dim = train_gen.nb_class
+
+        # cnn_input_shape = (train_gen.batch_size, *train_gen.image_shape)
+        input_tensor = Input(train_gen.image_shape)
+        print(input_tensor)
+
+        model = Sequential()
+        base_model = self.select_architecture(architecture, input_tensor=input_tensor)
+        for layer in base_model.layers[:164]:
+            layer.trainable = False
+            # model.add(layer)
+        # for layer in base_model.layers[164:]:
+        #     model.add(layer)
+
+        model.add(base_model)
+
+        model.add(Flatten(name='flatten'))
+        model.add(Dense(1024, activation='relu', name='fc1'))
+        # model.add(Dense(256, activation='relu', name='fc2'))
+        model.add(Dense(output_dim, activation='softmax', name='predictions'))
+
+        # optimizer = SGD(lr=1e-4, momentum=0.9)
+        optimizer = 'rmsprop'
+        early_stopping = EarlyStopping(monitor='val_loss', patience=5)
+        model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
+
+        model.summary(400)
+
+        hist = model.fit_generator(train_gen, samples_per_epoch=train_gen.nb_sample * nb_factor, nb_epoch=nb_epoch,
+                                   validation_data=test_gen, nb_val_samples=test_gen.nb_sample,
+                                   callbacks=[early_stopping])
+        print(hist.history)
+
+
+
 
     @staticmethod
     def _convert(img):
@@ -246,7 +287,7 @@ class CustomMLPClassifier(ClassifierMixin):
 
         model = Sequential()
         model.add(Dense(512, activation='relu', input_dim=nb_features, name='fc1'))
-        model.add(Dense(256, activation='relu', input_dim=nb_features, name='fc2'))
+        model.add(Dense(256, activation='relu', name='fc2'))
         model.add(Dense(output_dim, activation=final_activation, name='predictions'))
         optimizer = SGD(lr=1e-4, momentum=0.9)
         # optimizer = 'rmsprop'

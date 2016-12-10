@@ -48,6 +48,20 @@ def main(args):
         # clf.fit(X_train, y_train)
         # if train_conf.model_file is not None:
         #     clf.save(train_conf.model_file)
+    elif args.goal == 'fine_tune':
+        from cnn_feature import ClassifierPool, CNNFeatureExtractor
+        from preprocess_utils import Configuration
+
+        conf = Configuration(args.conf_file)
+
+        CNNFeatureExtractor().fine_tune(
+            train_gen=conf.train_gen,
+            test_gen=conf.test_gen,
+            feature_file=conf.train_feature,
+            architecture=conf.architecture,
+            nb_epoch=conf.epoch,
+            nb_factor=conf.factor)
+
 
     elif args.goal == 'augment':
         from cnn_feature import CNNFeatureExtractor
@@ -99,6 +113,9 @@ if __name__ == '__main__':
     # ------------------------------------------------
     # classify
     cur_parser = subparsers.add_parser("classify")
+    # ------------------------------------------------
+    # classify
+    cur_parser = subparsers.add_parser("fine_tune")
     # ------------------------------------------------
     # augment
     cur_parser = subparsers.add_parser("augment")
