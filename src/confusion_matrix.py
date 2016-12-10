@@ -21,11 +21,11 @@ def print_cm(cm, classes, top):
     match = sorted(match, reverse = True, key = lambda x: x[0])
     mismatch = sorted(mismatch, reverse = True, key = lambda x: x[0])
     print("top %(top)d matched"%locals())
-    for i in range(top):
+    for i in range(min(len(match), top)):
         item = match[i]
         print('%s(%d): %f(%d)' % (classes[item[1]], item[1], item[2],item[0]))
     print("top %(top)d mismatch, :-("%locals())
-    for i in range(top):
+    for i in range(min(len(mismatch), top)):
         item = mismatch[i]
         print('%s(%d)->%s(%d): %f(%d)' % (classes[item[1]], item[1], classes[item[2]], item[2], item[3], item[0]))
 

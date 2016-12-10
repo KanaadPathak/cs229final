@@ -203,10 +203,9 @@ class CNNFeatureExtractor(object):
         if aug:
             data_gen_args = dict(
                 rotation_range=10,
-                width_shift_range=0.1,
-                height_shift_range=0.1,
+                channel_shift_range=100.,
             )
-            nb_factor = 3
+            nb_factor = 5
             print("Image augementation is on, factor=%d"%(nb_factor))
         else:
             data_gen_args = None

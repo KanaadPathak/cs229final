@@ -79,7 +79,7 @@ def largestContours(canny,img,img_gray, visualize = False):
   #se = np.ones((2, 2), dtype='uint8')
   #canny = cv2.morphologyEx(canny, cv2.MORPH_OPEN, se)
 
-  se = np.ones((7, 7), dtype='uint8')
+  se = np.ones((3, 3), dtype='uint8')
   canny = cv2.morphologyEx(canny, cv2.MORPH_CLOSE, se)
   canny = cv2.dilate(canny, se )
 
@@ -107,7 +107,7 @@ def largestContours(canny,img,img_gray, visualize = False):
   # Draw max contours
   if len(perimeter) == 0:
     logging.error("Cannot find contours!")
-    return (None, None, None, None )
+    return (None, None, None, None,None)
 
   #init mask for grabCut
   mask = np.ones(img_contour.shape[:2], np.uint8) * cv2.GC_BGD
@@ -199,7 +199,7 @@ def grabcut_from_contour(orig, visualize=False):
   img_contour, contours, perimeters, hull, max_index = largestContours(canny,img,img_gray, visualize)
   if img_contour is None:
     logging.error("hitting error, return original image")
-    return orig
+    return (orig, orig)
 
   # Grabcut - Same bounding box than contours...
   (img_grcut, mask) = cut_graph_from_hull(hull, img, contours, max_index)

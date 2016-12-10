@@ -53,6 +53,7 @@ class GeneratorLoader(object):
             target_size=self.target_size,
             classes=classes_,
             class_mode=class_mode,
+            save_to_dir='/tmp/aug_saved/',
             batch_size=self.batch_size)
 
 
