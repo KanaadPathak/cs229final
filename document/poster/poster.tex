@@ -179,7 +179,7 @@ Fine-grained leaf recognition with image processing has important application in
   \headerbox{DATASET}{name=dataset,column=1,row=0,bottomaligned=problem}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{enumerate}\compresslist
-  \item Clean images: little or no luminance or color variations), e.g. Swedish leaf dataset and Flavia leaf dataset.
+  \item Clean images: little or no luminance or color variations), e.g. Swedish leaf dataset.
   \item Challenging images: considerable variations on lighting conditions, viewpoints, background clutters and occlusions, no bounding box, e.g. ImageCLEF which is crowd sourced. (To effectively evaluate our approaches, we use subsets of this dataset.)
 \end{enumerate}
    %\vspace{0.3em}
@@ -212,32 +212,31 @@ At last, we train a classifier, using the feature vectors from the above step an
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \headerbox{Results}{name=results,column=2,span=2,row=0}{
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \centering
-  \begin{tabular} { c c c c}
-    \hline\hline
-    Vocabulary size & Softmax &  Linear SVM  & RBF SVM \\
-    \hline
-    100  &  0.86 & 0.86 & 0.87\\
-    1000 &  0.93 & 0.93 & 0.93 \\
-    2500 &  0.93 & 0.94 & 0.94 \\
-    \hline
-  \end{tabular}
-  \label{table:prelimaryresult}
+  {\centering\includegraphics[width=0.95\linewidth]{test_accuracy}}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \headerbox{Discussions}{name=discussion,column=2,span=2,below=results}{
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \begin{enumerate}
-    \item As expected, pre-trained CNN codes yields better accuracy than hand crafted features.
-    \item Image augmentation is important for datasets with huge variations between train and test data.
+    \item As expected, pre-trained CNN codes yields better accuracy than SIFT+BOF off the shelf. Particularly traditional method is more sensitive to background clutter.
+    \item Looking at the confusion matrix, we believe the causes for top misclassification
+      \begin{itemize}
+        \item [--] Very fine differences between species which are even hard for humans
+        \item [--] Noisy and plausibly not-representative train data lead to overfitting,
+        \item [--] The ConvNet models are pre-trained with different dataset and task
+      \end{itemize}
+    \item Image augmentation/normalization help can noise (background clutter, color/viewpoint variations).
   \end{enumerate}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \headerbox{Future works}{name=future,column=2,below=discussion, above=bottom}{
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  [Explain object detection half backed idea and works]
+  \begin{enumerate}
+    \item Given enough time, we would approach more data (augmented or retrieve elsewhere) and fine-tune the ConvNet to solve the overfitting problem.
+    \item For the most challenging data set, i.e. Image CLEF natural images, we can segment the leaf out of background clutter first, which is an single object localization problem.  We believe this would help as there are multiple objects and sometime leaf is not the most salient object for this dataset.
+  \end{enumerate}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
