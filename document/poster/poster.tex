@@ -171,52 +171,77 @@ Fine-grained leaf recognition with image processing has important application in
 
 \includegraphics[height=5em]{easilyconfused}
 
-Traditionally, numerous hand-crafted features have been proposed and recently ConvNets based approaches are applied to this problem. We explore both options in this projects.
-   \vspace{0.3em}
+%Traditionally, numerous hand-crafted features have been proposed and recently ConvNets based approaches are applied to this problem. 
+   %\vspace{0.3em}
  }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \headerbox{DATASET}{name=dataset,column=1,row=0,bottomaligned=problem}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    We found two types of data set
 \begin{enumerate}\compresslist
-  \item Clean images (i.e., little or no luminance or color variations), e.g. Swedish leaf dataset and Flavia leaf dataset.
-  \item ImageCLEF, crowd sourced, much more challenging due to variations on lighting conditions, viewpoints, background clutters and occlusions.  To effectively evaluate our approaches, we use subsets of this dataset. 
+  \item Clean images: little or no luminance or color variations), e.g. Swedish leaf dataset and Flavia leaf dataset.
+  \item Challenging images: considerable variations on lighting conditions, viewpoints, background clutters and occlusions, no bounding box, e.g. ImageCLEF which is crowd sourced. (To effectively evaluate our approaches, we use subsets of this dataset.)
 \end{enumerate}
-
-   \vspace{0.3em}
+   %\vspace{0.3em}
   }
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{Method}{name=method,column=0,below=problem}{
+  \headerbox{Method}{name=method,column=0,below=problem, above=bottom}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  %\noindent{\centering\includegraphics[width=0.95\linewidth]{images/graph_occluded.pdf}\\}
-  %\indent 
-  \includegraphics[scale=0.5]{overview}
-  
-   \vspace{0.3em}
+  {\centering\includegraphics[width=0.95\linewidth]{overview}}
+  Firstly, during preprocessing, we apply Contrast Limited Adaptive Histogram Equalization to reduce lighting condition variation and raw images are resized to fit to the next layer. In traditional approach, we also use K-means to remove background color heuristically. For challenging dataset, we find the convex hull containing the largest N contours and then use GrabCut to segment leaf out of the background clutter.
+  Next we extract features and we explore two options,
+\begin{enumerate}\compresslist
+  \item ConvNets. 
+ We take transfer learning approach, in order to make use of the power of ConvNets with the constrains of time and computations. Specifically, we take a couple of ConvNets that are pretrained with ImageNet for ILSVRC object image classification task, remove one or two top  layers and then treat the rest of the ConvNet as fixed feature extractor for the our data set.
+  \item SIFT + Bag of Features
+Key points are densely sampled and SIFT feature descriptors are retrieved from each raw images. Then 
+At last, we train a classifier, using the feature vectors from the above step and predict labels for our test data.
+\end{enumerate}
+   %\vspace{0.3em}
   }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{Transfer Learning}{name=convnet,column=1,below=dataset,bottomaligned=method}{
+  \headerbox{Transfer Learning - Convet}{name=convnet,column=1,below=dataset, above=bottom}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-   \vspace{0.3em}
+    [Explain architecture and give more insights for ConvNet]
+   %\vspace{0.3em}
   }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \headerbox{Results}{name=results,column=2,span=2,row=0}{
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-      \vspace{-0.6em}
+  \centering
+  \begin{tabular} { c c c c}
+    \hline\hline
+    Vocabulary size & Softmax &  Linear SVM  & RBF SVM \\
+    \hline
+    100  &  0.86 & 0.86 & 0.87\\
+    1000 &  0.93 & 0.93 & 0.93 \\
+    2500 &  0.93 & 0.94 & 0.94 \\
+    \hline
+  \end{tabular}
+  \label{table:prelimaryresult}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\headerbox{Future works}{name=future,column=2,span=2,row=0,below=results}{
+\headerbox{Discussions}{name=discussion,column=2,span=2,below=results}{
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \begin{enumerate}
+    \item As expected, pre-trained CNN codes yields better accuracy than hand crafted features.
+    \item Image augmentation is important for datasets with huge variations between train and test data.
+  \end{enumerate}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{References}{name=references,column=2, span=2, below=future, above=bottom}{
+\headerbox{Future works}{name=future,column=2,below=discussion, above=bottom}{
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  [Explain object detection half backed idea and works]
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \headerbox{References}{name=references,column=3, below=discussion, above=bottom}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \smaller
     \bibliographystyle{ieee}
