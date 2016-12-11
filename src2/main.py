@@ -3,6 +3,8 @@ import argparse
 
 __version__ = "0.1"
 
+import logging
+
 
 def main(args):
     if args.goal == 'extract':
@@ -42,7 +44,9 @@ def main(args):
 
         X_train, y_train, train_classes = CNNFeatureExtractor.load_features(feature_file=conf.train_feature)
         X_test, y_test, test_classes = CNNFeatureExtractor.load_features(feature_file=conf.test_feature)
-        y_test = [conf.train_gen.class_indices[test_classes[label]] for label in y_test]
+
+        reverse = dict(zip(train_classes.values(), train_classes.keys()))
+        y_test = [reverse[test_classes[label]] for label in y_test]
         print("Training has %d species, test has %d species" % (len(train_classes), len(test_classes)))
         clf = ClassifierPool(classifier_name=conf.classifier_name, nb_features=X_train.shape[1])
         clf.train_and_score(X_train, y_train, X_test, y_test, test_class=test_classes,
@@ -108,6 +112,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('-V', '--version', action='version', version=__version__)
     parser.add_argument('-c', '--conf_file', help="the path to the config file")
+
+    # logging.basicConfig(filename='the.log', level=logging.DEBUG)
 
     # ================================================
     subparsers = parser.add_subparsers(dest='goal')

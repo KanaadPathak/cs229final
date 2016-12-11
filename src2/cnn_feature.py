@@ -224,8 +224,6 @@ class CNNFeatureExtractor(object):
                 if pbar.n >= data_gen.nb_sample * nb_factor:
                     break
 
-    # def fine_tune_any(self, layer_name=):
-
     @staticmethod
     def _convert(img):
         x = image.img_to_array(img)
@@ -317,8 +315,8 @@ class CustomMLPClassifier(ClassifierMixin):
     @staticmethod
     def _create_model2(nb_classes, input_shape):
         input_tensor = Input(shape=input_shape)
-        print(input_tensor)
-        x = identity_block(input_tensor, 3, [512, 512, 2048], stage=5, block='c')
+        x = input_tensor
+        x = identity_block(x, 3, [512, 512, 2048], stage=5, block='c')
 
         x = AveragePooling2D((7, 7), name='avg_pool')(x)
 
@@ -326,22 +324,27 @@ class CustomMLPClassifier(ClassifierMixin):
         x = Dense(nb_classes, activation='softmax', name='fc1000')(x)
 
         model = Model(input_tensor, x)
-        optimizer = SGD(lr=1e-4, momentum=0.9)
-        # optimizer = 'rmsprop'
+        # optimizer = SGD(lr=1e-4, momentum=0.9)
+        optimizer = 'rmsprop'
         model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
         return model
 
-    def fit2(self, X_train, y_train, X_val, y_val, batch_size=32, nb_epoch=10):
+    def fit2(self, X_train, y_train, X_test, y_test, batch_size=32, nb_epoch=10):
         nb_classes = len(np.unique(y_train))
         input_shape = X_train.shape[1:]
         model = self._create_model2(nb_classes, input_shape)
 
         y_train = np_utils.to_categorical(y_train, nb_classes=nb_classes)
-        y_val = np_utils.to_categorical(y_val, nb_classes=nb_classes)
+        # y_test = np_utils.to_categorical(y_test, nb_classes=nb_classes)
 
         early_stopping = EarlyStopping(monitor='val_loss', patience=5)
         model.fit(X_train, y_train, batch_size=batch_size, nb_epoch=nb_epoch,
-                  validation_data=(X_val, y_val), callbacks=[early_stopping])
+                  validation_split=0.1, callbacks=[early_stopping])
+
+        y_pred = model.predict(X_test, batch_size=batch_size)
+        y_pred = np.argmax(y_pred, axis=1)
+        test_acc = np.sum(y_test == y_pred, axis=0).item() / X_test.shape[0]
+        print('Test accuracy: %.2f%%' % (test_acc * 100))
 
     def fit(self, X_train, y_train, X_val, y_val, batch_size=32, nb_epoch=10):
         nb_classes = len(np.unique(y_train))
