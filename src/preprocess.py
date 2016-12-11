@@ -101,17 +101,17 @@ class LeafPreprocessor(object):
     self.post_process()
     return (self.records, self.meta_info)
 
-  def split(self, split_ratio):
+  def split(self, split_train):
     """randomly shuffle and split train/test data
-    split_ratio: ratio of the split and must be in  (0, 1)
+    split_train: number of split for train
     """
-    assert split_ratio<1.0 and split_ratio>0, "Wrong split:%f"%split_ratio
+    assert split_train>0, "Wrong split:%f"%split_train
     records1 = []; records2 = []; dict = {}
     dict = self.get_record_per_label()
     for (label, records) in dict.items():
       random.shuffle(records)
       total_size = len(records)
-      split_size = int(total_size*split_ratio)
+      split_size = min(total_size-1, split_train)
       logging.debug("splitting label:%(label)d %(split_size)d out of %(total_size)d"%locals())
       records1 += records[:split_size]
       records2 += records[split_size:]
@@ -200,6 +200,48 @@ class SwedishLP(LeafPreprocessor):
     if m is None:
       return (False, None, None)
     label = int(m.group(1))
+    #read image
+    filename = os.path.join(path, basename)
+    img = cv2.imread(filename,0);
+    img = self.downsize(img)
+    assert img is not None, "cannot read image:%s"%(basename)
+    return (True, img, label)
+
+  def verify_record(self, label_expected, name, image_expected):
+    base = os.path.basename(name)
+    path = os.path.dirname(name)
+    (valid, img, label) = self.read_record(path, base)
+    assert label_expected==label, "%(lable)s doesn't match %(label_expected)s" % locals()
+    assert img is not None, "cannot read image:%s"%(name)
+    img = self.downsize(img)
+    assert np.sum(np.where(image_expected!=img))==0, "image doesn't match"
+
+  def get_species(self, label):
+    return "%d" % label
+
+
+class FlaviaLP(LeafPreprocessor):
+  """ Swedish data set"""
+  def downsize(self, img):
+    #SIFT can still give ~200 KP per image, verified manually on a few images
+    #return self.resize(img, 128.0)
+    return img
+
+  def read_record(self, path, basename):
+    _number2label = [1059, 1122, 1194, 1267, 1323, 1385, 1437, 1496, 1551, 1616, 2050, 2113, 2165, 2230, 2290, \
+                     2346, 2423, 2485, 2546, 2612, 2675, 3055, 3110, 3175, 3229, 3281, 3334, 3389, 3446, 3510, \
+                     3563, 3621]
+    m = re.match(r"([0-9]+)[.]jpg", basename)
+    if m is None:
+      return (False, None, None)
+    t = int(m.group(1))
+    assert t>=1000 and t<=3621
+    label = 0
+    for (i, v) in enumerate(_number2label):
+      if t <= v:
+        label = i
+        break
+    logging.debug('label: %(label)d'%locals())
     #read image
     filename = os.path.join(path, basename)
     img = cv2.imread(filename,0);
@@ -395,6 +437,8 @@ def make_preprocessor(args):
     return ImageCLEF2013(parameters)
   elif type == 'hog':
     return HogProcessor(args)
+  elif type == 'flavia':
+    return FlaviaLP()
   raise ValueError("Unknown data set type:%s"% (type))
 
 def preprocess(args):
@@ -408,8 +452,8 @@ def preprocess(args):
   logging.info("total record size:%d", len(records))
 
   if args.split_output is not None:
-    logging.info("splitting records to %s and %s with ratio:%f", args.record_file, args.split_output, args.split_ratio)
-    (records, split_records) = p.split(args.split_ratio)
+    logging.info("splitting records to %s and %s with ratio:%f", args.record_file, args.split_output, args.split_train)
+    (records, split_records) = p.split(args.split_train)
     logging.info("writing %d records to  %s" % (len(split_records),  args.split_output))
     ImageRecordSerializer.serialize(args.split_output, split_records, meta_info)
   logging.info("writing %d records to  %s" % (len(records),  args.record_file))
@@ -420,8 +464,8 @@ if __name__ == "__main__":
   parser.add_argument('-l', dest='logLevel', default='info', help="logging level: {debug, info, error}")
   parser.add_argument('--action,', dest='action', default='preprocess', help = "{verify, print, preprocess, write}")
   parser.add_argument('--output_image,', dest='output_image', help = "path for output image")
-  parser.add_argument('--split_output,', dest='split_output', help = "split records into two file per split_ratio")
-  parser.add_argument('--split_ratio,', dest='split_ratio', default=0.75, type=float,
+  parser.add_argument('--split_output,', dest='split_output', help = "split records into two file per split_train")
+  parser.add_argument('--split_train,', dest='split_train', default=20, type=int,
       help = "percentage of total data used for training")
   parser.add_argument('--output_label,', dest='output_json', help = "output species label json file")
   parser.add_argument('--input_label,', dest='input_json', help = "input species label json file")
