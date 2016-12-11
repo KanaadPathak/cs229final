@@ -120,7 +120,7 @@
 
 \usepackage[pdftex]{graphicx} % Enhanced support for graphics
 % declare the path(s) where your graphic files are
-\graphicspath{../../resources/}
+\graphicspath{{../images/}}
 % and their extensions so you won't have to specify these with
 % every instance of \includegraphics
 \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
@@ -456,8 +456,8 @@
 %\begin{abstract}
 %\end{abstract}
 \section{Introduction}
-Automatic plant species recognition with image processing has gained increasing interests recently. This is a fine-grained image recognition problem and generally considered a hard problem due to the subtle differences between different species in the same class. Sometime such fine differences can be even challenging to humans. Typically this requires large training data but it is not feasible due to the number of planets (over 220000 \cite{Charles13}).
-\begin{enumerate}\compresslist
+Automatic plant species recognition with image processing is a fine-grained image recognition problem and generally considered a hard problem due to the subtle differences between different species in the same class. Sometime such fine differences can be even challenging to humans. Typically this requires large training data but it is not feasible due to the number of planets (over 220000 \cite{Charles13}).
+\begin{enumerate}
       \item The subtle differences between different species in the same class. Sometime such fine differences can be even challenging to humans. 
       \item Large number of categories, over 220000 \cite{Charles13}.
 \end{enumerate}
@@ -487,7 +487,6 @@ Recently, with the huge success of ConvNets, particularly in annual ImageNet Lar
 Images captured in the field, such as those from ImageCLEF \cite{ImageCLEF2013}, are more challenging as there are much more intra class variations due to viewpoint, lighting condition and occlusion.  We break down the problem into two pieces. Firstly, we want to locate the leaf in the image which is an single object localization problem.  This step becomes necessary if the image have multiple objects and possibly leaf is not the most salient object.  Then, we predict the specie of the leaf, which is a fine-grained classification problem. This is the main task and for most data set, we only need to perform this task. Here we explore both traditional method, such as Bag of Features,  and ConvNets based method. 
 
 \newpage
-\graphicspath{{../design/}}
 \begin{figure} 
   \center
   \includegraphics[scale=0.5]{overview}
@@ -518,20 +517,26 @@ We have two settings.
 
 \section{DataSet}
 \label{DataSet}
-We found these datasets.
+    We found two types of data set
 \begin{enumerate}
-  \item ImageCLEF \cite{ImageCLEF2013}: the most challenging dataset as images are collected through crowd sourced application. 250 species with 26077 images.
-  \item UCI leaf dataset \cite{UCIDataSet}: 40 species with 5 to 16 samples per specie
-  \item Kaggle leaf dataset\cite{Pedro13}: 99 species with 16 samples per specie
-  \item Swedish leaf dataset \cite{SwedishLeafDataset}: 15 species with 952 samples (roughly 60 samples per specie)
-  \item Flavia leaf dataset \cite{FlaviaDataset}: 33 species with roughly 60 samples per specie
+  \item Clean images, which consists of well aligned leaf on single contrasting background, with little or no variations of luminance or color
+    \begin{itemize}
+      \item[--] Swedish leaf dataset\cite{SwedishLeafDataset}: 15 species with 75 samples per specie
+      \item[--] Flavia leaf dataset\cite{FlaviaDataset}: 33 species with roughly 60 samples per specie
+      \item[--] UCI leaf dataset \cite{UCIDataSet}: 40 species with 5 to 16 samples per specie
+      \item[--] Kaggle leaf dataset\cite{Pedro13}: 99 species with 16 samples per specie
+    \end{itemize}
+  \item ImageCLEF \cite{ImageCLEF}, which is collected through crowd sourced application, has 250 species and 26077 images. This is a much more challenging datasets with variations on lighting conditions, viewpoints, background clutters and even occlusions.  To effectively evaluate our approaches, we use subsets of this dataset. 
+    \begin{itemize}
+      \item[--] uniform: relatively with less clutter, 66 species with [TODO] train samples and 1194 test samples.
+      \item[--] natural: in total natural environment, 57 species with 2585 train samples and 521 test samples.
+    \end{itemize}
 \end{enumerate}
 
 \section{Object recognition}
 \subsection{Bag of Features (BoF) + local feature descriptors}
    Due to the simplicity and performance, this well established approach was taken at first. Interest points are detected from the raw images and then local invariant feature descriptors are collected, which are clustered to form the visual vocabulary/codebook. Afterwards, each raw image can be represented with histograms of visual words, i.e. term vectors.  We have prototyped a BoF system, based on the OpenCV package.  Here is the illustration of the system \ref{fig:bofsystemdesign}.
 \newpage
-\graphicspath{{../milestone/}}
 \begin{figure} 
   \centering
   \includegraphics[scale=0.2]{flowchart}
@@ -542,7 +547,6 @@ During preprocessing, raw images are converted to gray-scaled images and resized
 \subsection{Background removal}
 [Discribe OpenCV GrapCut]
 \newpage
-\graphicspath{{../design/}}
 \begin{figure} 
   \centering
   \includegraphics[scale=0.2]{backgroundremoval}
@@ -565,7 +569,6 @@ During preprocessing, raw images are converted to gray-scaled images and resized
 We use traditional exhaustive search method to scan through all window, scales.
 
 \newpage
-\graphicspath{{../design/}}
 \begin{figure} 
   \center
   \includegraphics[scale=0.5]{detection}

@@ -20,7 +20,10 @@
 
 \newcommand{\captionfont}{\footnotesize}
 
-\graphicspath{{images/}{../images/}}
+\graphicspath{{../images/}}
+\DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+
+
 \usetikzlibrary{calc}
 
 \newcommand{\SET}[1]  {\ensuremath{\mathcal{#1}}}
@@ -136,14 +139,14 @@
   linewidth=2pt
   }
   % Eye Catcher
-  {\includegraphics[height=5em]{images/SU_New_BlockStree_2color}} 
+  {\includegraphics[height=5em]{SU_New_BlockStree_2color}} 
   % Title
   {\bf\textsc{Plant Leaf Recognition}\vspace{0.5em}}
   % Authors
   {\textsc{\{ Albert Liu and Yangming Wang \}@stanford.edu}}
   % University logo
   {% The makebox allows the title to flow into the logo, this is a hack because of the L shaped logo.
-    \includegraphics[height=5.0em]{images/SU_Seal_Red}
+    \includegraphics[height=5.0em]{SU_Seal_Red}
   }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -164,16 +167,27 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \headerbox{Problem}{name=problem,column=0,row=0}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Automatic plant species recognition with image processing has gained increasing interests recently. 
-This is a fine-grained image recognition problem 
+Fine-grained leaf recognition with image processing has important application in weeds identification, species discovery, plant taxonomy, and so on. The subtle differences between species and the sheer large number of categories makes it hard to solve.
 
-Generally it is considered a hard problem due to
+Traditionally, numerous hand-crafted features have been proposed and recently ConvNets based approaches are applied to this problem. We explore both options in this projects.
+\hspace{0.3em}
+{
+  \center
+  \includegraphics[height=5em]{easilyconfused}
+}
+
    \vspace{0.3em}
  }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \headerbox{DATASET}{name=dataset,column=1,row=0,bottomaligned=problem}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    We found two types of data set
+\begin{enumerate}\compresslist
+  \item Clean images (i.e., little or no luminance or color variations), e.g. Swedish leaf dataset and Flavia leaf dataset.
+  \item ImageCLEF, crowd sourced, much more challenging due to variations on lighting conditions, viewpoints, background clutters and occlusions.  To effectively evaluate our approaches, we use subsets of this dataset. 
+\end{enumerate}
+
    \vspace{0.3em}
   }
 
