@@ -141,5 +141,5 @@ def split_images(data_dir, test_size=None, train_size=None):
 
 
 if __name__ == '__main__':
-    gen = Configuration(sys.argv[1]).data_gen
+    gen = Configuration(sys.argv[1]).train_gen
     print(sum(x.shape[0] for x, y in tqdm(gen)))
