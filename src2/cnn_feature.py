@@ -47,7 +47,7 @@ class ClassifierPool(object):
     def __init__(self):
         self.classifiers = [
             #('KNN', KNeighborsClassifier(), {'n_neighbors': [5, 10]})
-             ('Linear SVM', SVC(), {'kernel': ["linear"], 'C': np.logspace(-2, -1, 1, endpoint=True)})
+             ('Linear SVM', SVC(), {'kernel': ["linear"], 'C': np.logspace(-3, 3, 7, endpoint=True)})
             #('RBF SVM', SVC(), {'kernel': ['rbf'], 'C': np.logspace(-2, 1, 4, endpoint=True),
             #                    'gamma': np.logspace(-1,3,5, endpoint=True)})
             # , ('Nu SVM', NuSVC(probability=True), {})
@@ -167,8 +167,8 @@ class ClassifierPool(object):
                     best_clf = clf
 
         print("=" * 30)
-        for (truth, predicted) in zip(y_test, best_predict):
-            print("%s(%d) -> %s(%d)" % (test_class[truth], truth, test_class[predicted], predicted))
+        #for (truth, predicted) in zip(y_test, best_predict):
+        #    print("%s(%d) -> %s(%d)" % (test_class[truth], truth, test_class[predicted], predicted))
 
 
         if results_file is not None:
