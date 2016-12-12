@@ -222,16 +222,14 @@ However, the subtle differences between species and the sheer number of categori
   \headerbox{Transfer Learning - ConvNet}{name=convnet,column=1,span=2, below=results, above=bottom}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   The pre-trained weights of VGG16, VGG19 and ResNet50 are available from open source Keras Framework.
-  After comparing, we choose ResNet50. Since ResNet50 uses a more aggressive Average Pooling
-  with a pool size of 7x7, which makes the output dimension of the bottleneck layer much smaller than VGG architectures'.
-  In another word, it outputs a much lower dimension features which helps the prediction accuracy.
+  After comparing preliminary results, we choose ResNet50 since ResNet50 gives better results and less overfitting. We believe this can be attributed to the fact that ResNet50 is deeper and generates lower dimension feature vector, which is likely due to the use of a more aggressive Average Pooling with a pool size of 7x7.
   %\vspace{0.3em}
   {\includegraphics[width=1\linewidth]{transfer_learning}}
-  The ResNet is famous for it's deep layers, in our case, 50 layers, with 49 Conv layers and one Fully Connected layers
+  The ResNet is famous for it's deep layers, in our case, 50 layers, with 49 Conv layers and one FC layer
   on top. Except for the first Conv layer, the rest 48 composes 16 ``residual'' blocks in 4 stages. The block within
-  each stage has similar architecture of same input \& output shape. \par
+  each stage has similar architecture, i.e. same input \& output shape. \par
 
-  The output of the stage 5 give 2048 features. Every cell in the grid shown above is a 8x8 filter visualized with
+  The output of the stage 5 give 2048-D features. Every cell in the grid shown above is a 8x8 filter visualized with
   heatmap, which will be a scalar after average pooling.
 }
 
