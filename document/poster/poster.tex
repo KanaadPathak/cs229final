@@ -169,30 +169,48 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Fine-grained leaf recognition with image processing has important application in weeds identification, species discovery, plant taxonomy, and so on. The subtle differences between species and the sheer large number of categories makes it hard to solve.
 
-%\centering\includegraphics[height=5em]{easilyconfused}
+\centering\includegraphics[width=0.65\linewidth]{easilyconfused}
 
-%Traditionally, numerous hand-crafted features have been proposed and recently ConvNets based approaches are applied to this problem.
-   %\vspace{0.3em}
+%Traditionally, numerous hand-crafted features have been proposed and recently ConvNets based approaches are applied to this problem. 
+   \vspace{0.3em}
  }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \headerbox{Method}{name=method,column=0, below=problem, above=bottom}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   {\centering\includegraphics[width=0.95\linewidth]{overview}}
-  Firstly, during preprocessing, we apply Contrast Limited Adaptive Histogram Equalization to reduce lighting condition variation and raw images are resized to fit to the next layer. In traditional approach, we also use K-means to remove background color heuristically. For challenging dataset, we find the convex hull containing the largest N contours and then use GrabCut to segment leaf out of the background clutter. Next we extract features and we explore two options,
 \begin{enumerate}\compresslist
-  \item ConvNets.
- We take transfer learning approach. see right
-  \item SIFT + Bag of Features
-Key points are densely sampled and SIFT feature descriptors are retrieved from each raw images. Then
+  \item Preprocessing. 
+    Apply Contrast Limited Adaptive Histogram Equalization to reduce lighting condition variation and resized to fit to the next layer. Also selectively use K-means to remove background heuristically.
+    For challenging dataset, find the convex hull containing the largest N contours and then use GrabCut to segment leaf out of the background clutter. 
+  \item Feature extract.
+    \begin{itemize}
+     \item ConvNets. 
+      Transfer learning approach, to make use of the power of ConvNets with the constrains of time and computations. Specifically, we take a couple of ConvNets that are pretrained with ImageNet for ILSVRC object image classification task, remove one or two top  layers and then treat the rest of the ConvNet as fixed feature extractor for the our data set.
+     \item SIFT + Bag of Features
+      Key points are densely sampled and SIFT feature descriptors are retrieved from each raw images. Then 
+    \end{itemize}
+  \item Classification.
+    Train a classifier, using the feature vectors from the above step and predict labels for our test data.
 \end{enumerate}
-At last, we train a classifier, using the feature vectors from the above step and predict labels for our test data.
    %\vspace{0.3em}
   }
 
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{Transfer Learning - Convnet}{name=convnet,column=1,span=2, row=0}{
+\headerbox{Results}{name=results,column=1,span=2,row=0}{
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %\begin{tabular}{c@{}c@{}}
+   %\\ [-1.0em]
+  {\includegraphics[width=0.40\linewidth]{test_accuracy}}
+  {\includegraphics[width=0.55\linewidth]{best_cm_uniform}}
+  %\end{tabular}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \headerbox{Transfer Learning - Convnet}{name=convnet,column=1,span=2, below=results, above=bottom}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     [Explain architecture and give more insights for ConvNet]\\
    %\vspace{0.3em}
@@ -203,18 +221,6 @@ At last, we train a classifier, using the feature vectors from the above step an
    {\includegraphics[width=0.15\linewidth]{conv1-2}}
    {\includegraphics[width=0.30\linewidth]{res5c_branch2c}}
   }
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\headerbox{Results}{name=results,column=1,span=2,above=bottom, below=convnet}{
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  %\begin{tabular}{c@{}c@{}}
-   %\\ [-1.0em]
-  {\includegraphics[width=0.40\linewidth]{test_accuracy}}
-  {\includegraphics[width=0.55\linewidth]{best_cm_uniform}}
-  %\end{tabular}
-}
-
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \headerbox{DATASET}{name=dataset,column=3, row=0}{
@@ -234,7 +240,7 @@ At last, we train a classifier, using the feature vectors from the above step an
     \item Looking at the confusion matrix, we believe the causes for top misclassification
       \begin{itemize}
         \item [--] Very fine differences between species which are even hard for humans
-        \item [--] Noisy and plausibly not-representative train data lead to overfitting,
+        \item [--] Noisy and plausibly non-representative train data lead to overfitting,
         \item [--] The ConvNet models are pre-trained with different dataset and task
       \end{itemize}
     \item Image augmentation/normalization help can noise (background clutter, color/viewpoint variations).
