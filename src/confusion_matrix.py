@@ -9,7 +9,7 @@ from sklearn.metrics import confusion_matrix
 from sklearn.externals import joblib
 
 
-def print_cm(cm, classes, top):
+def print_cm(cm, classes, top, sort_by_p):
     mismatch = []; match = []
     cnt = cm.astype('float').sum(axis=1)
     cnt = np.where(cnt, cnt, np.ones(cnt.shape).astype('float'))
@@ -18,8 +18,12 @@ def print_cm(cm, classes, top):
             mismatch.append([cm[i,j], i, j, cm.astype('float')[i,j]/cnt[i]])
         if i == j:
             match.append([cm[i,j], i, cm.astype('float')[i,j]/cnt[i]])
-    match = sorted(match, reverse = True, key = lambda x: x[0])
-    mismatch = sorted(mismatch, reverse = True, key = lambda x: x[0])
+    if sort_by_p:
+        match = sorted(match, reverse = True, key = lambda x: x[2])
+        mismatch = sorted(mismatch, reverse = True, key = lambda x: x[3])
+    else:
+        match = sorted(match, reverse = True, key = lambda x: x[0])
+        mismatch = sorted(mismatch, reverse = True, key = lambda x: x[0])
     print("top %(top)d matched"%locals())
     for i in range(min(len(match), top)):
         item = match[i]
@@ -29,7 +33,7 @@ def print_cm(cm, classes, top):
         item = mismatch[i]
         print('%s(%d)->%s(%d): %f(%d)' % (classes[item[1]], item[1], classes[item[2]], item[2], item[3], item[0]))
 
-def plot_cm(y_test, y_pred, classes, visual=False, pretty_print=False, output=None, top=10,
+def plot_cm(y_test, y_pred, classes, visual=False, pretty_print=False, output=None, top=10, sort_by_p=False,
                      title='Confusion matrix', cmap=plt.cm.jet):
     """ This function save the confusion matrix """
     # Compute confusion matrix
@@ -39,7 +43,7 @@ def plot_cm(y_test, y_pred, classes, visual=False, pretty_print=False, output=No
     #for (i,j) in zip(y_test, y_pred):
     #  cm[i,j] += 1
     if pretty_print:
-        print_cm(cm, classes, top)
+        print_cm(cm, classes, top, sort_by_p)
 
     cnt = cm.sum(axis=1)
     cnt =np.where( cnt, cnt, np.ones(cnt.shape))
@@ -64,6 +68,7 @@ if __name__ == "__main__":
   parser.add_argument('--visual', dest='visual', action='store_true', help="save confusion matrix")
   parser.add_argument('--top', dest='top', type=int, default=10, help="save confusion matrix")
   parser.add_argument('--pretty_print', dest='pretty_print', action='store_true', help="print confusion matrix")
+  parser.add_argument('--sort_by_percentage', dest='sort_by_p', action='store_true', help="sort by percentage")
   parser.add_argument('result_file', help="results")
   args = parser.parse_args()
 
@@ -79,5 +84,6 @@ if __name__ == "__main__":
                    pretty_print=args.pretty_print,
                    output=args.output,
                    top=args.top,
+                   sort_by_p=args.sort_by_p,
                    )
 

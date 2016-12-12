@@ -45,7 +45,7 @@ def shrink(image, width, height, inter=cv2.INTER_AREA):
   #create a new box with the desired dimension and draw the re_sized image
   (h, w) = image.shape[:2]
   aspect_ratio = float(w)/float(h)
-  assert w > width or h > height
+  assert w >= width or h >= height
   if float(width)/float(height) > aspect_ratio:
     new_w = int(float(height) * aspect_ratio)
     new_h = height

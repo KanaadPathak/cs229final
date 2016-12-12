@@ -43,7 +43,7 @@ def kmeans_threshold(img, visualize=False):
   #green = np.uint8([[[0,255,0]]])
   #green = cv2.cvtColor(green,cv2.COLOR_BGR2HSV)
   #pos_label = clt.predict(green[0,0])
-  neg_label = clt.predict(img[0,:])
+  neg_label = clt.predict(img[5 * w + 5,:])
   labels = clt.predict(img)
 
   for i in range(len(labels)):

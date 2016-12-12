@@ -137,7 +137,7 @@ def process(filename, output_file):
         elif k == ord('s'): # save image
             bar = np.zeros((img.shape[0],5,3),np.uint8)
             #res = np.hstack((img2,bar,img,bar,output))
-            cv2.imwrite(output_file, output)
+            assert cv2.imwrite(output_file, output)
             break
         elif k == ord('n'): # next
             break
