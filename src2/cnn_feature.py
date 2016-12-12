@@ -355,7 +355,7 @@ class CustomMLPClassifier(ClassifierMixin):
 
         self.model = self._create_model(nb_classes, nb_features)
 
-        early_stopping = EarlyStopping(monitor='val_loss', patience=5)
+        early_stopping = EarlyStopping(monitor='val_loss', patience=2)
         hist = self.model.fit(X_train, y_train, batch_size=batch_size, nb_epoch=nb_epoch,
                               validation_data=(X_val, y_val), callbacks=[early_stopping])
         print(hist.history)

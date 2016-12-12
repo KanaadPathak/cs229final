@@ -83,7 +83,7 @@ class GeneratorLoader(object):
 
     def load_generator(self, data_dir):
         classes_ = get_classes(data_dir)
-        class_mode = 'binary' if len(classes_) <= 2 else 'categorical'
+        class_mode = 'categorical'
 
         data_gen = ImageDataGenerator(**self.generator_params)
 
