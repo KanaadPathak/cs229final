@@ -12,14 +12,14 @@ def _convert(img):
     return preprocess_input(x)
 
 
-def stitch(img_path):
+def stitch(img_path, target_size=(128, 128)):
     jpgs = [f for f in os.listdir(img_path) if f.endswith('jpeg') or f.endswith('jpg')]
     first_path = os.path.join(img_path, jpgs[0])
     img = cv2.imread(first_path, cv2.IMREAD_UNCHANGED)
     img_width, img_height, channel = img.shape
 
     name = os.path.dirname(img_path).split('/')[-1]
-    n = int(round(256/img_width))
+    n = int(round(target_size[0]/img_width))
     print(n, name)
 
     margin = 1

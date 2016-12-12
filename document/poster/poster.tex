@@ -83,14 +83,14 @@
    \noindent\pgfmathsetlength{\FSZ}{\linewidth/#2}
    \begin{tikzpicture}[outer sep=0pt,inner sep=0pt,x=\FSZ,y=\FSZ]
    \draw[color=lightblue!50!black] (0,0) node[outer sep=0pt,inner sep=0pt,text width=\linewidth,minimum height=0] (video) {\noindent#3};
-   \path [fill=lightblue!50!black,line width=0pt] 
-     (video.north west) rectangle ([yshift=\FSZ] video.north east) 
+   \path [fill=lightblue!50!black,line width=0pt]
+     (video.north west) rectangle ([yshift=\FSZ] video.north east)
     \foreach \x in {1,2,...,#2} {
       {[rounded corners=0.6] ($(video.north west)+(-0.7,0.8)+(\x,0)$) rectangle +(0.4,-0.6)}
     }
 ;
-   \path [fill=lightblue!50!black,line width=0pt] 
-     ([yshift=-1\FSZ] video.south west) rectangle (video.south east) 
+   \path [fill=lightblue!50!black,line width=0pt]
+     ([yshift=-1\FSZ] video.south west) rectangle (video.south east)
     \foreach \x in {1,2,...,#2} {
       {[rounded corners=0.6] ($(video.south west)+(-0.7,-0.2)+(\x,0)$) rectangle +(0.4,-0.6)}
     }
@@ -139,7 +139,7 @@
   linewidth=2pt
   }
   % Eye Catcher
-  {\includegraphics[height=5em]{SU_New_BlockStree_2color}} 
+  {\includegraphics[height=5em]{SU_New_BlockStree_2color}}
   % Title
   {\bf\textsc{Plant Leaf Recognition}\vspace{0.5em}}
   % Authors
@@ -153,10 +153,10 @@
 %%% Now define the boxes that make up the poster
 %%%---------------------------------------------------------------------------
 %%% Each box has a name and can be placed absolutely or relatively.
-%%% The only inconvenience is that you can only specify a relative position 
-%%% towards an already declared box. So if you have a box attached to the 
-%%% bottom, one to the top and a third one which should be in between, you 
-%%% have to specify the top and bottom boxes before you specify the middle 
+%%% The only inconvenience is that you can only specify a relative position
+%%% towards an already declared box. So if you have a box attached to the
+%%% bottom, one to the top and a third one which should be in between, you
+%%% have to specify the top and bottom boxes before you specify the middle
 %%% box.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %
@@ -171,7 +171,7 @@ Fine-grained leaf recognition with image processing has important application in
 
 %\centering\includegraphics[height=5em]{easilyconfused}
 
-%Traditionally, numerous hand-crafted features have been proposed and recently ConvNets based approaches are applied to this problem. 
+%Traditionally, numerous hand-crafted features have been proposed and recently ConvNets based approaches are applied to this problem.
    %\vspace{0.3em}
  }
 
@@ -192,10 +192,10 @@ Fine-grained leaf recognition with image processing has important application in
   {\centering\includegraphics[width=0.95\linewidth]{overview}}
   Firstly, during preprocessing, we apply Contrast Limited Adaptive Histogram Equalization to reduce lighting condition variation and raw images are resized to fit to the next layer. In traditional approach, we also use K-means to remove background color heuristically. For challenging dataset, we find the convex hull containing the largest N contours and then use GrabCut to segment leaf out of the background clutter. Next we extract features and we explore two options,
 \begin{enumerate}\compresslist
-  \item ConvNets. 
+  \item ConvNets.
  We take transfer learning approach, in order to make use of the power of ConvNets with the constrains of time and computations. Specifically, we take a couple of ConvNets that are pretrained with ImageNet for ILSVRC object image classification task, remove one or two top  layers and then treat the rest of the ConvNet as fixed feature extractor for the our data set.
   \item SIFT + Bag of Features
-Key points are densely sampled and SIFT feature descriptors are retrieved from each raw images. Then 
+Key points are densely sampled and SIFT feature descriptors are retrieved from each raw images. Then
 \end{enumerate}
 At last, we train a classifier, using the feature vectors from the above step and predict labels for our test data.
    %\vspace{0.3em}
@@ -204,16 +204,20 @@ At last, we train a classifier, using the feature vectors from the above step an
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \headerbox{Transfer Learning - Convet}{name=convnet,column=1,below=dataset, above=bottom}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    [Explain architecture and give more insights for ConvNet]
+    [Explain architecture and give more insights for ConvNet]\\
    %\vspace{0.3em}
+   {\includegraphics[width=0.30\linewidth]{augment}}\\
+   {\includegraphics[width=0.15\linewidth]{conv1-1}}\\
+   {\includegraphics[width=0.15\linewidth]{conv1-2}}\\
+   {\includegraphics[width=0.30\linewidth]{res5c_branch2c}}
   }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \headerbox{Results}{name=results,column=2,span=2,row=0}{
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %\begin{tabular}{c@{}c@{}}
-   %\\ [-1.0em] 
-  {\includegraphics[width=0.40\linewidth]{test_accuracy}}  
+   %\\ [-1.0em]
+  {\includegraphics[width=0.40\linewidth]{test_accuracy}}
   {\includegraphics[width=0.55\linewidth]{best_cm_uniform}}
   %\end{tabular}
 }
@@ -251,7 +255,7 @@ At last, we train a classifier, using the feature vectors from the above step an
       \begin{thebibliography}{1}\itemsep=-0.01em
       \setlength{\baselineskip}{0.4em}
       \bibitem{Charles13}
-  Charles Mallah, James Cope, James Orwell. 
+  Charles Mallah, James Cope, James Orwell.
   \newblock Plant Leaf Classification Using Probabilistic Integration of Shape, Texture and Margin Features. Signal Processing, Pattern Recognition and Applications, in press. 2013
       \end{thebibliography}
   }
