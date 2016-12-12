@@ -234,7 +234,7 @@ class CNNFeatureExtractor(object):
         img_name = os.path.splitext(os.path.basename(img_path))[0]
         x = self._convert(img)
 
-        middle_layers = [layer for layer in self.model.layers if isinstance(layer, Convolution2D)]
+        middle_layers = [layer for layer in self.model.layers]
         get_features = K.function([self.model.layers[0].input, K.learning_phase()], [l.output for l in middle_layers])
         # we only have one sample of dim: (height, width, features)
         all_features = [f[0].transpose(2, 0, 1) for f in get_features([x, 1])]
@@ -246,11 +246,11 @@ class CNNFeatureExtractor(object):
                 dir_path = os.path.join(output_dir, img_name, layer_name)
                 os.makedirs(dir_path, exist_ok=True)
                 for j in range(features_of_layer.shape[0]):
-                    feat_normalized = self._normalize(features_of_layer[j])
-                    dims = '_'.join(map(lambda i: str(i), feat_normalized.shape))
-                    output_path = os.path.join(dir_path, 'feature_%s_%s.jpg' % (j, dims))
-                    im_color = cv2.applyColorMap(feat_normalized, cv2.COLORMAP_AUTUMN)
-                    cv2.imwrite(output_path, im_color)
+                    img = self._normalize(features_of_layer[j])
+                    dims = '_'.join(map(lambda i: str(i), img.shape))
+                    output_path = os.path.join(dir_path, '%s_%s_%s.jpg' % (layer_name, j, dims))
+                    img = cv2.applyColorMap(img, cv2.COLORMAP_HOT)
+                    cv2.imwrite(output_path, img)
                     pbar.update(1)
 
     @staticmethod
