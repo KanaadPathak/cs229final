@@ -214,8 +214,6 @@ Fine-grained leaf recognition with image processing has important application in
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     [Explain architecture and give more insights for ConvNet]\\
    %\vspace{0.3em}
-   With the power of ConvNets with the constrains of time and computations.
-   Specifically, we take a couple of ConvNets that are pretrained with ImageNet for ILSVRC object image classification task, remove one or two top  layers and then treat the rest of the ConvNet as fixed feature extractor for the our data set.
    {\includegraphics[width=0.30\linewidth]{augment}}
    {\includegraphics[width=0.15\linewidth]{conv1-1}}
    {\includegraphics[width=0.15\linewidth]{conv1-2}}
@@ -239,11 +237,11 @@ Fine-grained leaf recognition with image processing has important application in
     \item As expected, pre-trained CNN codes yields better accuracy than SIFT+BOF off the shelf. Particularly traditional method is more sensitive to background clutter.
     \item Looking at the confusion matrix, we believe the causes for top misclassification
       \begin{itemize}
-        \item [--] Very fine differences between species which are even hard for humans
+        \item [--] Very fine differences between species which are even hard for human experts
         \item [--] Noisy and plausibly non-representative train data lead to overfitting,
-        \item [--] The ConvNet models are pre-trained with different dataset and task
+        \item [--] Since the ConvNet models are pre-trained for a different task, we speculate these features may not always generalize well for fine-grained classification
       \end{itemize}
-    \item Image augmentation/normalization help can noise (background clutter, color/viewpoint variations).
+    \item Error analysis shows that it helps greatly to reduce noise (background clutter, color/viewpoint variations).
   \end{enumerate}
 }
 
