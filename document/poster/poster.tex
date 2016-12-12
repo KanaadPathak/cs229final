@@ -176,24 +176,13 @@ Fine-grained leaf recognition with image processing has important application in
  }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{DATASET}{name=dataset,column=1,row=0}{
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{enumerate}\compresslist
-  \item Clean images: little or no luminance or color variations), e.g. Swedish leaf dataset.
-  \item Challenging images: considerable variations on lighting conditions, viewpoints, background clutters and occlusions, no bounding box, e.g. ImageCLEF which is crowd sourced. (To effectively evaluate our approaches, we use subsets of this dataset.)
-\end{enumerate}
-   %\vspace{0.3em}
-  }
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{Method}{name=method,column=0,below=problem, above=bottom}{
+  \headerbox{Method}{name=method,column=0, below=problem, above=bottom}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   {\centering\includegraphics[width=0.95\linewidth]{overview}}
   Firstly, during preprocessing, we apply Contrast Limited Adaptive Histogram Equalization to reduce lighting condition variation and raw images are resized to fit to the next layer. In traditional approach, we also use K-means to remove background color heuristically. For challenging dataset, we find the convex hull containing the largest N contours and then use GrabCut to segment leaf out of the background clutter. Next we extract features and we explore two options,
 \begin{enumerate}\compresslist
   \item ConvNets.
- We take transfer learning approach, in order to make use of the power of ConvNets with the constrains of time and computations. Specifically, we take a couple of ConvNets that are pretrained with ImageNet for ILSVRC object image classification task, remove one or two top  layers and then treat the rest of the ConvNet as fixed feature extractor for the our data set.
+ We take transfer learning approach. see right
   \item SIFT + Bag of Features
 Key points are densely sampled and SIFT feature descriptors are retrieved from each raw images. Then
 \end{enumerate}
@@ -201,19 +190,22 @@ At last, we train a classifier, using the feature vectors from the above step an
    %\vspace{0.3em}
   }
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{Transfer Learning - Convet}{name=convnet,column=1,below=dataset, above=bottom}{
+  \headerbox{Transfer Learning - Convnet}{name=convnet,column=1,span=2, row=0}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     [Explain architecture and give more insights for ConvNet]\\
    %\vspace{0.3em}
-   {\includegraphics[width=0.30\linewidth]{augment}}\\
-   {\includegraphics[width=0.15\linewidth]{conv1-1}}\\
-   {\includegraphics[width=0.15\linewidth]{conv1-2}}\\
+   With the power of ConvNets with the constrains of time and computations.
+   Specifically, we take a couple of ConvNets that are pretrained with ImageNet for ILSVRC object image classification task, remove one or two top  layers and then treat the rest of the ConvNet as fixed feature extractor for the our data set.
+   {\includegraphics[width=0.30\linewidth]{augment}}
+   {\includegraphics[width=0.15\linewidth]{conv1-1}}
+   {\includegraphics[width=0.15\linewidth]{conv1-2}}
    {\includegraphics[width=0.30\linewidth]{res5c_branch2c}}
   }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\headerbox{Results}{name=results,column=2,span=2,row=0}{
+\headerbox{Results}{name=results,column=1,span=2,above=bottom, below=convnet}{
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %\begin{tabular}{c@{}c@{}}
    %\\ [-1.0em]
@@ -222,8 +214,20 @@ At last, we train a classifier, using the feature vectors from the above step an
   %\end{tabular}
 }
 
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\headerbox{Discussions}{name=discussion,column=2,span=2,below=results}{
+\headerbox{DATASET}{name=dataset,column=3, row=0}{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{enumerate}\compresslist
+\item Clean images: little or no luminance or color variations), e.g. Swedish leaf dataset.
+\item Challenging images: considerable variations on lighting conditions, viewpoints, background clutters and occlusions, no bounding box, e.g. ImageCLEF which is crowd sourced. (To effectively evaluate our approaches, we use subsets of this dataset.)
+\end{enumerate}
+%\vspace{0.3em}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\headerbox{Discussions}{name=discussion,column=3,span=1, below=dataset}{
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \begin{enumerate}
     \item As expected, pre-trained CNN codes yields better accuracy than SIFT+BOF off the shelf. Particularly traditional method is more sensitive to background clutter.
@@ -238,7 +242,7 @@ At last, we train a classifier, using the feature vectors from the above step an
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\headerbox{Future works}{name=future,column=2,below=discussion, span=2,}{
+\headerbox{Future works}{name=future,column=3, span=1, above=bottom, below=discussion}{
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \begin{enumerate}
     \item Given enough time, we would approach more data (augmented or retrieve elsewhere) and fine-tune the ConvNet to solve the overfitting problem.
@@ -246,19 +250,19 @@ At last, we train a classifier, using the feature vectors from the above step an
   \end{enumerate}
 }
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{References}{name=references,column=2, below=future, span=2, above=bottom}{
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    \smaller
-    \bibliographystyle{ieee}
-    \renewcommand{\section}[2]{\vskip 0.05em}
-      \begin{thebibliography}{1}\itemsep=-0.01em
-      \setlength{\baselineskip}{0.4em}
-      \bibitem{Charles13}
-  Charles Mallah, James Cope, James Orwell.
-  \newblock Plant Leaf Classification Using Probabilistic Integration of Shape, Texture and Margin Features. Signal Processing, Pattern Recognition and Applications, in press. 2013
-      \end{thebibliography}
-  }
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   \headerbox{References}{name=references,column=1, span=1, above=bottom}{
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%     \smaller
+%     \bibliographystyle{ieee}
+%     \renewcommand{\section}[2]{\vskip 0.05em}
+%       \begin{thebibliography}{1}\itemsep=-0.01em
+%       \setlength{\baselineskip}{0.4em}
+%       \bibitem{Charles13}
+%   Charles Mallah, James Cope, James Orwell.
+%   \newblock Plant Leaf Classification Using Probabilistic Integration of Shape, Texture and Margin Features. Signal Processing, Pattern Recognition and Applications, in press. 2013
+%       \end{thebibliography}
+%   }
 
 \end{poster}
 
