@@ -181,19 +181,18 @@ Fine-grained leaf recognition has important application in weeds identification,
   {\centering\includegraphics[width=1.00\linewidth]{overview}}
 \begin{enumerate}\compresslist
   \item Preprocessing
+
     Apply CLAHE to reduce lighting condition variation and resize to fit the next layer. Selectively use K-means to remove background heuristically. For challenging dataset, find the convex hull containing the largest N contours and then use GrabCut to segment leaf out.
   \item Feature extraction
     \begin{itemize}
      \item ConvNets.
 
-      Transfer learning approach. Specifically, we take a couple of ConvNets pretrained on ImageNet for ILSVRC object classification task, remove top layers and use it as generic feature extractor. For ResNet50, this is 2048-D feature vector.
+      Transfer learning approach. Specifically, we take a couple of ConvNets pretrained on ImageNet for ILSVRC object classification task, remove top layers and use it as generic feature extractor. For ResNet50, the feature vector is 2048-D.
      \item Traditional SIFT + BoF
 
-      Key points are densely sampled. Size of the codebook (K) is chosen via CV.
+      Key points are densely sampled. Size of the codebook (K) is fixed at 1000/3000.
     \end{itemize}
   \item Classification
-
-    SVM Linear/RBF/Softmax/NN/etc.
 \end{enumerate}
 {\centering\includegraphics[width=1.00\linewidth]{bof}}
   }
@@ -204,15 +203,15 @@ Fine-grained leaf recognition has important application in weeds identification,
 \headerbox{Experimental Results}{name=results,column=1,span=2,row=0}{
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %\begin{tabular}{c@{}c@{}}
-   %\\ [-1.0em]
-  {\includegraphics[width=0.40\linewidth]{test_accuracy}}
-  {\includegraphics[width=0.55\linewidth]{best_cm_uniform}}
+  $\vcenter{\hbox{\includegraphics[width=0.40\linewidth]{test_accuracy}}}$
+  $\vcenter{\hbox{\includegraphics[width=0.55\linewidth]{best_cm_uniform}}}$
+  %{\includegraphics[width=0.55\linewidth]{best_cm_uniform}}
   %\end{tabular}
 }
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{Transfer Learning - Convnet}{name=convnet,column=1,span=2, below=results, above=bottom}{
+  \headerbox{Transfer Learning - ConvNet}{name=convnet,column=1,span=2, below=results, above=bottom}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     [Explain architecture and give more insights for ConvNet]\\
    %\vspace{0.3em}
@@ -239,15 +238,16 @@ Fine-grained leaf recognition has important application in weeds identification,
 \headerbox{Discussions}{name=discussion,column=3,span=1, below=dataset}{
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \begin{enumerate}
-    \item As expected, CNN codes off the shelf yields similar or better accuracy than SIFT+BoF. Particularly traditional method suffers with noisy datasets.
+    \item As expected, CNN codes off the shelf yields similar or better accuracy, compared to SIFT+BoF. Particularly traditional method suffers with noisy datasets.
     \item Error analysis shows that it helps greatly to reduce noise/variations on data.
     \item Looking at the confusion matrix, we believe the main causes for misclassification
       \begin{itemize}
-        \item [--] Very fine differences between species which are hard even for human experts
-        \item [--] Noisy and plausibly non-representative train data lead to overfitting,
-        \item [--] Since the ConvNet models are pre-trained for a different task, we speculate these features may not always generalize well for fine-grained classification task
+        \item [--] Very fine differences between species, which is hard even for human experts
+        \item [--] Noisy and possibly non-representative train data lead to overfitting,
+        \item [--] Since the ConvNet models are pre-trained for a different task, we speculate these features may not always generalize well.
       \end{itemize}
   \end{enumerate}
+   \vspace{0.3em}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -256,7 +256,7 @@ Fine-grained leaf recognition has important application in weeds identification,
   \begin{enumerate}
     \item Acquire more data and fine-tune ConvNet to solve overfitting problem
     \item Engage advanced techniques for image augmentation
-    \item Explore state-of-art method to detect and locate leaf for Image CLEF natural data set.
+    \item Explore state-of-art method to detect and locate leaf for Image CLEF natural leaf dataset.
   \end{enumerate}
 }
 
