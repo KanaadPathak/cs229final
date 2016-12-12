@@ -210,8 +210,8 @@ However, the subtle differences between species and the sheer number of categori
 \headerbox{Experimental Results}{name=results,column=1,span=2,row=0}{
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %\begin{tabular}{c@{}c@{}}
-  $\vcenter{\hbox{\includegraphics[width=0.40\linewidth]{test_accuracy}}}$
-  $\vcenter{\hbox{\includegraphics[width=0.55\linewidth]{best_cm_uniform}}}$
+  $\vcenter{\hbox{\includegraphics[width=0.43\linewidth]{test_accuracy}}}$
+  $\vcenter{\hbox{\includegraphics[width=0.52\linewidth]{best_cm_uniform}}}$
   %{\includegraphics[width=0.55\linewidth]{best_cm_uniform}}
   %\end{tabular}
 }
@@ -221,17 +221,17 @@ However, the subtle differences between species and the sheer number of categori
   \headerbox{Transfer Learning - ConvNet}{name=convnet,column=1,span=2, below=results, above=bottom}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   There are pretrained weights available in keras framework. After compare with VGG16 and VGG19, we choose to use
-  ResNet50 for transfer learning, since ResNet uses Average Pooling before connect to the Fully connected layers, this
+  ResNet50 for transfer learning, since it uses Average Pooling before connect to the Fully connected layers, this
   makes it having better feature set than VGG architectures. \par
   The process of CNN is for each layer, convolve features with a window slding with stride, which auto extract features
-  like edge and shape through the generated filters. (See the two filters extracted by the first Conv Layer, they
-  looks like representing the leaf itself and the background respectively.)
+  like edge and shape through the generated filters. (See the first row of the filters are extracted by the first Conv
+  Layer, they looks like representing the leaf itself, the outlines and the background respectively. The second row is
+  from the activation layer where the one with highlights of the background has been filtered)
   %\vspace{0.3em}
   {\includegraphics[width=1\linewidth]{transfer_learning}}
   The ResNet is famous for it's deep layers, in our case, 50 layers, with 49 Conv Layers and One Fully connected layers
-  on top. Except for the first Conv Layer, the rest 48 composes 16
-  ``residual'' blocks in total with in 4 stages. The block within each stage has similar architecture of same
-  input shape and output shape. \par
+  on top. Except for the first Conv Layer, the rest 48 composes 16 ``residual'' blocks in 4 stages. The block within
+  each stage has similar architecture of same input \& output shape. \par
 
   The output of the stage 5 give 2048 filters. Every cell in the grid shown above is a 8x8 filter, which will be a
   scalar after average pooling.
