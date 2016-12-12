@@ -1,4 +1,4 @@
-\documentclass[landscape,final,a0paper,fontscale=0.285]{baposter}
+\documentclass[landscape,a0paper,fontscale=0.285]{baposter}
 
 \usepackage{calc}
 \usepackage{graphicx}
@@ -10,7 +10,6 @@
 \usepackage{bm}
 \usepackage{url}
 
-\usepackage{graphicx}
 \usepackage{multicol}
 
 %\usepackage{times}
@@ -80,28 +79,31 @@
 % Draw a video
 \newlength{\FSZ}
 \newcommand{\drawvideo}[3]{% [0 0.25 0.5 0.75 1 1.25 1.5]
-   \noindent\pgfmathsetlength{\FSZ}{\linewidth/#2}
-   \begin{tikzpicture}[outer sep=0pt,inner sep=0pt,x=\FSZ,y=\FSZ]
-   \draw[color=lightblue!50!black] (0,0) node[outer sep=0pt,inner sep=0pt,text width=\linewidth,minimum height=0] (video) {\noindent#3};
-   \path [fill=lightblue!50!black,line width=0pt]
-     (video.north west) rectangle ([yshift=\FSZ] video.north east)
+  \noindent\pgfmathsetlength{\FSZ}{\linewidth/#2}
+  \begin{tikzpicture}[outer sep=0pt,inner sep=0pt,x=\FSZ,y=\FSZ]
+    \draw[color=lightblue!50!black] (0,0) node[outer sep=0pt, inner sep=0pt, text width=\linewidth, minimum height=0]
+      (video) {\noindent#3};
+    \path [fill=lightblue!50!black,line width=0pt]
+      (video.north west) rectangle ([yshift=\FSZ] video.north east)
     \foreach \x in {1,2,...,#2} {
       {[rounded corners=0.6] ($(video.north west)+(-0.7,0.8)+(\x,0)$) rectangle +(0.4,-0.6)}
     }
-;
-   \path [fill=lightblue!50!black,line width=0pt]
-     ([yshift=-1\FSZ] video.south west) rectangle (video.south east)
+  ;
+    \path [fill=lightblue!50!black,line width=0pt]
+      ([yshift=-1\FSZ] video.south west) rectangle (video.south east)
     \foreach \x in {1,2,...,#2} {
       {[rounded corners=0.6] ($(video.south west)+(-0.7,-0.2)+(\x,0)$) rectangle +(0.4,-0.6)}
     }
-;
-   \foreach \x in {1,...,#1} {
-     \draw[color=lightblue!50!black] ([xshift=\x\linewidth/#1] video.north west) -- ([xshift=\x\linewidth/#1] video.south west);
-   }
-   \foreach \x in {0,#1} {
-     \draw[color=lightblue!50!black] ([xshift=\x\linewidth/#1,yshift=1\FSZ] video.north west) -- ([xshift=\x\linewidth/#1,yshift=-1\FSZ] video.south west);
-   }
-   \end{tikzpicture}
+  ;
+    \foreach \x in {1,...,#1} {
+     \draw[color=lightblue!50!black] ([xshift=\x\linewidth/#1] video.north west)
+                                  -- ([xshift=\x\linewidth/#1] video.south west);
+    }
+    \foreach \x in {0,#1} {
+     \draw[color=lightblue!50!black] ([xshift=\x\linewidth/#1,yshift=1\FSZ] video.north west)
+                                  -- ([xshift=\x\linewidth/#1,yshift=-1\FSZ] video.south west);
+    }
+  \end{tikzpicture}
 }
 
 \hyphenation{resolution occlusions}
@@ -162,16 +164,21 @@
     %
     % A coloured circle useful as a bullet with an adjustably strong filling
     \newcommand{\colouredcircle}{%
-      \tikz{\useasboundingbox (-0.2em,-0.32em) rectangle(0.2em,0.32em); \draw[draw=black,fill=lightblue,line width=0.03em] (0,0) circle(0.18em);}}
+      \tikz{\useasboundingbox (-0.2em,-0.32em) rectangle(0.2em,0.32em);
+            \draw[draw=black,fill=lightblue,line width=0.03em] (0,0) circle(0.18em);
+      }
+    }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \headerbox{Problem}{name=problem,column=0,row=0}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Fine-grained leaf recognition has important application in weeds identification, species discovery, plant taxonomy, etc. However, the subtle differences between species and the sheer number of categories makes it hard to solve.
+Fine-grained leaf recognition has important application in weeds identification, species discovery, plant taxonomy, etc.
+However, the subtle differences between species and the sheer number of categories makes it hard to solve.
 
 \centering\includegraphics[width=0.65\linewidth]{easilyconfused}
 
-%Traditionally, numerous hand-crafted features have been proposed and recently ConvNets based approaches are applied to this problem.
+%Traditionally, numerous hand-crafted features have been proposed and recently ConvNets based approaches are applied to
+% this problem.
    \vspace{0.3em}
  }
 
@@ -213,17 +220,30 @@ Fine-grained leaf recognition has important application in weeds identification,
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \headerbox{Transfer Learning - ConvNet}{name=convnet,column=1,span=2, below=results, above=bottom}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    [Explain architecture and give more insights for ConvNet]\\
-   %\vspace{0.3em}
-   {\includegraphics[width=1\linewidth]{transfer_learning}}
-  }
+  There are pretrained weights available in keras framework. After compare with VGG16 and VGG19, we choose to use
+  ResNet50 for transfer learning, since ResNet uses Average Pooling before connect to the Fully connected layers, this
+  makes it having better feature set than VGG architectures.
+  %\vspace{0.3em}
+  {\includegraphics[width=1\linewidth]{transfer_learning}}
+  The process of CNN is for each layer, convolve features with a window slding with stride, which auto extract features
+  like edge and shape through the generated filters. (See the two filters extracted by the first Conv Layer, they
+  looks like representing the leaf itself and the background respectively.) \par
+  The ResNet is famous for it's deep layers, in our case, 50 layers, with 49 Conv Layers and One Fully connected layers
+  on top. Except for the first Conv Layer, the rest 48 composes 16
+  ``residual'' blocks in total with in 4 stages. The block within each stage has similar architecture of same
+  input shape and output shape. \par
+
+  The output of the stage 5 give 2048 filters. Every cell in the grid shown above is a 8x8 filter, which will be a
+  scalar after average pooling.
+}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \headerbox{DATASET}{name=dataset,column=3, row=0}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{enumerate}\compresslist
 \item Swedish/Flavia Leaf Dataset: clean images taken in controlled conditions. Use 20 samples per species for training.
-\item ImageCLEF Plant: crowd sourced and noisy. Considerable variations on lighting conditions, viewpoints, background clutters and occlusions. Choose species with at least 20 training samples.
+\item ImageCLEF Plant: crowd sourced and noisy. Considerable variations on lighting conditions, viewpoints, background
+      clutters and occlusions. Choose species with at least 20 training samples.
   \begin{tabular}{c@{}c@{}c@{}c@{}c@{}}
   {\includegraphics[height=4.0em]{swedish1}} &
   {\includegraphics[height=4.0em]{flavia1}} &
@@ -270,7 +290,8 @@ Fine-grained leaf recognition has important application in weeds identification,
 %       \setlength{\baselineskip}{0.4em}
 %       \bibitem{Charles13}
 %   Charles Mallah, James Cope, James Orwell.
-%   \newblock Plant Leaf Classification Using Probabilistic Integration of Shape, Texture and Margin Features. Signal Processing, Pattern Recognition and Applications, in press. 2013
+%   \newblock Plant Leaf Classification Using Probabilistic Integration of Shape, Texture and Margin Features. Signal
+%           Processing, Pattern Recognition and Applications, in press. 2013
 %       \end{thebibliography}
 %   }
 
