@@ -223,16 +223,16 @@ However, the subtle differences between species and the sheer number of categori
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   The pre-trained weights of VGG16, VGG19 and ResNet50 are available from open source Keras Framework.
   After comparing, we choose ResNet50. Since ResNet50 uses a more aggressive Average Pooling
-  with a pool size of 7x7, which makes the output dimension of the bottleneck layer much smaller than VGG architectures',
-  it outputs a much smaller feature set which helps the prediction accuracy.
+  with a pool size of 7x7, which makes the output dimension of the bottleneck layer much smaller than VGG architectures'.
+  In another word, it outputs a much lower dimension features which helps the prediction accuracy.
   %\vspace{0.3em}
   {\includegraphics[width=1\linewidth]{transfer_learning}}
   The ResNet is famous for it's deep layers, in our case, 50 layers, with 49 Conv layers and one Fully Connected layers
   on top. Except for the first Conv layer, the rest 48 composes 16 ``residual'' blocks in 4 stages. The block within
   each stage has similar architecture of same input \& output shape. \par
 
-  The output of the stage 5 give 2048 features. Every cell in the grid shown above is a 8x8 filter, which will be a
-  scalar after average pooling.
+  The output of the stage 5 give 2048 features. Every cell in the grid shown above is a 8x8 filter visualized with
+  heatmap, which will be a scalar after average pooling.
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
