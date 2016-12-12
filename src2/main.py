@@ -87,7 +87,7 @@ def main(args):
 
     elif args.goal == 'split':
         from preprocess_utils import split_images
-        split_images(args.data_dir, args.train_size, args.test_size)
+        split_images(args.data_dir, int(args.train_size), int(args.test_size))
 
     elif args.goal == 'mlp':
         from preprocess_utils import Configuration
@@ -104,7 +104,7 @@ def main(args):
         print("Training has %d species, test has %d species" % (len(train_classes), len(test_classes)))
 
         clf = CustomMLPClassifier()
-        clf.fit2(X_train, y_train, X_test, y_test, batch_size=conf.batch_size, nb_epoch=conf.epoch)
+        clf.fit(X_train, y_train, X_test, y_test, batch_size=conf.batch_size, nb_epoch=conf.epoch)
         # clf.save(conf.result_file)
 
 
@@ -148,7 +148,7 @@ if __name__ == '__main__':
     # ------------------------------------------------
     cur_parser = subparsers.add_parser('split', description='split images in a folder to train and val')
     cur_parser.add_argument('--train_size', help="num of samples or proportion of samples for train")
-    cur_parser.add_argument('--test_size', help="num of samples or proportion of samples for validation")
+    cur_parser.add_argument('--test_size', help="num of samples or proportion of samples for test")
     cur_parser.add_argument('data_dir', help="the data dir with a images folder")
     # ================================================
 

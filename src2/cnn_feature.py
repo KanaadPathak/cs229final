@@ -32,8 +32,7 @@ from sklearn.externals import joblib
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.gaussian_process import GaussianProcessClassifier
 from sklearn.gaussian_process.kernels import RBF
-from sklearn.model_selection import GridSearchCV
-from sklearn.model_selection import StratifiedKFold
+from sklearn.model_selection import GridSearchCV, StratifiedKFold, StratifiedShuffleSplit
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.neural_network import MLPClassifier
@@ -65,11 +64,11 @@ class ClassifierPool(object):
         self.preprocessors = [
             StandardScaler(),
             # feature scaling
-            PCA(n_components=min(1024, nb_features), whiten=True),
+            # PCA(n_components=min(1024, nb_features), whiten=True),
             # normalize against after pca, per suggested in the paper
-            StandardScaler(),
+            # StandardScaler(),
             # feature selection
-            VarianceThreshold(threshold=(.9 * (1 - .9))),
+            # VarianceThreshold(threshold=(.9 * (1 - .9))),
             # SelectKBest(mutual_info_classif, k=min(nb_features, 1000)),
         ]
 
@@ -337,18 +336,26 @@ class CustomMLPClassifier(ClassifierMixin):
         y_train = np_utils.to_categorical(y_train, nb_classes=nb_classes)
         # y_test = np_utils.to_categorical(y_test, nb_classes=nb_classes)
 
-        early_stopping = EarlyStopping(monitor='val_loss', patience=5)
-        model.fit(X_train, y_train, batch_size=batch_size, nb_epoch=nb_epoch,
-                  validation_split=0.1, callbacks=[early_stopping])
+        early_stopping = EarlyStopping(monitor='val_loss', patience=20)
+        model.fit(X_train, y_train, shuffle=False, batch_size=batch_size, nb_epoch=nb_epoch,
+                  validation_split=0.4, callbacks=[early_stopping])
 
         y_pred = model.predict(X_test, batch_size=batch_size)
         y_pred = np.argmax(y_pred, axis=1)
         test_acc = np.sum(y_test == y_pred, axis=0).item() / X_test.shape[0]
         print('Test accuracy: %.2f%%' % (test_acc * 100))
 
-    def fit(self, X_train, y_train, X_val, y_val, batch_size=32, nb_epoch=10):
-        nb_classes = len(np.unique(y_train))
-        nb_features = X_train.shape[1]
+    def fit(self, X, y, X_test, y_test, batch_size=32, nb_epoch=10):
+        nb_classes = len(np.unique(y))
+        nb_features = X.shape[1]
+
+        sss = StratifiedShuffleSplit(2, int(X.shape[0] / 3))\
+
+        print(X.shape[0])
+        train_index, test_index = next(sss.split(X, y))
+        print("TRAIN:", len(train_index), "TEST:", len(test_index))
+        X_train, X_val = X[train_index], X[test_index]
+        y_train, y_val = y[train_index], y[test_index]
 
         y_train = np_utils.to_categorical(y_train, nb_classes=nb_classes)
         y_val = np_utils.to_categorical(y_val, nb_classes=nb_classes)
@@ -358,6 +365,10 @@ class CustomMLPClassifier(ClassifierMixin):
         early_stopping = EarlyStopping(monitor='val_loss', patience=2)
         hist = self.model.fit(X_train, y_train, batch_size=batch_size, nb_epoch=nb_epoch,
                               validation_data=(X_val, y_val), callbacks=[early_stopping])
+        y_pred = self.model.predict(X_test, batch_size=batch_size)
+        y_pred = np.argmax(y_pred, axis=1)
+        test_acc = np.sum(y_test == y_pred, axis=0).item() / X_test.shape[0]
+        print('Test accuracy: %.2f%%' % (test_acc * 100))
         print(hist.history)
 
     def load(self, model_file):

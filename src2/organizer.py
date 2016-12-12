@@ -135,10 +135,13 @@ class ImageClefLoader(object):
         for d in os.listdir(train_dir):
             sub_dir = os.path.join(train_dir, d)
             if os.path.isdir(sub_dir):
-                if sum(f.endswith('.jpg') for f in os.listdir(sub_dir)) < 30:
+                if sum(f.endswith('.jpg') for f in os.listdir(sub_dir)) < 20:
                     print('removing species: ', d)
-                    shutil.rmtree(os.path.join(train_dir, d), ignore_errors=True)
+                    shutil.rmtree(sub_dir, ignore_errors=True)
                     shutil.rmtree(os.path.join(test_dir, d), ignore_errors=True)
+                if not os.path.exists(os.path.join(test_dir, d)):
+                    print('removing species: ', d)
+                    shutil.rmtree(sub_dir, ignore_errors=True)
 
 
 if __name__ == '__main__':
