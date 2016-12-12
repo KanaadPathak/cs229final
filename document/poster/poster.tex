@@ -222,12 +222,12 @@ However, the subtle differences between species and the sheer number of categori
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   There are pretrained weights available in keras framework. After compare with VGG16 and VGG19, we choose to use
   ResNet50 for transfer learning, since ResNet uses Average Pooling before connect to the Fully connected layers, this
-  makes it having better feature set than VGG architectures.
-  %\vspace{0.3em}
-  {\includegraphics[width=1\linewidth]{transfer_learning}}
+  makes it having better feature set than VGG architectures. \par
   The process of CNN is for each layer, convolve features with a window slding with stride, which auto extract features
   like edge and shape through the generated filters. (See the two filters extracted by the first Conv Layer, they
-  looks like representing the leaf itself and the background respectively.) \par
+  looks like representing the leaf itself and the background respectively.)
+  %\vspace{0.3em}
+  {\includegraphics[width=1\linewidth]{transfer_learning}}
   The ResNet is famous for it's deep layers, in our case, 50 layers, with 49 Conv Layers and One Fully connected layers
   on top. Except for the first Conv Layer, the rest 48 composes 16
   ``residual'' blocks in total with in 4 stages. The block within each stage has similar architecture of same
