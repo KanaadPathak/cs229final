@@ -171,7 +171,7 @@ Fine-grained leaf recognition has important application in weeds identification,
 
 \centering\includegraphics[width=0.65\linewidth]{easilyconfused}
 
-%Traditionally, numerous hand-crafted features have been proposed and recently ConvNets based approaches are applied to this problem. 
+%Traditionally, numerous hand-crafted features have been proposed and recently ConvNets based approaches are applied to this problem.
    \vspace{0.3em}
  }
 
@@ -180,11 +180,11 @@ Fine-grained leaf recognition has important application in weeds identification,
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   {\centering\includegraphics[width=1.00\linewidth]{overview}}
 \begin{enumerate}\compresslist
-  \item Preprocessing 
-    Apply CLAHE to reduce lighting condition variation and resize to fit the next layer. Selectively use K-means to remove background heuristically. For challenging dataset, find the convex hull containing the largest N contours and then use GrabCut to segment leaf out. 
+  \item Preprocessing
+    Apply CLAHE to reduce lighting condition variation and resize to fit the next layer. Selectively use K-means to remove background heuristically. For challenging dataset, find the convex hull containing the largest N contours and then use GrabCut to segment leaf out.
   \item Feature extraction
     \begin{itemize}
-     \item ConvNets. 
+     \item ConvNets.
 
       Transfer learning approach. Specifically, we take a couple of ConvNets pretrained on ImageNet for ILSVRC object classification task, remove top layers and use it as generic feature extractor. For ResNet50, this is 2048-D feature vector.
      \item Traditional SIFT + BoF
@@ -216,10 +216,7 @@ Fine-grained leaf recognition has important application in weeds identification,
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     [Explain architecture and give more insights for ConvNet]\\
    %\vspace{0.3em}
-   {\includegraphics[width=0.30\linewidth]{augment}}
-   {\includegraphics[width=0.15\linewidth]{conv1-1}}
-   {\includegraphics[width=0.15\linewidth]{conv1-2}}
-   {\includegraphics[width=0.30\linewidth]{res5c_branch2c}}
+   {\includegraphics[width=1\linewidth]{transfer_learning}}
   }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
