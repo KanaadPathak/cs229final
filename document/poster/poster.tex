@@ -211,8 +211,11 @@ At last, we train a classifier, using the feature vectors from the above step an
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \headerbox{Results}{name=results,column=2,span=2,row=0}{
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  {\centering\includegraphics[height=20em]{test_accuracy}}
-  {\centering\includegraphics[width=0.45\linewidth]{best_cm_uniform}}
+  %\begin{tabular}{c@{}c@{}}
+   %\\ [-1.0em] 
+  {\includegraphics[width=0.40\linewidth]{test_accuracy}}  
+  {\includegraphics[width=0.55\linewidth]{best_cm_uniform}}
+  %\end{tabular}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -231,7 +234,7 @@ At last, we train a classifier, using the feature vectors from the above step an
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\headerbox{Future works}{name=future,column=2,below=discussion, above=bottom}{
+\headerbox{Future works}{name=future,column=2,below=discussion, span=2,}{
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \begin{enumerate}
     \item Given enough time, we would approach more data (augmented or retrieve elsewhere) and fine-tune the ConvNet to solve the overfitting problem.
@@ -240,7 +243,7 @@ At last, we train a classifier, using the feature vectors from the above step an
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{References}{name=references,column=3, below=discussion, above=bottom}{
+  \headerbox{References}{name=references,column=2, below=future, span=2, above=bottom}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \smaller
     \bibliographystyle{ieee}
@@ -251,7 +254,6 @@ At last, we train a classifier, using the feature vectors from the above step an
   Charles Mallah, James Cope, James Orwell. 
   \newblock Plant Leaf Classification Using Probabilistic Integration of Shape, Texture and Margin Features. Signal Processing, Pattern Recognition and Applications, in press. 2013
       \end{thebibliography}
-   \vspace{0.3em}
   }
 
 \end{poster}
