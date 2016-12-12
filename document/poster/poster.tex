@@ -194,7 +194,7 @@ However, the subtle differences between species and the sheer number of categori
     \begin{itemize}
      \item ConvNets.
 
-      Transfer learning approach. Specifically, we take a couple of ConvNets pretrained on ImageNet for ILSVRC object classification task, remove top layers and use it as generic feature extractor. For ResNet50, the feature vector is 2048-D.
+      Transfer learning approach. Specifically, we take a couple of ConvNets pretrained on ImageNet for ILSVRC object classification task, remove top layers and use it as generic feature extractor.
      \item Traditional SIFT + BoF
 
       Key points are densely sampled. Size of the codebook (K) is fixed at 1000/3000.
@@ -211,8 +211,8 @@ However, the subtle differences between species and the sheer number of categori
 \headerbox{Experimental Results}{name=results,column=1,span=2,row=0}{
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %\begin{tabular}{c@{}c@{}}
-  $\vcenter{\hbox{\includegraphics[width=0.43\linewidth]{test_accuracy}}}$
-  $\vcenter{\hbox{\includegraphics[width=0.52\linewidth]{best_cm_uniform}}}$
+  $\vcenter{\hbox{\includegraphics[width=0.45\linewidth]{test_accuracy}}}$
+  $\vcenter{\hbox{\includegraphics[width=0.50\linewidth]{best_cm_uniform}}}$
   %{\includegraphics[width=0.55\linewidth]{best_cm_uniform}}
   %\end{tabular}
 }
@@ -221,15 +221,17 @@ However, the subtle differences between species and the sheer number of categori
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \headerbox{Transfer Learning - ConvNet}{name=convnet,column=1,span=2, below=results, above=bottom}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  After comparing with VGG16 and VGG19, we choose ResNet50, since it uses Average Pooling before connect to the fully connected layers, which gives smaller feature set than VGG architectures.  We then download the pretrained weights from open source Keras framework.  \par
-  See the first row of the filters extracted by the first Conv layer, they seem to represent the leaves, the outlines and the background respectively. The second row is from the activation layer where the one with highlights of the background has been filtered.
+  The pre-trained weights of VGG16, VGG19 and ResNet50 are available from open source Keras Framework.
+  After comparing, we choose ResNet50. Since ResNet50 uses a more aggressive Average Pooling
+  with a pool size of 7x7, which makes the output dimension of the bottleneck layer much smaller than VGG architectures',
+  it outputs a much smaller feature set which helps the prediction accuracy.
   %\vspace{0.3em}
   {\includegraphics[width=1\linewidth]{transfer_learning}}
-  The ResNet is famous for it's deep layers, in our case, 50 layers, with 49 Conv layers and one fully connected layers
+  The ResNet is famous for it's deep layers, in our case, 50 layers, with 49 Conv layers and one Fully Connected layers
   on top. Except for the first Conv layer, the rest 48 composes 16 ``residual'' blocks in 4 stages. The block within
   each stage has similar architecture of same input \& output shape. \par
 
-  The output of the stage 5 give 2048 filters. Every cell in the grid shown above is a 8x8 filter, which will be a
+  The output of the stage 5 give 2048 features. Every cell in the grid shown above is a 8x8 filter, which will be a
   scalar after average pooling.
 }
 
