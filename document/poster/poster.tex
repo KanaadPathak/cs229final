@@ -21,7 +21,7 @@
 \newcommand{\captionfont}{\footnotesize}
 
 \graphicspath{{../images/}}
-\DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+\DeclareGraphicsExtensions{.pdf,.jpg,.png}
 
 
 \usetikzlibrary{calc}
@@ -169,14 +169,14 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Fine-grained leaf recognition with image processing has important application in weeds identification, species discovery, plant taxonomy, and so on. The subtle differences between species and the sheer large number of categories makes it hard to solve.
 
-\includegraphics[height=5em]{easilyconfused}
+%\centering\includegraphics[height=5em]{easilyconfused}
 
 %Traditionally, numerous hand-crafted features have been proposed and recently ConvNets based approaches are applied to this problem. 
    %\vspace{0.3em}
  }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \headerbox{DATASET}{name=dataset,column=1,row=0,bottomaligned=problem}{
+  \headerbox{DATASET}{name=dataset,column=1,row=0}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{enumerate}\compresslist
   \item Clean images: little or no luminance or color variations), e.g. Swedish leaf dataset.
@@ -190,15 +190,14 @@ Fine-grained leaf recognition with image processing has important application in
   \headerbox{Method}{name=method,column=0,below=problem, above=bottom}{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   {\centering\includegraphics[width=0.95\linewidth]{overview}}
-  Firstly, during preprocessing, we apply Contrast Limited Adaptive Histogram Equalization to reduce lighting condition variation and raw images are resized to fit to the next layer. In traditional approach, we also use K-means to remove background color heuristically. For challenging dataset, we find the convex hull containing the largest N contours and then use GrabCut to segment leaf out of the background clutter.
-  Next we extract features and we explore two options,
+  Firstly, during preprocessing, we apply Contrast Limited Adaptive Histogram Equalization to reduce lighting condition variation and raw images are resized to fit to the next layer. In traditional approach, we also use K-means to remove background color heuristically. For challenging dataset, we find the convex hull containing the largest N contours and then use GrabCut to segment leaf out of the background clutter. Next we extract features and we explore two options,
 \begin{enumerate}\compresslist
   \item ConvNets. 
  We take transfer learning approach, in order to make use of the power of ConvNets with the constrains of time and computations. Specifically, we take a couple of ConvNets that are pretrained with ImageNet for ILSVRC object image classification task, remove one or two top  layers and then treat the rest of the ConvNet as fixed feature extractor for the our data set.
   \item SIFT + Bag of Features
 Key points are densely sampled and SIFT feature descriptors are retrieved from each raw images. Then 
-At last, we train a classifier, using the feature vectors from the above step and predict labels for our test data.
 \end{enumerate}
+At last, we train a classifier, using the feature vectors from the above step and predict labels for our test data.
    %\vspace{0.3em}
   }
 
@@ -212,7 +211,8 @@ At last, we train a classifier, using the feature vectors from the above step an
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \headerbox{Results}{name=results,column=2,span=2,row=0}{
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  {\centering\includegraphics[width=0.95\linewidth]{test_accuracy}}
+  {\centering\includegraphics[height=20em]{test_accuracy}}
+  {\centering\includegraphics[width=0.45\linewidth]{best_cm_uniform}}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
