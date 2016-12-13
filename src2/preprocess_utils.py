@@ -37,7 +37,7 @@ class Configuration:
 
         self.base_dir = _conf.get('base_dir', 'history')
         self.architecture = _conf.get('architecture', 'vgg16')
-        self.target_size = (_conf.get('img_height', 256), _conf.get('img_width', 256))
+        self.target_size = (_conf.get('img_height', 224), _conf.get('img_width', 224))
         self.batch_size = _conf.get('batch_size', 8)
         self.epoch = _conf.get('epoch', 50)
         self.classifier_name = _conf.get('classifier', 'SVC')
@@ -72,7 +72,7 @@ class Configuration:
 
 
 class GeneratorLoader(object):
-    def __init__(self, target_size=(256, 256), batch_size=32, factor=1, generator_params=None):
+    def __init__(self, target_size=(224, 224), batch_size=32, factor=1, generator_params=None):
         self.batch_size = batch_size
         self.target_size = target_size
         self.factor = factor

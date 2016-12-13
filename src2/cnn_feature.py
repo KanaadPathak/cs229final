@@ -7,8 +7,9 @@ import numpy as np
 import tables
 from keras import backend as K
 from keras.applications.imagenet_utils import preprocess_input
-from keras.applications.resnet50 import ResNet50, identity_block, conv_block, TH_WEIGHTS_PATH_NO_TOP,\
-    TF_WEIGHTS_PATH_NO_TOP
+# from keras.applications.resnet50 import ResNet50, identity_block, conv_block, TH_WEIGHTS_PATH_NO_TOP,\
+#     TF_WEIGHTS_PATH_NO_TOP
+from resnet50 import ResNet50, identity_block
 from keras.applications.vgg16 import VGG16
 from keras.applications.vgg19 import VGG19
 from keras.callbacks import EarlyStopping
@@ -229,10 +230,12 @@ class CNNFeatureExtractor(object):
         x = np.expand_dims(x, axis=0)
         return preprocess_input(x)
 
-    def visualize_intermediate(self, img_path, output_dir, target_size=(256, 256)):
+    def visualize_intermediate(self, img_path, output_dir, target_size=(224, 224)):
+        print(target_size)
         img = image.load_img(img_path, target_size=target_size)
         img_name = os.path.splitext(os.path.basename(img_path))[0]
         x = self._convert(img)
+        print("my shape is: ", x.shape)
 
         middle_layers = [layer for layer in self.model.layers]
         get_features = K.function([self.model.layers[0].input, K.learning_phase()], [l.output for l in middle_layers])
@@ -254,7 +257,7 @@ class CNNFeatureExtractor(object):
                     pbar.update(1)
 
     @staticmethod
-    def augment(img_path, output_dir, generator_params, batch_size=32, target_size=(256, 256)):
+    def augment(img_path, output_dir, generator_params, batch_size=32, target_size=(224, 224)):
         img = image.load_img(img_path, target_size=target_size)
         img_name = os.path.splitext(os.path.basename(img_path))[0]
         x = image.img_to_array(img)

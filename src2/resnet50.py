@@ -161,6 +161,7 @@ def ResNet50(include_top=True, weights='imagenet',
     else:
         bn_axis = 1
 
+    print(img_input)
     x = ZeroPadding2D((3, 3))(img_input)
     x = Convolution2D(64, 7, 7, subsample=(2, 2), name='conv1')(x)
     x = BatchNormalization(axis=bn_axis, name='bn_conv1')(x)
