@@ -39,7 +39,7 @@ class GeneratorLoader(object):
         self.batch_size = batch_size
         self.target_size = target_size
         if generator_params is None:
-            self.generator_params = {}
+            self.generator_params = dict(samplewise_center=True, samplewise_std_normalization=True)
         else:
             self.generator_params = generator_params
 

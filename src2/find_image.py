@@ -1,8 +1,6 @@
-'''Visualization of the filters of VGG16, via gradient ascent in input space.
-
-This script can run on CPU in a few minutes (with the TensorFlow backend).
-
-Results example: http://i.imgur.com/4nj4KjN.jpg
+'''Find input images that maximize the CNN codes
+based on Kera's example conv_filter_visualization
+and adopted new regularization from https://arxiv.org/pdf/1506.06579v1.pdf
 '''
 from __future__ import print_function
 from scipy.misc import imsave
@@ -54,9 +52,9 @@ def normalize(x):
     # utility function to normalize a tensor by its L2 norm
     return x / (K.sqrt(K.mean(K.square(x))) + 1e-5)
 
-
+#misnomer: this is the input images that maximize
 kept_filters = []
-for filter_index in range(0, 200):
+for filter_index in range(0, 20):
     # we only scan through the first 200 filters,
     # but there are actually 512 of them
     print('Processing filter %d' % filter_index)
@@ -70,7 +68,7 @@ for filter_index in range(0, 200):
     else:
         loss = K.mean(layer_output[:, :, :, filter_index])
 
-    # we compute the gradient of the input picture wrt this loss
+    # we compute the gradient of the loss wrt to input picture (variables)
     grads = K.gradients(loss, input_img)[0]
 
     # normalization trick: we normalize the gradient
@@ -82,6 +80,7 @@ for filter_index in range(0, 200):
     # step size for gradient ascent
     step = 1.
 
+    #initialize with random
     # we start from a gray image with some random noise
     if K.image_dim_ordering() == 'th':
         input_img_data = np.random.random((1, 3, img_width, img_height))
@@ -89,10 +88,18 @@ for filter_index in range(0, 200):
         input_img_data = np.random.random((1, img_width, img_height, 3))
     input_img_data = (input_img_data - 0.5) * 20 + 128
 
+    #for regularization
+    decay = 0.01
+    blur_radius = 0.3
+    lower_percentile = 0.1
+    norm_percentile = 0.1
     # we run gradient ascent for 20 steps
     for i in range(20):
+        #get gradient and object function
         loss_value, grads_value = iterate([input_img_data])
-        input_img_data += grads_value * step
+        #update and apply regularization
+        #L2 norm: x <= x + nebla * learning_rate - decay * x
+        input_img_data = input_img_data *(1-decay) + grads_value * step
 
         print('Current loss value:', loss_value)
         if loss_value <= 0.:
@@ -107,7 +114,7 @@ for filter_index in range(0, 200):
     print('Filter %d processed in %ds' % (filter_index, end_time - start_time))
 
 # we will stich the best 64 filters on a 8 x 8 grid.
-n = 8
+n = 4
 
 # the filters that have the highest loss are assumed to be better-looking.
 # we will only keep the top 64 filters.
