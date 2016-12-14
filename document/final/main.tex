@@ -497,7 +497,7 @@ We break down the problem into two pieces. Firstly, we want to locate the leaf i
 
   Firstly, during preprocessing, we apply Contrast Limited Adaptive Histogram Equalization to reduce lighting condition variation and raw images are resized to fit to the next layer. In traditional approach, we also use K-means to remove background color heuristically. For challenging dataset, we find the convex hull containing the largest N contours and then use GrabCut to segment leaf out of the background clutter.
   Next we extract features and we explore two options,
-\begin{enumerate} \compresslist
+\begin{enumerate}
   \item ConvNets.
     We take transfer learning approach, in order to make use of the power of ConvNets with the constrains of time and computations. Specifically, we take a couple of ConvNets that are pretrained with ImageNet for ILSVRC object image classification task, remove one or two top  layers and then treat the rest of the ConvNet as fixed feature extractor for the our data set.
 
