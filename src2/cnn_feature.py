@@ -43,7 +43,7 @@ from sklearn.tree import DecisionTreeClassifier
 from tqdm import tqdm
 
 classifiers = {
-    'SVC': (SVC(), {'kernel': ["linear"], 'C': [0.01, 0.1, 1.0]}),
+    'SVC': (SVC(), {'kernel': ["linear"], 'C': [0.01]}),
     'KNN': (KNeighborsClassifier(), {'n_neighbors': [5, 10]}),
     'GaussianProcess': (GaussianProcessClassifier(), {'kernel': 1.0 * RBF(1.0), 'warm_start': True}),
     'DecisionTree': (DecisionTreeClassifier(), {}),

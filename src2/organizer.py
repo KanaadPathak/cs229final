@@ -139,9 +139,9 @@ class ImageClefLoader(object):
                     print('removing species: ', d)
                     shutil.rmtree(sub_dir, ignore_errors=True)
                     shutil.rmtree(os.path.join(test_dir, d), ignore_errors=True)
-                if not os.path.exists(os.path.join(test_dir, d)):
-                    print('removing species: ', d)
-                    shutil.rmtree(sub_dir, ignore_errors=True)
+                # if not os.path.exists(os.path.join(test_dir, d)):
+                #     print('removing species: ', d)
+                #     shutil.rmtree(sub_dir, ignore_errors=True)
 
 
 if __name__ == '__main__':
