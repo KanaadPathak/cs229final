@@ -45,7 +45,7 @@ class CNNClassifier(object):
         return model
 
     def fit_generator(self, train_generator, val_generator, num_train, num_val, num_epoch=50):
-        callbacks = [EarlyStopping(monitor='val_loss', patience=5)]
+        callbacks = [EarlyStopping(monitor='val_loss', patience=10)]
         self.model.fit_generator(
             train_generator,
             samples_per_epoch=num_train,
@@ -64,7 +64,7 @@ def run_cnn_classify(conf):
     val_gen = conf.test_gen
 
     clf = CNNClassifier(num_classes=train_gen.nb_class, target_size=train_gen.target_size)
-    clf.fit_generator(train_gen, val_gen, num_train=train_gen.nb_sample, num_val=val_gen.nb_sample,
+    clf.fit_generator(train_gen, val_gen, num_train=train_gen.nb_sample * conf.factor, num_val=val_gen.nb_sample,
                       num_epoch=conf.epoch)
 
     if conf.weight_file is not None:

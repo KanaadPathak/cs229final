@@ -120,21 +120,12 @@ if __name__ == '__main__':
 
     # ================================================
     subparsers = parser.add_subparsers(dest='goal')
-    # ------------------------------------------------
-    # extract
     cur_parser = subparsers.add_parser("extract")
-    # ------------------------------------------------
-    # custom mlp
     cur_parser = subparsers.add_parser('mlp', description='train top layer with pre-trained weights')
-    # ------------------------------------------------
-    # classify
-    cur_parser = subparsers.add_parser("classify")
-    # ------------------------------------------------
-    # classify
-    cur_parser = subparsers.add_parser("fine_tune")
-    # ------------------------------------------------
-    # extract_any
-    cur_parser = subparsers.add_parser("extract_any")
+    cur_parser = subparsers.add_parser("classify", description='SVM training on CNN codes')
+    cnn_parser = subparsers.add_parser('cnn_classify', description='CNN classifier trained from scratch')
+    cur_parser = subparsers.add_parser('fine_tune', description='fine tune last block of resnet50')
+    cur_parser = subparsers.add_parser('extract_any', description='extract CNN codes before last block')
     # ------------------------------------------------
     # augment
     cur_parser = subparsers.add_parser("augment")
@@ -145,8 +136,6 @@ if __name__ == '__main__':
     cur_parser = subparsers.add_parser("viz")
     cur_parser.add_argument('-o', '--output_dir', required=True, help="the feature file to save to")
     cur_parser.add_argument('image_file', help="the path to the image")
-    # ------------------------------------------------
-    cnn_parser = subparsers.add_parser('cnn_classify')
     # ------------------------------------------------
     cur_parser = subparsers.add_parser('split', description='split images in a folder to train and val')
     cur_parser.add_argument('--train_size', help="num of samples or proportion of samples for train")
