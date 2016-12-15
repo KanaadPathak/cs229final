@@ -612,6 +612,9 @@ We use traditional exhaustive search method to scan through all window, scales.
     \item More species with less samples per classes.
   \end{itemize}
   [More noise need more variations and more aggressive filtering thus deeper network is required]
+
+  Research shows number of samples need to be big enough to avoid excessive overfitting. See B section of the supplementary material of \cite{Jason2014}. Note that the research is proven for AlexNet. While we don't have enough data to seek for the threshold which suffices to avoid overfitting for ResNet50, we assume 20 per samples is still not enough.
+
   [explain why species with less sample will reduce the performance. Explain why sample per classes makes it harder to predict Learning Theory] [TODO]
 
   [TODO: learning curve]
