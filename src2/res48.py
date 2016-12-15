@@ -108,8 +108,7 @@ def conv_block(input_tensor, kernel_size, filters, stage, block, strides=(2, 2))
     x = Activation('relu')(x)
     return x
 
-def ResNet48(include_top=False, weights='imagenet',
-             input_tensor=None):
+def ResNet48(include_top=False, weights='imagenet', input_tensor=None):
     '''Instantiate the ResNet50 architecture,
     optionally loading weights pre-trained
     on ImageNet. Note that when using TensorFlow,
@@ -183,11 +182,11 @@ def ResNet48(include_top=False, weights='imagenet',
     x = identity_block(x, 3, [256, 256, 1024], stage=4, block='e')
     x = identity_block(x, 3, [256, 256, 1024], stage=4, block='f')
 
-    #x = conv_block(x, 3, [512, 512, 2048], stage=5, block='a')
-    #x = identity_block(x, 3, [512, 512, 2048], stage=5, block='b')
+    x = conv_block(x, 3, [512, 512, 2048], stage=5, block='a')
+    x = identity_block(x, 3, [512, 512, 2048], stage=5, block='b')
     #x = identity_block(x, 3, [512, 512, 2048], stage=5, block='c')
 
-    #x = AveragePooling2D((7, 7), name='avg_pool')(x)
+    x = AveragePooling2D((7, 7), name='avg_pool')(x)
 
     if include_top:
         x = Flatten()(x)
@@ -242,13 +241,16 @@ def ResNet48(include_top=False, weights='imagenet',
 if __name__ == '__main__':
     model = ResNet48(include_top=False, weights='imagenet')
 
-    img_path = '/data/clef2013.uniform_leaf/uniform_t20_5_train/Acer_campestre/10230.jpg'
-    img = image.load_img(img_path, target_size=(224, 224))
+    import sys
+    assert len(sys.argv) == 2, "input_file"
+    img_path = sys.argv[1]
+    img = image.load_img(img_path, target_size=(256, 256))
     x = image.img_to_array(img)
     x = np.expand_dims(x, axis=0)
     x = preprocess_input(x)
     print('Input image shape:', x.shape)
 
     preds = model.predict(x)
-    print(preds)
+    print('Feature shape:', preds.shape)
+    print('Feature size:', preds.size)
 

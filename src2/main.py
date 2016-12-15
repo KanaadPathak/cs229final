@@ -67,7 +67,7 @@ if __name__ == '__main__':
     extract_parser.add_argument('--batch_size', type=int, default=8, help="batch size")
     extract_parser.add_argument('--aug', action='store_true', default=False, help="turn on image augmentation")
     extract_parser.add_argument('data_dir', help="the path to the config")
-    extract_parser.add_argument('-a', '--architecture', default='vgg16', choices=['vgg16', 'vgg19', 'resnet50'],
+    extract_parser.add_argument('-a', '--architecture', default='vgg16', choices=['vgg16', 'vgg19', 'resnet50', 'resnet48'],
                                 help="the CNN architecture to use")
     # ------------------------------------------------
     # viz

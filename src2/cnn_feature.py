@@ -196,10 +196,16 @@ class CNNFeatureExtractor(object):
             return VGG19(weights='imagenet', include_top=False)
         elif architecture == 'resnet50':
             return ResNet50(weights='imagenet', include_top=False)
+        elif architecture == 'resnet48':
+            import res48
+            return res48.ResNet48(weights='imagenet', include_top=False)
+        else:
+            raise 'unknown architecture'
 
     def extract_feature(self, data_dir, feature_file, architecture='vgg16', target_size=(256, 256), batch_size=8, aug=False):
         model = self.select_architecture(architecture)
 
+        assert model is not None
         if aug:
             data_gen_args = dict(
                 rotation_range=10,

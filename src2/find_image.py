@@ -38,13 +38,14 @@ def normalize(x):
 
 def process(path):
     # dimensions of the generated pictures for each filter.
-    img_width = 128
-    img_height = 128
+    img_width = 224
+    img_height = 224
     stage = 0 # 0 for test
+    max_iteration = 100
 
 
     K.set_learning_phase(stage)
-    model = resnet50.ResNet50(include_top=False)
+    model = resnet50.ResNet50(include_top=True)
     model.summary()
 
     K.set_learning_phase(stage)
@@ -55,20 +56,20 @@ def process(path):
     # get the symbolic outputs of each "key" layer (we gave them unique names).
     layer_dict = dict([(layer.name, layer) for layer in model.layers[1:]])
     # the name of the layer we want to visualize
-    layer_name = 'activation_49'
+    layer_name = 'fc1000'
     #misnomer: this is the input images that maximize
     kept_filters = []
     for filter_index in range(0, 20):
         # we only scan through the first 200 filters,
         # but there are actually 512 of them
-        print('Processing filter %d' % filter_index)
+        print('Processing filter %d in layer:%s' % (filter_index, layer_name) )
         start_time = time.time()
 
         # we build a loss function that maximizes the activation
         # of the nth filter of the layer considered
         layer_output = layer_dict[layer_name].output
-        if K.image_dim_ordering() == 'th':
-            loss = K.mean(layer_output[:, filter_index, :, :])
+        if layer_name == 'fc1000':
+            loss = K.mean(layer_output[:, filter_index])
         else:
             loss = K.mean(layer_output[:, :, :, filter_index])
 
@@ -87,10 +88,7 @@ def process(path):
 
         #initialize with random
         # we start from a gray image with some random noise
-        if K.image_dim_ordering() == 'th':
-            xx = np.random.random((1, 3, img_width, img_height))
-        else:
-            xx = np.random.random((1, img_width, img_height, 3))
+        xx = np.random.random((1, img_width, img_height, 3))
         xx = (xx - 0.5) * 20 + 128
 
         #for regularization
@@ -99,27 +97,28 @@ def process(path):
         lower_percentile = 0.1
         norm_percentile = 0.1
         # we run gradient ascent for 20 steps
-        for i in range(20):
+        for i in range(max_iteration):
             #get gradient and object function
             loss_value, grads_value = iterate([xx])
-            #update and apply regularization
-            #L2 norm: x <= x + nebla * learning_rate - decay * x
-            xx = xx *(1-decay) + grads_value * step
-            #Gaussian blur
-            from scipy.ndimage import gaussian_filter
-            for channel in range(3):
-                cimg = gaussian_filter(xx[0,channel], blur_radius)
-                xx[0,channel] = cimg
-
             print('Current loss value:', loss_value)
             if loss_value <= 0.:
                 # some filters get stuck to 0, we can skip them
                 break
+            #update and apply regularization
+            #L2 norm: x <= x + nebla * learning_rate - decay * x
+            xx = xx *(1-decay) + grads_value * step
+            #Gaussian blur
+            #from scipy.ndimage import gaussian_filter
+            #for channel in range(3):
+            #    cimg = gaussian_filter(xx[0,channel], blur_radius)
+            #    xx[0,channel] = cimg
+
 
         # decode the resulting input image
         if loss_value > 0:
             img = deprocess_image(xx[0])
             kept_filters.append((img, loss_value))
+            imsave(os.path.join(path, '%d.jpg'%(filter_index)), img)
         end_time = time.time()
         print('Filter %d processed in %ds' % (filter_index, end_time - start_time))
 
@@ -144,10 +143,6 @@ def process(path):
     #        img, loss = kept_filters[i * n + j]
     #        stitched_filters[(img_width + margin) * i: (img_width + margin) * i + img_width,
     #                         (img_height + margin) * j: (img_height + margin) * j + img_height, :] = img
-    for i in range(len(kept_filters)):
-        # save the result to disk
-        img, loss = kept_filters[i]
-        imsave(os.path.join(path, '%d.jpg'%(i)), img)
 
 if __name__ == '__main__':
     assert len(sys.argv) == 2, "output_path"

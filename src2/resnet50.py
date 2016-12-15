@@ -238,14 +238,18 @@ def ResNet50(include_top=True, weights='imagenet',
 
 
 if __name__ == '__main__':
-    model = ResNet50(include_top=True, weights='imagenet')
+    model = ResNet50(include_top=False, weights='imagenet')
 
-    img_path = 'elephant.jpg'
-    img = image.load_img(img_path, target_size=(224, 224))
+    import sys
+    assert len(sys.argv) == 2, "input_file"
+    img_path = sys.argv[1]
+    img = image.load_img(img_path, target_size=(256, 256))
     x = image.img_to_array(img)
     x = np.expand_dims(x, axis=0)
     x = preprocess_input(x)
     print('Input image shape:', x.shape)
 
     preds = model.predict(x)
-    print('Predicted:', decode_predictions(preds))
+    print('Feature shape:', preds.shape)
+    print('Feature size:', preds.size)
+
