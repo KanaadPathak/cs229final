@@ -73,5 +73,5 @@ def run_cnn_classify(conf):
         filename = conf.result_file.rsplit('/', 1)[-1]
         name = filename.rsplit('.', 1)[0]
         dt = datetime.now().strftime("%Y%m%d_%H%M%S")
-        save_file = 'history/%s_%s.h5' % (name, dt)
-        clf.save(save_file)
+        weight_file = 'history/%s_%s.h5' % (name, dt)
+        clf.save(weight_file)

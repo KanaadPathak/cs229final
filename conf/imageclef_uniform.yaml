@@ -8,14 +8,14 @@ test_feature: history/imageclef_sheet_test_resnet50.h5
 
 architecture: resnet50
 model_file: history/imageclef_sheet_classifier.pkl
-factor: 5
+factor: 1
 batch_size: 8
-epoch: 150
-gen_params:
-  rotation_range: 90
-  width_shift_range: 0.2
-  height_shift_range: 0.2
-  channel_shift_range: 100
-  zoom_range: 0.2
-  horizontal_flip: True
-  vertical_flip: True
+epoch: 100
+#gen_params:
+#  rotation_range: 90
+#  width_shift_range: 0.2
+#  height_shift_range: 0.2
+#  channel_shift_range: 100
+#  zoom_range: 0.2
+#  horizontal_flip: True
+#  vertical_flip: True

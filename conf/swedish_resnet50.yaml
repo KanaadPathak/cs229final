@@ -12,5 +12,5 @@ architecture: resnet50
 batch_size: 8
 epoch: 100
 model_file: classifier.pkl
-weight_file: weight.pkl
+weight_file: history/weight/swedish_custom_weight.pkl
 result_file: result.pkl

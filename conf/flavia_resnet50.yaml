@@ -3,10 +3,8 @@ name: flavia
 
 
 train_dir: data/flavia/train
-val_dir: data/flavia/validation
 test_dir: data/flavia/test
 train_feature: history/flavia_train_resnet50.h5
-val_feature: history/flavia_val_resnet50.h5
 test_feature: history/flavia_test_resnet50.h5
 
 architecture: resnet50
@@ -15,7 +13,7 @@ batch_size: 8
 factor: 5
 epoch: 100
 model_file: classifier.pkl
-weight_file: weight.pkl
+weight_file: history/weight/flavia_custom_weight.pkl
 result_file: result.pkl
 
 gen_params:
