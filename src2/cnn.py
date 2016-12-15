@@ -1,10 +1,7 @@
 from datetime import datetime
 
-import yaml
 from keras.layers import Convolution2D, MaxPooling2D, ZeroPadding2D, Dropout, Flatten, Dense
 from keras.models import Sequential
-
-from preprocess_utils import create_from_dict
 
 
 class CNNClassifier(object):
@@ -16,17 +13,15 @@ class CNNClassifier(object):
         self.model = self.create_model()
 
     def create_model(self):
-        loss = 'binary_crossentropy'
-        output_dim = 1
-        final_activation = 'sigmoid'
-        if self.num_classes > 2:
-            loss = 'categorical_crossentropy'
-            output_dim = self.num_classes
-            final_activation = 'softmax'
+        loss = 'categorical_crossentropy'
+        output_dim = self.num_classes
+        final_activation = 'softmax'
+
+        print((3, self.img_height, self.img_width))
 
         model = Sequential()
-        model.add(ZeroPadding2D((1, 1), input_shape=(3, self.img_height, self.img_width)))
-        model.add(Convolution2D(32, 3, 3, activation='relu'))
+        model.add(ZeroPadding2D((1, 1), input_shape=(self.img_height, self.img_width, 3)))
+        model.add(Convolution2D(32, 3, 3, activation='relu', name='conv0'))
         model.add(MaxPooling2D(pool_size=(2, 2)))
 
         model.add(ZeroPadding2D((1, 1)))
@@ -59,21 +54,19 @@ class CNNClassifier(object):
         self.model.save_weights(h5_file)
 
 
-def run_cnn_classify(args):
-    with open(args.gen_conf, 'r') as stream:
-        conf = yaml.load(stream)
+def run_cnn_classify(conf):
 
-    train_gen = create_from_dict(conf.get('train'))
-    val_gen = create_from_dict(conf.get('val'))
+    train_gen = conf.train_gen
+    val_gen = conf.test_gen
 
     clf = CNNClassifier(num_classes=train_gen.nb_class, target_size=train_gen.target_size)
     clf.fit_generator(train_gen, val_gen, num_train=train_gen.nb_sample, num_val=val_gen.nb_sample,
-                      num_epoch=args.epoch)
+                      num_epoch=conf.epoch)
 
-    if args.save_file is not None:
-        clf.save(args.save_file)
+    if conf.save_file is not None:
+        clf.save(conf.result_file)
     else:
-        filename = args.config_file.rsplit('/', 1)[-1]
+        filename = conf.result_file.rsplit('/', 1)[-1]
         name = filename.rsplit('.', 1)[0]
         dt = datetime.now().strftime("%Y%m%d_%H%M%S")
         save_file = 'history/%s_%s.h5' % (name, dt)

@@ -83,7 +83,10 @@ def main(args):
 
     elif args.goal == 'cnn_classify':
         from cnn import run_cnn_classify
-        run_cnn_classify(args)
+        from preprocess_utils import Configuration
+
+        conf = Configuration(args.conf_file)
+        run_cnn_classify(conf)
 
     elif args.goal == 'split':
         from preprocess_utils import split_images
@@ -144,7 +147,6 @@ if __name__ == '__main__':
     cur_parser.add_argument('image_file', help="the path to the image")
     # ------------------------------------------------
     cnn_parser = subparsers.add_parser('cnn_classify')
-    cur_parser.add_argument('-e', '--epoch', type=int, default=50, help="the number of epochs to run")
     # ------------------------------------------------
     cur_parser = subparsers.add_parser('split', description='split images in a folder to train and val')
     cur_parser.add_argument('--train_size', help="num of samples or proportion of samples for train")
