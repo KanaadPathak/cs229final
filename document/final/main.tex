@@ -63,7 +63,7 @@
 % should be used if it is desired that the figures are to be displayed in
 % draft mode.
 %
-\documentclass[journal]{IEEEtran}
+\documentclass[journal, 10pt]{IEEEtran}
 
 % Some very useful LaTeX packages include:
 % (uncomment the ones you want to load)
@@ -237,7 +237,8 @@
 %% Table, Bulletin and other type­set­ting
 \usepackage[ampersand]{easylist} % Lists us­ing a sin­gle ac­tive char­ac­ter
 % \usepackage[table,x11names,svgnames]{xcolor} % Driver-in­de­pen­dent color ex­ten­sions
-% \usepackage{enumitem}      % Con­trol lay­out of item­ize, enu­mer­ate, de­scrip­tion
+\let\labelindent\relax
+\usepackage{enumitem}      % Con­trol lay­out of item­ize, enu­mer­ate, de­scrip­tion
 % \usepackage{multirow}      % Create tab­u­lar cells span­ning mul­ti­ple rows
 % \usepackage{tabularx}      % Tab­u­lars with ad­justable-width columns
 % \usepackage{tablefootnote} % Per­mit foot­notes in ta­bles
@@ -481,14 +482,40 @@ Research on automatic leaf classification from image has been active since 2000.
 Most of such manually engineered features achieve excellent accuracy on clean images taken in controlled conditions, which consist of one single well aligned leave on contrasting background, such as those images in data set [TODO ].
 Recently, with the huge success of ConvNets, particularly in annual ImageNet Large Scale Visual Recognition Challenge \cite{Alex2014}, researchers start to apply ConvNets to this problem [TODO].  [TODO] have suggested that generic features can be extracted from large ConvNet and yield very good results on fine-grained classification problems even without fine-tuning the pretrained model.
 
+\section{DataSet}
+\label{DataSet}
+    We found two types of data set
+\begin{enumerate}
+  \item Clean images, which consists of well aligned leaf on single contrasting background, with little or no variations of luminance or color. \\
+  \begin{center}
+      \begin{tabular}{| l | l | l |}
+      \hline
+      Name & Species & Samples Per Species        \\ \hline
+      Swedish \cite{SwedishLeafDataset} & 15 & 75        \\ \hline
+      Flavia \cite{FlaviaDataset}       & 33 & $\sim$ 60 \\ \hline
+      UCI \cite{UCIDataSet}:            & 40 & 5~16      \\ \hline
+      Kaggle \cite{Pedro13}:            & 99 & 16        \\ \hline
+      \end{tabular}
+  \end{center}
+
+  \item ImageCLEF \cite{ImageCLEF2013}, which is collected through crowd sourced application, has 250 species and 26077 images. This is a much more challenging datasets with variations on lighting conditions, viewpoints, background clutters and even occlusions. The data further split to different subset: uniform, which is relatively with less clutter, and natrual-background, which is taken in a total natural enviroment. To effectively evaluate our approaches, we use subsets of this dataset.\\
+  \begin{center}
+      \begin{tabular}{| l | l | l | l |}
+      \hline
+      Name    & Species & train samples & test samples \\ \hline
+      uniform & 66      & [TODO:]       & 1194         \\ \hline
+      natural & 57      & 2585          & 521          \\ \hline
+      \end{tabular}
+  \end{center}
+\end{enumerate}
+
 \section{Approach}
 
 \subsection{Overview}
 Images captured in the field, such as those from ImageCLEF \cite{ImageCLEF2013}, are more challenging as there are much more intra class variations due to viewpoint, lighting condition and occlusion.
-We break down the problem into two pieces. Firstly, we want to locate the leaf in the image which is an single object localization problem.  This step becomes necessary if the image have multiple objects and possibly leaf is not the most salient object.  Then, we predict the specie of the leaf, which is a fine-grained classification problem. This is the main task and for most data set, we only need to perform this task. Here we explore both traditional method, such as Bag of Features,  and ConvNets based method.
+We break down the problem into two pieces. Firstly, we want to locate the leaf in the image which is an single object localization problem.  This step becomes necessary if the image have multiple objects and possibly leaf is not the most salient object.  Then, we predict the species of the leaf, which is a fine-grained classification problem. This is the main task and for most data set, we only need to perform this task. Here we explore both traditional method, such as Bag of Features,  and ConvNets based method.
 
-\newpage
-\begin{figure}
+\begin{figure}[H]
   \center
   \includegraphics[scale=0.2]{overview}
   \caption{ Overview of the system }
@@ -499,18 +526,13 @@ We break down the problem into two pieces. Firstly, we want to locate the leaf i
   Next we extract features and we explore two options,
 \begin{enumerate}
   \item ConvNets.
-    We take transfer learning approach, in order to make use of the power of ConvNets with the constrains of time and computations. Specifically, we take a couple of ConvNets that are pretrained with ImageNet for ILSVRC object image classification task, remove one or two top  layers and then treat the rest of the ConvNet as fixed feature extractor for the our data set.
+    We take transfer learning approach, in order to make use of the power of ConvNets with the constrains of time and computations. Specifically, we take a couple of ConvNets that are pretrained with ImageNet for ILSVRC object image classification task, remove one or two top layers and then treat the rest of the ConvNet as fixed feature extractor for the our data set.
 
 
   \item SIFT + Bag of Features
-    Key points are densely sampled and SIFT feature descriptors are retrieved from each raw images. Then
-
-    At last, we train a classifier, using the feature vectors from the above step and predict labels for our test data.
+    Key points are densely sampled and SIFT feature descriptors are retrieved from each raw images. Then at last, we train a classifier, using the feature vectors from the above step and predict labels for our test data.
 \end{enumerate}
 
-
-\subsection{ConvNets}
-We use the transfer learning approach, in order to make use of the power of ConvNets with the constrains of time and computations. Specifically, we take a couple of ConvNets what are pretrained on ImageNet  VGGNet/ResNet [TODO quote], remove the last fully connected layers and then treat the rest of the ConvNet as fixed feature extractor for the our data set.
 
 Part of reason
 
@@ -518,7 +540,7 @@ Part of reason
 
 [Explains architecture of ResNet50]
 
-The feature vector we get from ResNet50 is 2048 dimensions.
+The CNN codes (feature vector) we get from ResNet50 is 2048 dimensions.
 We have two settings.
 \begin{itemize}
   \item [--] [explain preprocessing] The feature vector is normalized with unit variance and we learn a linear SVM classifier [(or others)] from the features.
@@ -529,24 +551,6 @@ We have two settings.
 -The CNN codes are trained for the object image classification task of ILSVRC (2013 for VGGNet and 2015 for ResNet), which is aligned with our task except that ours are more fine-grained classification.
 -Some of our data set [ImageCLEF2013] is more challenging in term of clutter and occlusion.
 
-
-\section{DataSet}
-\label{DataSet}
-    We found two types of data set
-\begin{enumerate}
-  \item Clean images, which consists of well aligned leaf on single contrasting background, with little or no variations of luminance or color
-    \begin{itemize}
-      \item[--] Swedish leaf dataset\cite{SwedishLeafDataset}: 15 species with 75 samples per specie
-      \item[--] Flavia leaf dataset\cite{FlaviaDataset}: 33 species with roughly 60 samples per specie
-      \item[--] UCI leaf dataset \cite{UCIDataSet}: 40 species with 5 to 16 samples per specie
-      \item[--] Kaggle leaf dataset\cite{Pedro13}: 99 species with 16 samples per specie
-    \end{itemize}
-  \item ImageCLEF \cite{ImageCLEF2013}, which is collected through crowd sourced application, has 250 species and 26077 images. This is a much more challenging datasets with variations on lighting conditions, viewpoints, background clutters and even occlusions.  To effectively evaluate our approaches, we use subsets of this dataset.
-    \begin{itemize}
-      \item[--] uniform: relatively with less clutter, 66 species with [TODO] train samples and 1194 test samples.
-      \item[--] natural: in total natural environment, 57 species with 2585 train samples and 521 test samples.
-    \end{itemize}
-\end{enumerate}
 
 \section{Object recognition}
 \subsection{Bag of Features (BoF) + local feature descriptors}
@@ -569,9 +573,6 @@ During preprocessing, raw images are converted to gray-scaled images and resized
   \label{fig:backgroundremoval}
 \end{figure}
 
-
-\subsection{ConvNets}
-
 % Note that IEEE does not put floats in the very first column - or typically
 % anywhere on the first page for that matter. Also, in-text middle ("here")
 % positioning is not used. Most IEEE journals use top floats exclusively.
@@ -591,10 +592,66 @@ We use traditional exhaustive search method to scan through all window, scales.
   \label{fig:detection}
 \end{figure}
 
+\section{ConvNets approach}
+  \subsection{exploration}
+
+  We started by training CNN classifier from scratch, following the guidelines below:
+  \begin{enumerate}
+    \item Convolutional layer learning features from general to specific, giving more layers helps with the transition.
+    \item Dropout reduces overfitting
+    \item Use aggressive pooling to reduce the dimensionality.
+  \end{enumerate}
+  We designed our CNN with the architecture below:
+  \begin{align}
+    (Conv-ReLU-MaxPool)x3-FC-DropOut-SoftMax
+  \end{align}
+  It works well with \cite{SwedishLeafDataset}, with an error rate of [],
+  But when test against \cite{ImageCLEF2013}, the accuracy reduced significantly. There are a few things to consider:
+  \begin{itemize}
+    \item The fore-mentioned lighting variation and background clutter.
+    \item More species with less samples per classes.
+  \end{itemize}
+  [More noise need more variations and more aggressive filtering thus deeper network is required]
+  [explain why species with less sample will reduce the performance. Explain why sample per classes makes it harder to predict Learning Theory] [TODO]
+
+  [TODO: learning curve]
+
+  A deeper CNN with better architecture is needed for the complicity of our data.
+  Thus we switched to pre-trained weight of proven CNN architecture.
+
+  Starting from VGG16, [TODO: reference to VGG16]
+  [TODO: why ResNet50 is better than VGG16]
+
+  With ResNet50
+
+
+  \subsection{process}
+
+
+  generalization vs specialization,
+
+  remove top layer,
+  predict with upper layer
+
+  extract features
+
+  final output
+
+  \subsection{Discussion}
+    How do you decide what type of transfer learning you should perform on a new dataset? This is a function of several factors, but the two most important ones are the size of the new dataset (small or big), and its similarity to the original dataset (e.g. ImageNet-like in terms of the content of images and the classes, or very different, such as microscope images). Keeping in mind that ConvNet features are more generic in early layers and more original-dataset-specific in later layers, here are some common rules of thumb for navigating the 4 major scenarios:
+    \cite{CS231N}
+
+    \begin{enumerate}
+      \item similarity (transfer learning is good)
+      \item size for each class(fine tuning is not a good idea)
+    \end{enumerate}
+
+
+
 \section{Experimental Results}
 [Explain cross validation approach we used]
 
-We use prediction rank-1 identification (i.e. accuracy) as our performance metric, which is defined as $Accurary = \frac{N_c}{N_t} \times 100 \%$, where  $N_c$ represents the number of correct match and $N_t$ is the total number of test samples.
+We use prediction rank-1 identification (i.e. accuracy) as our performance metric, which is defined as $Accurary = \frac{N_c}{N_t} \times 100 \%$, where $N_c$ represents the number of correct match and $N_t$ is the total number of test samples.
 
 
 [Test results as table.]
@@ -695,7 +752,7 @@ We use prediction rank-1 identification (i.e. accuracy) as our performance metri
 
 
  \bibitem{Alex2014}
-    A. Krizhevsky, I. Sutskever, and G. E. Hinton. Imagenet classification with deep convolutional neural networks. In F. Pereira, C. Burges, L. Bottou, and K. Weinberger, edi- tors, Advances in Neural Information Processing Systems 25, pages 1097–1105. Curran Associates, Inc., 2012.
+    A. Krizhevsky, I. Sutskever, and G. E. Hinton. Imagenet classification with deep convolutional neural networks. In F. Pereira, C. Burges, L. Bottou, and K. Weinberger, editors, Advances in Neural Information Processing Systems 25, pages 1097–1105. Curran Associates, Inc., 2012.
 
   \bibitem{Caffe}
     Y. Jia. Caffe: An open source convolutional architecture for fast feature embedding. http://caffe.berkeleyvision.org, 2013.
@@ -717,6 +774,15 @@ We use prediction rank-1 identification (i.e. accuracy) as our performance metri
 
   \bibitem{Keras}
     Chollet, Fran\c{c}ois, 2015, \url{https://github.com/fchollet/keras},
+
+  \bibitem{CS231N}
+    http://cs231n.github.io/transfer-learning/
+
+  \bibitem{OffTheShelf}
+    Ali Sharif Razavian Hossein Azizpour Josephine Sullivan Stefan Carlsson. CNN Features off-the-shelf: an Astounding Baseline for Recognition, CVAP, KTH (Royal Institute of Technology) Stockholm, Sweden
+
+  \bibitem{Jason2014}
+    Jason Yosinski,1 Jeff Clune,2 Yoshua Bengio,3 and Hod Lipson4. How transferable are features in deep neural networks? arXiv:1411.1792, 2014.
 \end{thebibliography}
 
 % biography section
