@@ -552,26 +552,6 @@ We have two settings.
 -Some of our data set [ImageCLEF2013] is more challenging in term of clutter and occlusion.
 
 
-\section{Object recognition}
-\subsection{Bag of Features (BoF) + local feature descriptors}
-   Due to the simplicity and performance, this well established approach was taken at first. Interest points are detected from the raw images and then local invariant feature descriptors are collected, which are clustered to form the visual vocabulary/codebook. Afterwards, each raw image can be represented with histograms of visual words, i.e. term vectors.  We have prototyped a BoF system, based on the OpenCV package.  Here is the illustration of the system \ref{fig:bofsystemdesign}.
-\newpage
-\begin{figure}
-  \centering
-  \includegraphics[scale=0.2]{flowchart}
-  \caption{ System Design for BoF }
-  \label{fig:bofsystemdesign}
-\end{figure}
-During preprocessing, raw images are converted to gray-scaled images and resized to reduce computation complexity. We extract SIFT descriptors from the pixels after detecting the key points. Limiting the width of image to 128 pixels, we have roughly 200 SIFT descriptors per image. Then all the descriptors are clustered to build visual words via K-Means. Due to computation complexity, we pick randomly 100 training images to build the visual vocabulary for the initial run.
-\subsection{Background removal}
-[Discribe OpenCV GrapCut]
-\newpage
-\begin{figure}
-  \centering
-  \includegraphics[scale=0.2]{backgroundremoval}
-  \caption{ Background Remove }
-  \label{fig:backgroundremoval}
-\end{figure}
 
 % Note that IEEE does not put floats in the very first column - or typically
 % anywhere on the first page for that matter. Also, in-text middle ("here")
@@ -580,19 +560,7 @@ During preprocessing, raw images are converted to gray-scaled images and resized
 % floats. This can be corrected via the \fnbelowfloat command of the
 % stfloats package.
 
-\section{Object detection }
-[TODO describe why we need this]
-We use traditional exhaustive search method to scan through all window, scales.
-
-\newpage
-\begin{figure}
-  \center
-  \includegraphics[scale=0.5]{detection}
-  \caption{ Leaf Detection }
-  \label{fig:detection}
-\end{figure}
-
-\section{ConvNets approach}
+\subsection{ConvNets approach}
   \subsection{exploration}
 
   We started by training CNN classifier from scratch, following the guidelines below:
@@ -651,6 +619,16 @@ We use traditional exhaustive search method to scan through all window, scales.
       \item size for each class(fine tuning is not a good idea)
     \end{enumerate}
 
+\subsection{Bag of Features (BoF) + local feature descriptors}
+   Due to the simplicity and performance, this well established approach was taken at first. Interest points are detected from the raw images and then local invariant feature descriptors are collected, which are clustered to form the visual vocabulary/codebook. Afterwards, each raw image can be represented with histograms of visual words, i.e. term vectors.  We have prototyped a BoF system, based on the OpenCV package.  Here is the illustration of the system \ref{fig:bofsystemdesign}.
+\newpage
+\begin{figure}
+  \centering
+  \includegraphics[scale=0.2]{flowchart}
+  \caption{ System Design for BoF }
+  \label{fig:bofsystemdesign}
+\end{figure}
+During preprocessing, raw images are converted to gray-scaled images and resized to reduce computation complexity. We extract SIFT descriptors from the pixels after detecting the key points. Limiting the width of image to 128 pixels, we have roughly 200 SIFT descriptors per image. Then all the descriptors are clustered to build visual words via K-Means. Due to computation complexity, we pick randomly 100 training images to build the visual vocabulary for the initial run.
 
 
 \section{Experimental Results}
@@ -660,7 +638,8 @@ We use prediction rank-1 identification (i.e. accuracy) as our performance metri
 
 
 [Test results as table.]
-[Discussions of the results.]
+
+\section{Discussions}
 
 
 \section{Conclusion and Future work}
