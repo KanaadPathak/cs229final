@@ -15,6 +15,7 @@ import sys
 import argparse
 import logging
 import bof
+from pylab import *
 
 def plotInputData(dataSet):
   #randomly pick two features and plot it 
@@ -48,33 +49,34 @@ def get_cmap(N):
 
 #----------------------------------------------------------------------
 # Scale and visualize the embedding vectors
-def plot_embedding(X, y, N):
+def plot_embedding(X, y, N, output):
     x_min, x_max = np.min(X, 0), np.max(X, 0)
     X = (X - x_min) / (x_max - x_min)
 
-    fig = plt.figure()
-    ax1 = fig.add_subplot(111)
     cmap = get_cmap(N)
+    markers =  ( 'o', 'v', '^', '<', '>', '8', 's', 'p', '*', 'h', 'H', 'D', 'd')
     for i in range(X.shape[0]):
-        ax1.scatter(X[i, 0], X[i, 1], color=cmap(y[i]))
-
-        #plt.xticks([]), plt.yticks([])
-        #if title is not None:
-        #plt.title(title)
+        label = y[i]
+        plt.scatter(X[i, 0], X[i, 1], color=cmap(label), vmin=1, vmax=N, marker=markers[label%len(markers)],linewidths=0)
+    #plt.colorbar()
     plt.show()
+    plt.savefig(output)
 
-def plot_tsne(X, y):
+
+def plot_tsne(X, y, output):
     print("Computing t-SNE embedding")
     tsne = manifold.TSNE(n_components=2, random_state=0)
     N = np.max(y) + 1
+    logging.info("number of labels: %d"%(N))
     t0 = time.time()
     X_tsne = tsne.fit_transform(X)
     print("t-SNE embedding of the digits (time %.2fs)" % (time.time() - t0))
-    plot_embedding(X_tsne, y, N)
+    plot_embedding(X_tsne, y, N, output)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__, version=__version__)
     parser.add_argument('-l', dest='logLevel', default='info', help="logging level: {debug, info, error}")
+    parser.add_argument('--output', dest='output', help="output file")
     parser.add_argument('train_file', help = "supply train file")
     parser.add_argument('test_file', help = "supply test file")
     args = parser.parse_args()
@@ -82,4 +84,5 @@ if __name__ == "__main__":
     logging.basicConfig(level=getattr(logging, args.logLevel.upper()), format='%(asctime)s %(levelname)s %(message)s')
 
     data_set = bof.BoFDataSet(args.train_file, args.test_file)
-    plot_tsne(data_set.X_test, data_set.y_test)
+    logging.info("Test data: %d x %d"%(len(data_set.X_test), data_set.X_test[0].size))
+    plot_tsne(data_set.X_test, data_set.y_test, args.output)
