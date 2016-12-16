@@ -16,6 +16,7 @@ import argparse
 import logging
 import bof
 from pylab import *
+import tables
 
 def plotInputData(dataSet):
   #randomly pick two features and plot it 
@@ -60,29 +61,40 @@ def plot_embedding(X, y, N, output):
         plt.scatter(X[i, 0], X[i, 1], color=cmap(label), vmin=1, vmax=N, marker=markers[label%len(markers)],linewidths=0)
     #plt.colorbar()
     plt.show()
-    plt.savefig(output)
+    if output is not None:
+        plt.savefig(output)
 
 
 def plot_tsne(X, y, output):
     print("Computing t-SNE embedding")
     tsne = manifold.TSNE(n_components=2, random_state=0)
-    N = np.max(y) + 1
+    N = np.max(y)
     logging.info("number of labels: %d"%(N))
     t0 = time.time()
     X_tsne = tsne.fit_transform(X)
     print("t-SNE embedding of the digits (time %.2fs)" % (time.time() - t0))
     plot_embedding(X_tsne, y, N, output)
 
+def load_feature_form_joblib(feature_file):
+    from sklearn.externals import joblib
+    d = joblib.load(feature_file)
+    return d['X'], d['y']
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__, version=__version__)
     parser.add_argument('-l', dest='logLevel', default='info', help="logging level: {debug, info, error}")
+    parser.add_argument('--type', dest='type', default='tv', help="file type {tv, joblib}")
     parser.add_argument('--output', dest='output', help="output file")
-    parser.add_argument('train_file', help = "supply train file")
-    parser.add_argument('test_file', help = "supply test file")
+    parser.add_argument('data_set', help="supply dataset file")
     args = parser.parse_args()
 
     logging.basicConfig(level=getattr(logging, args.logLevel.upper()), format='%(asctime)s %(levelname)s %(message)s')
 
-    data_set = bof.BoFDataSet(args.train_file, args.test_file)
-    logging.info("Test data: %d x %d"%(len(data_set.X_test), data_set.X_test[0].size))
-    plot_tsne(data_set.X_test, data_set.y_test, args.output)
+    if args.type == 'tv':
+        data_set = bof.BoFDataSet(args.data_set, args.data_set)
+        X = data_set.X_test
+        y = data_set.y_test
+    else:
+        X,y = load_feature_form_joblib(args.data_set)
+    logging.info("data set size=%d, feature d=%d"%(len(X), X[0].size))
+    plot_tsne(X, y, args.output)
