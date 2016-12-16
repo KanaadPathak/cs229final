@@ -15,11 +15,11 @@ model_file: classifier.pkl
 weight_file: history/weight/flavia_custom_weight.pkl
 result_file: result.pkl
 
-#gen_params:
-#  rotation_range: 90
-##  width_shift_range: 0.2
-##  height_shift_range: 0.2
-##  channel_shift_range: 100
-##  zoom_range: 0.2
-#  horizontal_flip: True
-#  vertical_flip: True
+gen_params:
+  rotation_range: 90
+#  width_shift_range: 0.2
+#  height_shift_range: 0.2
+#  channel_shift_range: 100
+#  zoom_range: 0.2
+  horizontal_flip: True
+  vertical_flip: True

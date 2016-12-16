@@ -453,7 +453,6 @@
 % make the title area
 \maketitle
 
-
 %\begin{abstract}
 %\end{abstract}
 \section{Introduction}
@@ -533,6 +532,89 @@ We break down the problem into two pieces. Firstly, we want to locate the leaf i
     Key points are densely sampled and SIFT feature descriptors are retrieved from each raw images. Then at last, we train a classifier, using the feature vectors from the above step and predict labels for our test data.
 \end{enumerate}
 
+\subsection{ConvNets approach}
+  \subsubsection{Setup}
+  For ConvNets, we used Keras framework \cite{Keras} with Tensorlow backend of GPU support: NVIDIA GeForce GT 750M 2048 MB. As an alternative, we also run on CPU given the limited graphic memory of our GPU which is crucial for a deeper ConvNets architecture.
+
+  \subsubsection{Exploration}
+  We started by training ConvNets classifier from scratch, following the guidelines below:
+  \begin{enumerate}
+    \item Convolutional layer learning features from general to specific, giving more layers helps with the transition. Study on deep convolutional nets suggests that deeper models are preferred under a parameter budget\cite{Deep2013} (with computational restriction).
+    \item Dropout reduces overfitting \cite{Dropout}
+    \item Use aggressive pooling to reduce the dimensionality.
+  \end{enumerate}
+  We designed our ConvNets with the architecture below:
+  \begin{figure}[H]
+    \center
+    \includegraphics[scale=0.4]{cnn_arch}
+    \caption{Customized ConvNets Classifier Architecture}
+    \label{cnn_arch}
+  \end{figure}
+  Using cross entropy to measure loss, we got the learning curve:
+  \begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.4]{cnn_loss}
+    \caption{Loss curve of ConvNets Classifier}
+    \label{cnn_loss}
+  \end{figure}
+  The loss of swedish dataset \cite{SwedishLeafDataset} keeps decreasing as expected. But for flavia dataset \cite{FlaviaDataset}, the training loss is keep decreasing, but at some point, validation loss stop changing. For imageclef uniform dataset \cite{ImageCLEF2013}, it actually stopped learning and the loss goes back up and stay there.
+
+  The accuracy is consistent from the loss, where accuracy of swedish converges at $92\%$, with a test accaracy of $90.46\%$, but it doesn't work well with other datasets especially imageclef dataset.
+  \begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.4]{cnn_acc}
+    \caption{\label{fig:cnn_acc} Accuracy curve of ConvNets Classifier}
+    \label{cnn_acc}
+  \end{figure}
+
+  Compare the datasets, intuitively, there are a few things to consider:
+  \begin{itemize}
+    \item The lighting variation and background clutter. Swedish has very clean background, where for ImageCLEF uniform image quality varies in a large range.
+    \item More species with less samples per classes.
+  \end{itemize}
+
+  A deeper ConvNets with more aggressive filters is needed to extract the features more efficiently and to deal with the noise and variation of datasets. But given the constrains of time and computations, we can't afford to train a deeper network with much more parameters.
+
+  As a common practice, we switched to use pre-trained weights of proven ConvNets architecture.
+
+  Since for our specific problem the output is different, we can't apply the architecture of the pre-trained weights directly. At minimum we have to drop the softmax layer at the very end to retrain with our own dataset. The technique is known as Transfer Learning. There are two options for Transfer Learning:
+  \begin{enumerate}
+    \item ConvNet as fixed feature extractor, and then classify with other Classifiers such as Logistic Regression/Softmax or SVM
+    \item Fine-tuning the ConvNet. For a N level structure, freeze N-H lower levels, and train the last H levels (the higher the level, the less overfitting to the target-datasets) \cite{CS231N}
+  \end{enumerate}
+  The second strategy is still too computational intense due our limited hardware. So we choose to do just the first layer.
+
+  The ideality to choose an architecture of pre-trained weights is that it has to trained for original datasets that is similar to the target datasets. The well-known ImageNet has $14,197,122$ images, $21841$ synsets. Among them, there are $70$ synsets that is related to leaves. The task classifying leaves is similar but more specific to the task classifying ImageNet datasets. Given the large number of syncsets, the weights trained against ImageNet is generalized enough that there will be relatively less bias. Jason et al. found that even features transferred from distant tasks are better than random weights \cite{Jason2014}. Also note that ConvNet features are more generic in lower layers and more original-dataset-specific in upper layers\cite{CS231N}.
+  There are several options of architecture trained against ImageNet whose weights are available with keras framework.
+  \begin{itemize}
+    \item VGGNet, runner-up in ILSVRC 2014 (GoogLeNet is the winner of that year).
+    \item ResNet, winner of ILSVRC 2015. The available weights are for ResNet50 with 50 layers (including Fully Connected layers) in total, and the original one has ResNet152 which, again, is too computational expensive.
+  \end{itemize}
+
+  For the purpose of our datasets, we choose to use ResNet50.
+
+  Research shows number of samples need to be big enough to avoid excessive overfitting. See B section of the supplementary material of \cite{Jason2014}. Note that the research is proven for AlexNet. While we don't have enough data to seek for the threshold which suffices to avoid overfitting for ResNet50, we assume 20 per samples is not enough.
+
+  One of the relief is to use data augmentation. To make up the lower amount of To avoid serious overfitting of the training data, we has to do some transformation to the data.
+
+  [explain why species with less sample will reduce the performance. Explain why sample per classes makes it harder to predict Learning Theory] [TODO]
+
+  With ResNet50
+
+
+  \subsubsection{process}
+
+
+  generalization vs specialization,
+
+
+
+  remove top layer,
+  predict with upper layer
+
+  extract features
+
+  final output
 
 Part of reason
 
@@ -550,65 +632,6 @@ We have two settings.
 [Explain if and how this method is suitable for our task]
 -The CNN codes are trained for the object image classification task of ILSVRC (2013 for VGGNet and 2015 for ResNet), which is aligned with our task except that ours are more fine-grained classification.
 -Some of our data set [ImageCLEF2013] is more challenging in term of clutter and occlusion.
-
-
-
-% Note that IEEE does not put floats in the very first column - or typically
-% anywhere on the first page for that matter. Also, in-text middle ("here")
-% positioning is not used. Most IEEE journals use top floats exclusively.
-% Note that, LaTeX2e, unlike IEEE journals, places footnotes above bottom
-% floats. This can be corrected via the \fnbelowfloat command of the
-% stfloats package.
-
-\subsection{ConvNets approach}
-  \subsection{exploration}
-
-  We started by training CNN classifier from scratch, following the guidelines below:
-  \begin{enumerate}
-    \item Convolutional layer learning features from general to specific, giving more layers helps with the transition.
-    \item Dropout reduces overfitting
-    \item Use aggressive pooling to reduce the dimensionality.
-  \end{enumerate}
-  We designed our CNN with the architecture below:
-  \begin{align}
-    (Conv-ReLU-MaxPool)x3-FC-DropOut-SoftMax
-  \end{align}
-  It works well with \cite{SwedishLeafDataset}, with an error rate of [],
-  But when test against \cite{ImageCLEF2013}, the accuracy reduced significantly. There are a few things to consider:
-  \begin{itemize}
-    \item The fore-mentioned lighting variation and background clutter.
-    \item More species with less samples per classes.
-  \end{itemize}
-  [More noise need more variations and more aggressive filtering thus deeper network is required]
-
-  Research shows number of samples need to be big enough to avoid excessive overfitting. See B section of the supplementary material of \cite{Jason2014}. Note that the research is proven for AlexNet. While we don't have enough data to seek for the threshold which suffices to avoid overfitting for ResNet50, we assume 20 per samples is still not enough.
-
-  [explain why species with less sample will reduce the performance. Explain why sample per classes makes it harder to predict Learning Theory] [TODO]
-
-  [TODO: learning curve]
-
-  A deeper CNN with better architecture is needed for the complicity of our data.
-  Thus we switched to pre-trained weight of proven CNN architecture.
-
-  Jason et al. found that even features transferred from distant tasks are better than random. weights\cite{Jason2014}
-
-  Starting from VGG16, [TODO: reference to VGG16]
-  [TODO: why ResNet50 is better than VGG16]
-
-  With ResNet50
-
-
-  \subsection{process}
-
-
-  generalization vs specialization,
-
-  remove top layer,
-  predict with upper layer
-
-  extract features
-
-  final output
 
   \subsection{Discussion}
     How do you decide what type of transfer learning you should perform on a new dataset? This is a function of several factors, but the two most important ones are the size of the new dataset (small or big), and its similarity to the original dataset (e.g. ImageNet-like in terms of the content of images and the classes, or very different, such as microscope images). Keeping in mind that ConvNet features are more generic in early layers and more original-dataset-specific in later layers, here are some common rules of thumb for navigating the 4 major scenarios:
@@ -630,7 +653,6 @@ We have two settings.
 \end{figure}
 During preprocessing, raw images are converted to gray-scaled images and resized to reduce computation complexity. We extract SIFT descriptors from the pixels after detecting the key points. Limiting the width of image to 128 pixels, we have roughly 200 SIFT descriptors per image. Then all the descriptors are clustered to build visual words via K-Means. Due to computation complexity, we pick randomly 100 training images to build the visual vocabulary for the initial run.
 
-
 \section{Experimental Results}
 [Explain cross validation approach we used]
 
@@ -643,9 +665,6 @@ We use prediction rank-1 identification (i.e. accuracy) as our performance metri
 
 
 \section{Conclusion and Future work}
-
-
-
 
 
 % if have a single appendix:
@@ -677,7 +696,6 @@ We use prediction rank-1 identification (i.e. accuracy) as our performance metri
 \ifCLASSOPTIONcaptionsoff
   \newpage
 \fi
-
 
 
 % trigger a \newpage just before the given reference
@@ -759,14 +777,26 @@ We use prediction rank-1 identification (i.e. accuracy) as our performance metri
   \bibitem{Keras}
     Chollet, Fran\c{c}ois, 2015, \url{https://github.com/fchollet/keras},
 
+  \bibitem{KerasBlog}
+    Chollet, Fran\c{c}ois, 2015, \url{ https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html}
+
   \bibitem{CS231N}
-    http://cs231n.github.io/transfer-learning/
+    Andrej Karpathy et al. \url{http://cs231n.github.io/transfer-learning/}
+
+  \bibitem{ResNet}
+    Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun. Deep Residual Learning for Image Recognition 	arXiv:1512.03385, Dec. 2015.
 
   \bibitem{OffTheShelf}
-    Ali Sharif Razavian Hossein Azizpour Josephine Sullivan Stefan Carlsson. CNN Features off-the-shelf: an Astounding Baseline for Recognition, CVAP, KTH (Royal Institute of Technology) Stockholm, Sweden
+    Ali Sharif Razavian Hossein Azizpour Josephine Sullivan Stefan Carlsson. CNN Features off-the-shelf: an Astounding Baseline for Recognition, CVAP, KTH (Royal Institute of Technology) Stockholm, Sweden, May. 2014.
 
   \bibitem{Jason2014}
-    Jason Yosinski,1 Jeff Clune,2 Yoshua Bengio,3 and Hod Lipson4. How transferable are features in deep neural networks? arXiv:1411.1792, 2014.
+    Jason Yosinski,1 Jeff Clune,2 Yoshua Bengio,3 and Hod Lipson4. How transferable are features in deep neural networks? arXiv:1411.1792, Nov. 2014.
+
+  \bibitem{Deep2013}
+    David Eigen, Jason Rolfe, Rob Fergus, and Yann LeCun. Understanding deep architectures using a recursive convolutional network. arXiv preprint arXiv:1312.1847, 2013.
+
+  \bibitem{Dropout}
+    N. Srivastava, G. Hinton, A. Krizhevsky, I. Sutskever, R. Salakhutdinov. Dropout: A Simple Way to Prevent Neural Networks from Overfitting. J. Machine Learning Res. 15, 1929–1958 (2014)
 \end{thebibliography}
 
 % biography section
