@@ -584,25 +584,21 @@ We break down the problem into two pieces. Firstly, we want to locate the leaf i
   \end{enumerate}
   The second strategy is still too computational intense due our limited hardware. So we choose to do just the first layer.
 
-  The ideality to choose an architecture of pre-trained weights is that it has to trained for original datasets that is similar to the target datasets. The well-known ImageNet has $14,197,122$ images, $21841$ synsets. Among them, there are $70$ synsets that is related to leaves. The task classifying leaves is similar but more specific to the task classifying ImageNet datasets. Given the large number of syncsets, the weights trained against ImageNet is generalized enough that there will be relatively less bias. Jason et al. found that even features transferred from distant tasks are better than random weights \cite{Jason2014}. Also note that ConvNet features are more generic in lower layers and more original-dataset-specific in upper layers\cite{CS231N}.
+  The ideality to choose an architecture of pre-trained weights is that it has been trained against original datasets that is similar to the target datasets. The well-known ImageNet has $14,197,122$ images, $21841$ synsets. Among them, there are $70$ synsets that is related to leaves. The task classifying leaves is similar but more specific to the task classifying ImageNet datasets. Given the large number of syncsets, the weights trained against ImageNet is generalized enough that there will be relatively less bias. Jason et al. found that even features transferred from distant tasks are better than random weights \cite{Jason2014}. Also note that ConvNet features are more generic in lower layers and more original-dataset-specific in upper layers\cite{CS231N}.
   There are several options of architecture trained against ImageNet whose weights are available with keras framework.
   \begin{itemize}
     \item VGGNet, runner-up in ILSVRC 2014 (GoogLeNet is the winner of that year).
     \item ResNet, winner of ILSVRC 2015. The available weights are for ResNet50 with 50 layers (including Fully Connected layers) in total, and the original one has ResNet152 which, again, is too computational expensive.
   \end{itemize}
 
-  For the purpose of our datasets, we choose to use ResNet50.
-
-  Research shows number of samples need to be big enough to avoid excessive overfitting. See B section of the supplementary material of \cite{Jason2014}. Note that the research is proven for AlexNet. While we don't have enough data to seek for the threshold which suffices to avoid overfitting for ResNet50, we assume 20 per samples is not enough.
-
-  One of the relief is to use data augmentation. To make up the lower amount of To avoid serious overfitting of the training data, we has to do some transformation to the data.
+  For the purpose of this project, we choose to use ResNet50.
 
   [explain why species with less sample will reduce the performance. Explain why sample per classes makes it harder to predict Learning Theory] [TODO]
 
   With ResNet50
 
 
-  \subsubsection{process}
+  \subsubsection{Workflow}
 
 
   generalization vs specialization,
@@ -623,6 +619,13 @@ Part of reason
 [Explains architecture of ResNet50]
 
 The CNN codes (feature vector) we get from ResNet50 is 2048 dimensions.
+
+
+
+
+Research shows number of samples need to be big enough to avoid excessive overfitting. See B section of the supplementary material of \cite{Jason2014}. Note that the research is proven for AlexNet. While we don't have enough data to seek for the threshold which suffices to avoid overfitting for ResNet50, we assume 20 per samples is not enough.
+
+One of the relief is to use data augmentation. To make up the lower amount of To avoid serious overfitting of the training data, we has to do some transformation to the data.
 We have two settings.
 \begin{itemize}
   \item [--] [explain preprocessing] The feature vector is normalized with unit variance and we learn a linear SVM classifier [(or others)] from the features.
