@@ -580,7 +580,7 @@ We break down the problem into two pieces. Firstly, we want to locate the leaf i
   Since for our specific problem the output is different, we can't apply the architecture of the pre-trained weights directly. At minimum we have to drop the softmax layer at the very end to retrain with our own dataset. The technique is known as Transfer Learning. There are two options for Transfer Learning:
   \begin{enumerate}
     \item ConvNet as fixed feature extractor, and then classify with other Classifiers such as Logistic Regression/Softmax or SVM
-    \item Fine-tuning the ConvNet. For a N level structure, freeze N-H lower levels, and train the last H levels (the higher the level, the less overfitting to the target-datasets) \cite{CS231N}
+    \item Fine-tuning the ConvNet. For a $N$ level structure, train the last $H$ levels with the $N-H$ lower levels freeze (the higher the level, the less overfitting to the target-datasets) \cite{CS231N}.
   \end{enumerate}
 
   The ideality to choose an architecture of pre-trained weights is that it has been trained against original datasets that is similar to the target datasets. The well-known ImageNet has $14,197,122$ images, $21841$ synsets. Among them, there are $70$ synsets that is related to leaves. The task classifying leaves is similar but more specific to the task classifying ImageNet datasets. Given the large number of syncsets, the weights trained against ImageNet is generalized enough that there will be relatively less bias. Jason et al. found that even features transferred from distant tasks are better than random weights \cite{Jason2014}. Also note that ConvNet features are more generic in lower layers and more original-dataset-specific in upper layers\cite{CS231N}.
@@ -592,26 +592,29 @@ We break down the problem into two pieces. Firstly, we want to locate the leaf i
 
   For the purpose of this project, we choose to use ResNet50.
 
-  [explain why species with less sample will reduce the performance. Explain why sample per classes makes it harder to predict Learning Theory] [TODO]
+  % [explain why species with less sample will reduce the performance. Explain why sample per classes makes it harder to predict Learning Theory] [TODO]
 
-  \subsubsection{Workflow}
+  \subsubsection{Data Augmentation}
 
   Research shows number of samples need to be big enough to avoid excessive overfitting. See B section of the supplementary material of \cite{Jason2014}. Note that the research is proven for AlexNet. While we don't have enough data to seek for the threshold which suffices to avoid overfitting for ResNet50, we assume for the ImageCLEF data sets \cite{ImageCLEF2013}, 20 per samples is not enough.
 
   Data augmentation is widely used to reduce overfitting on image data \cite{Alex2014}. This technique makes up the lower amount of samples and with some transformation increases the variation of the image. In our case, we've applied rotation, flipping, space shifting and channel shifting.
 
-  Then we download the weights and load it into the preset model. And drop off the layer after the last Convolutional/Residual block.
+  \subsubsection{Transfer Learning}
+  We download the weights and load it into the preset model. And drop off the layer after the last Convolutional/Residual block.
 
   The possible approaches as forementioned, are either get the bottleneck features which is called CNN codes in the terms of transfer Learning, or freeze all the layers except for the last Residual Block and train with the target datasets. See Figure \ref{fig:tl_resnet}.
 
   \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.4]{TL_ResNet}
+    \includegraphics[scale=0.23]{TL_ResNet}
     \caption{ Illustration of Transfer Learning with ResNet }
     \label{fig:tl_resnet}
   \end{figure}
 
   Again, with the constrains of the time and computations, we choose to just extract the CNN codes.
+
+  Feed the network with augmented data, the CNN codes (feature vector) we get from ResNet50 is 2048 dimensions.
 
   generalization vs specialization,
 
@@ -619,8 +622,6 @@ We break down the problem into two pieces. Firstly, we want to locate the leaf i
 [Explain the data set for our pretrained model and why this is this is applicable to our problem, i.e. same feature space.]
 
 [Explains architecture of ResNet50]
-
-The CNN codes (feature vector) we get from ResNet50 is 2048 dimensions.
 
 We have two settings.
 \begin{itemize}
