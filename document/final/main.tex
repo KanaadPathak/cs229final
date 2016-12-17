@@ -457,16 +457,14 @@
 %\begin{abstract}
 %\end{abstract}
 \section{Introduction}
-Automatic plant species recognition with image processing has application in weeds identification, species discovery, plant taxonomy, natural reserve park management and so on \cite{Pedro13}.  It is considered as a fine-grained image recognition problem which is hard to solve since
+Automatic plant species recognition with image processing has application in weeds identification, species discovery, plant taxonomy, natural reserve park management and so on \cite{Pedro13}.  It is considered a fine-grained image recognition problem which is hard to solve since
 \begin{enumerate}
   \item The subtle differences between different species in the same class. Sometime such fine differences can be even challenging to human experts.
   \item Typically this requires large training data but it is not feasible due to the number of species (over 220000 \cite{Charles13}).
 \end{enumerate}
 
-In this report, we describe our exploration with this problem, using traditional handcrafted features and features extracted from pretrained deep convolution neural network (ConvNets). 
-
-The input to our system is raw images from various datasets and the output is the label for each species.
-\centering\includegraphics[width=0.65\linewidth]{easilyconfused}
+In this report, we describe our exploration with this problem, using traditional handcrafted features and features extracted from pretrained deep convolution neural network (ConvNets). The input to our system is raw images from various datasets and the output is the label for each species.
+{\includegraphics[width=0.8\linewidth]{easilyconfused}}
 
 % IEEEtran.cls defaults to using nonbold math in the Abstract.
 % This preserves the distinction between vectors and scalars. However,
@@ -475,20 +473,20 @@ The input to our system is raw images from various datasets and the output is th
 % of the abstract to achieve this. Many IEEE journals frown on math
 % in the abstract anyway.
 
-\section{Related Work }
+\section{Related Work}
 Research on automatic leaf classification with computer vision processing has been active since 2000. Lots of hand-crafted features have been proposed, ranging from shape based, to statistical texture and margin \cite{Charles13} \cite{Pedro13} \cite{Cho2002}. Also generic computer vision object recognition/detection features, such SIFT\cite{SIFT} and HOG\cite{HOG} are studied for this problem.  Most of such manually engineered features achieve excellent accuracy on clean images taken in controlled conditions, which consist of one single well aligned leave on contrasting background, such as those images in data set \cite{SwedishLeafDataset}.
 
-Recently, with the huge success of deep ConvNets, particularly from the winners of ILSVRC \cite{Alex2014} \cite{VGGNetReference}, \cite{GoogleNetReference} and \cite{ResNet}, researchers start to apply deep ConvNets to this problem.  In \cite{CNNOfTheShelf}, Sharif, et al. suggested that generic features can be extracted from large ConvNet and yield very good results on fine-grained classification problems even without fine-tuning the pretrained model.  \cite{EvaluationOfLeafConv} compares traditional approaches with ConvNet based approach, and discuss impacts on various conditions, including translation, rotation, scale and occlusion. However it only give results on Flavia\cite{FlaviaDataset} dataset, which is clean dataset. \cite{PlantIdentificationConv} proposes a VGG\cite{VGGNetReference} based architecture, and use multiple organ features. It produces above 70\% mean average precision on ImageCLEF dataset\cite{ImageCLEF2013}.  
+Recently, with the huge success of deep ConvNets, particularly from the winners of ILSVRC \cite{Alex2014} \cite{VGGNetReference}, \cite{GoogleNetReference} and \cite{ResNet}, researchers start to apply deep ConvNets to this problem.  In \cite{CNNOfTheShelf}, Sharif, et al. suggested that generic features can be extracted from large ConvNet and yield very good results on fine-grained classification problems even without fine-tuning the pretrained model.  \cite{EvaluationOfLeafConv} compares traditional approaches with ConvNet based approach, and discuss impacts on various conditions, including translation, rotation, scale and occlusion. However it only give results on Flavia\cite{FlaviaDataset} dataset which is relatively less challenging\ref{DataSet}. \cite{PlantIdentificationConv} proposes a VGG\cite{VGGNetReference} based architecture, and use multiple organ features. It produces above 70\% mean average precision on ImageCLEF dataset\cite{ImageCLEF2013}.  
 
 
 \section{DataSet}
 \label{DataSet}
   \begin{tabular}{c@{}c@{}c@{}c@{}c@{}}
-  {\includegraphics[height=4.0em]{swedish1}} &
-  {\includegraphics[height=4.0em]{flavia1}} &
-  {\includegraphics[height=4.0em]{clef1}} &
-  {\includegraphics[height=4.0em]{clef2}} &
-  {\includegraphics[height=4.0em]{clef3}}
+  {\includegraphics[height=6.0em]{swedish1}} &
+  {\includegraphics[height=6.0em]{flavia1}} &
+  {\includegraphics[height=6.0em]{clef1}} &
+  {\includegraphics[height=6.0em]{clef2}} &
+  {\includegraphics[height=6.0em]{clef3}}
   \end{tabular}
 
     We consider two types of dataset.
@@ -519,21 +517,23 @@ Here is the pipeline of our system.
   \label{fig:pipeline}
 \end{figure}
 
-Firstly, during preprocessing, we apply CLAHE\cite{CLAHE} to reduce lighting condition variation and then resize raw images to fit the next layer. We also attempt to remove background with the following techniques in a heuristic way
-  \begin{enumerate}
-    \item use K-means (K=2) and throw away the background
-    \item find the convex hull containing the largest N contours and then use GrabCut\cite{Grabcut} to segment leaf out of the background clutter.
-  \end{enumerate}
-  Next we extract features
 \begin{enumerate}
+  \item Firstly, during preprocessing, we apply CLAHE\cite{CLAHE} to reduce lighting condition variation and then resize raw images to fit the next layer. We also attempt to remove background with the following techniques in a heuristic way
+  \begin{itemize}
+    \item use K-means (K=2) and throw away background
+    \item find the convex hull containing the largest N contours and then use GrabCut\cite{Grabcut} to segment leaf out of the background clutter.
+  \end{itemize}
+\item Next we extract features
+\begin{itemize}
   \item ConvNets
-    We take transfer learning approach, in order to make use of the power of ConvNets under the constrains of time and computations. Specifically, we take a couple of ConvNets that are pretrained on ImageNet for ILSVRC object classification task, remove top FC layers and then treat the rest of the ConvNet as fixed feature extractor. The CNN codes are our features. To battle overfitting issue, we augment our input images.
+
+    We take transfer learning approach, in order to make use of the power of deep ConvNets under the constrains of time and computations. Specifically, we take a couple of ConvNets that are pretrained on ImageNet for ILSVRC object classification task, remove top FC layers and then treat the rest of the ConvNet as fixed feature extractor. The CNN codes are our features. To battle overfitting issue, we augment our input images with color channel shift, translation and rotation.
   \item Traditional SIFT + Bag of Features
+
     Key points are densely sampled and SIFT feature descriptors are retrieved at each key point. We fix size of the codebook (K) as 1000/300 for different data sets.
+\end{itemize}
+\item Finally,  we train a simple classifier from the feature vectors and then predict labels for our test data.
 \end{enumerate}
-Finally,  we train a simple classifier from the feature vectors and then predict labels for our test data.
-
-
 \subsection{ConvNets approach}
   \subsubsection{Setup}
   For ConvNets, we used Keras framework \cite{Keras} with Tensorlow backend of GPU support: NVIDIA GeForce GT 750M 2048 MB. As an alternative, we also run on CPU given the limited graphic memory of our GPU which is crucial for a deeper ConvNets architecture.
