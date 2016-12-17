@@ -573,35 +573,42 @@ We break down the problem into two pieces. Firstly, we want to locate the leaf i
     \item More species with less samples per classes.
   \end{itemize}
 
+  Some of our data set such as ImageCLEF2013 is even more challenging in term of clutter and occlusion, which we didn't cover in the customized ConvNets classifier experiment.
+
   A deeper ConvNets with more aggressive filters is needed to extract the features more efficiently and to deal with the noise and variation of datasets. But given the constrains of time and computations, we can't afford to train a deeper network with much more parameters.
 
   As a common practice, we switched to use pre-trained weights of proven ConvNets architecture.
 
-  Since for our specific problem the output is different, we can't apply the architecture of the pre-trained weights directly. At minimum we have to drop the softmax layer at the very end to retrain with our own dataset. The technique is known as Transfer Learning. There are two options for Transfer Learning:
+  \subsubsection{Data Augmentation}
+  Before we start with the pre-trained weights, application of data augmentation is helpful.
+  Research shows number of samples need to be big enough to avoid excessive overfitting. See B section of the supplementary material of \cite{Jason2014}. Note that the research is proven for AlexNet. While we don't have enough data to seek for the threshold which suffices to avoid overfitting for our choice of architecture, we assume for the ImageCLEF data sets \cite{ImageCLEF2013}, 20 per samples is not enough.
+
+  Data augmentation is widely used to reduce overfitting on image data \cite{Alex2014}. This technique makes up the lower amount of samples and with some transformation increases the variation of the image. In our case, we've applied rotation, flipping, space shifting and channel shifting.
+
+  For our problemset, we experimented both to apply or to not apply data augmentation for the ImageCLEF dataset.
+
+  \subsubsection{Transfer Learning}
+  Since the output is different for our specific problem, we cannot apply the architecture of the pre-trained weights directly. At minimum we have to drop the softmax layer at the very end to retrain with our own dataset. The technique is known as Transfer Learning. The two well-known options for Transfer Learning are:
   \begin{enumerate}
     \item ConvNet as fixed feature extractor, and then classify with other Classifiers such as Logistic Regression/Softmax or SVM
     \item Fine-tuning the ConvNet. For a $N$ level structure, train the last $H$ levels with the $N-H$ lower levels freeze (the higher the level, the less overfitting to the target-datasets) \cite{CS231N}.
   \end{enumerate}
 
-  The ideality to choose an architecture of pre-trained weights is that it has been trained against original datasets that is similar to the target datasets. The well-known ImageNet has $14,197,122$ images, $21841$ synsets. Among them, there are $70$ synsets that is related to leaves. The task classifying leaves is similar but more specific to the task classifying ImageNet datasets. Given the large number of syncsets, the weights trained against ImageNet is generalized enough that there will be relatively less bias. Jason et al. found that even features transferred from distant tasks are better than random weights \cite{Jason2014}. Also note that ConvNet features are more generic in lower layers and more original-dataset-specific in upper layers\cite{CS231N}.
-  There are several options of architecture trained against ImageNet whose weights are available with keras framework.
+  There are several options of architecture trained against the well-known ImageNet whose weights are available with keras framework.
   \begin{itemize}
     \item VGGNet, runner-up in ILSVRC 2014 (GoogLeNet is the winner of that year).
     \item ResNet, winner of ILSVRC 2015. The available weights are for ResNet50 with 50 layers (including Fully Connected layers) in total.
   \end{itemize}
 
-  For the purpose of this project, we choose to use ResNet50.
+  The ideality to choose an architecture of pre-trained weights is that it has been trained against original datasets that is similar to the target datasets. ImageNet has $14,197,122$ images, $21841$ synsets. Among them, there are $70$ synsets that is related to leaves. Given the large number of syncsets, the weights trained against ImageNet is generalized enough that there will be relatively less bias. The weights are trained for the object image classification task of ImageNet, which is aligned with our task except that ours are more fine-grained leaf classification.
+
+  Further more, Jason et al. found that even features transferred from distant tasks are better than random weights \cite{Jason2014}. Also note that ConvNet features are more generic in early layers and more original-dataset-specific in later layers\cite{CS231N}.
+
+  After comparing preliminary results, we choose ResNet50 since ResNet50 gives better results and less overfitting. We believe this can be attributed to the fact that ResNet50 is deeper, but still having lower complexity\cite{ResNet}. It also generates lower dimension feature vector, which is likely due to the use of a more aggressive Average Pooling with a pool size of 7x7. This saves us from the effort to seek for reduction of dimensionality.
 
   % [explain why species with less sample will reduce the performance. Explain why sample per classes makes it harder to predict Learning Theory] [TODO]
 
-  \subsubsection{Data Augmentation}
-
-  Research shows number of samples need to be big enough to avoid excessive overfitting. See B section of the supplementary material of \cite{Jason2014}. Note that the research is proven for AlexNet. While we don't have enough data to seek for the threshold which suffices to avoid overfitting for ResNet50, we assume for the ImageCLEF data sets \cite{ImageCLEF2013}, 20 per samples is not enough.
-
-  Data augmentation is widely used to reduce overfitting on image data \cite{Alex2014}. This technique makes up the lower amount of samples and with some transformation increases the variation of the image. In our case, we've applied rotation, flipping, space shifting and channel shifting.
-
-  \subsubsection{Transfer Learning}
-  We download the weights and load it into the preset model. And drop off the layer after the last Convolutional/Residual block.
+  The ResNet is famous for it's deep layers\cite{ResNet}, in our case, 50 layers, with 49 Conv layers and one FC layer on top. Except for the first Conv layer, the rest 48 composes 16 ``residual'' blocks in 4 stages. The block within each stage has similar architecture, i.e. same input \& output shape. \par
 
   The possible approaches as forementioned, are either get the bottleneck features which is called CNN codes in the terms of transfer Learning, or freeze all the layers except for the last Residual Block and train with the target datasets. See Figure \ref{fig:tl_resnet}.
 
@@ -611,27 +618,55 @@ We break down the problem into two pieces. Firstly, we want to locate the leaf i
     \caption{ Illustration of Transfer Learning with ResNet }
     \label{fig:tl_resnet}
   \end{figure}
-
   Again, with the constrains of the time and computations, we choose to just extract the CNN codes.
 
-  Feed the network with augmented data, the CNN codes (feature vector) we get from ResNet50 is 2048 dimensions.
+  We download the weights and load it into the preset model. And drop off the layer after the last Convolutional/Residual block. Feed the network with augmented data, the CNN codes (feature vector) we get from ResNet50 is 2048 dimensions.
 
-  generalization vs specialization,
+  With the help of visualization, intuitively we can see that each filter is seizing different features, roughly the outlines, the texture or the contour. The output from later layers is more abstract and global than the earlier layers. We can also see that some of the filters are completely dark, means for that particular filter, it doesn't response to certain feature of the image after rectification.
 
+  \begin{figure}[H]
+    \centering
+    \begin{minipage}[b]{0.3\linewidth}
+      \centering
+      \includegraphics[width=0.9\textwidth]{33214-conv1.jpg}
+      \vspace{4ex}
+    \end{minipage}%
+    \begin{minipage}[b]{0.3\linewidth}
+      \centering
+      \includegraphics[width=0.9\textwidth]{33214-a1.jpg}
+      \vspace{4ex}
+    \end{minipage}%
+    \begin{minipage}[b]{0.3\linewidth}
+      \centering
+      \includegraphics[width=0.9\textwidth]{33214-a10.jpg}
+      \vspace{4ex}
+    \end{minipage}
+    \begin{minipage}[b]{0.3\linewidth}
+      \centering
+      \includegraphics[width=0.9\textwidth]{33214-a22.jpg}
+      \vspace{4ex}
+    \end{minipage}%
+    \begin{minipage}[b]{0.3\linewidth}
+      \centering
+      \includegraphics[width=0.9\textwidth]{33214-a40.jpg}
+      \vspace{4ex}
+    \end{minipage}%
+    \begin{minipage}[b]{0.3\linewidth}
+      \centering
+      \includegraphics[width=0.9\textwidth]{33214-a49.jpg}
+      \vspace{4ex}
+    \end{minipage}
+    \caption{Visualization of partial outputs for each stage of ResNet50. Left to right, top to bottom, they are from First Convolutional layer, the activation layer right after, Stage 2, Stage 3, Stage 4 and Stage 5 respectively. Note that the 4 outputs of Conv layer are corresponding to the 4 outputs of the activation layer}
+    \label{fig:visual_output}
+  \end{figure}
 
-[Explain the data set for our pretrained model and why this is this is applicable to our problem, i.e. same feature space.]
+  Thus, we can assume that the pre-trained weight is applicable to our problem, at least the early layers do generalize well to our feature space.
 
-[Explains architecture of ResNet50]
+  \subsubsection{Classification}
 
-We have two settings.
-\begin{itemize}
-  \item [--] [explain preprocessing] The feature vector is normalized with unit variance and we learn a linear SVM classifier [(or others)] from the features.
-  \item [--] We further augment the training set by adding rotated and shifted copies of samples.
-\end{itemize}
+  The feature vector is normalized with unit variance and we learn a linear SVM classifier (or others) from the features.
 
-[Explain if and how this method is suitable for our task]
--The CNN codes are trained for the object image classification task of ILSVRC (2013 for VGGNet and 2015 for ResNet), which is aligned with our task except that ours are more fine-grained classification.
--Some of our data set [ImageCLEF2013] is more challenging in term of clutter and occlusion.
+  We applied grid search for the hyperparameters. For SVM, we searched for the $C$ parameters with logarithmic scale $.01$, $.1$ and $1.$
 
   \subsection{Discussion}
     How do you decide what type of transfer learning you should perform on a new dataset? This is a function of several factors, but the two most important ones are the size of the new dataset (small or big), and its similarity to the original dataset (e.g. ImageNet-like in terms of the content of images and the classes, or very different, such as microscope images). Keeping in mind that ConvNet features are more generic in early layers and more original-dataset-specific in later layers, here are some common rules of thumb for navigating the 4 major scenarios:
