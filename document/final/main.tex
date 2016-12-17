@@ -451,6 +451,9 @@
 % this is a minor point as most people would not even notice if the said evil
 % space somehow managed to creep in.
 
+\setcounter{secnumdepth}{2} % only chapter and sections will be numbered
+\setcounter{tocdepth}{3}    % entries down to \subsubsections in the TOC
+
 
 % make the title area
 \maketitle
@@ -481,7 +484,7 @@ In this report, we describe our exploration with this problem, using traditional
 \section{Related Work}
 Research on automatic leaf classification has been active since 2000. Lots of hand-crafted features have been proposed, ranging from shape based, to statistical texture and margin related \cite{Charles13} \cite{Pedro13} \cite{Cho2002}. Also generic computer vision object recognition features, such SIFT\cite{SIFT} and HOG\cite{HOG}, are studied for this problem.  Most of such manually engineered features achieve excellent accuracy on clean images taken in controlled conditions, which consist of one single well aligned leave on contrasting background, such as those images in data set \cite{SwedishLeafDataset}.
 
-Recently, with the huge success of deep ConvNets, particularly from the winners of ILSVRC \cite{Alex2014} \cite{VGGNetReference} \cite{GoogleNetReference} \cite{ResNet}, researchers start to apply deep ConvNets to this problem.  In \cite{CNNOfTheShelf}, Sharif, et al. suggested that generic features can be extracted from large ConvNet and yield very good results on fine-grained classification problems even without fine-tuning the pre-trained model.  \cite{EvaluationOfLeafConv} compares traditional approaches with ConvNet based approach, and discuss impacts on various conditions, including translation, rotation, scale and occlusion. However it only give results on Flavia\cite{FlaviaDataset} dataset which is relatively less challenging\ref{DataSet}. \cite{PlantIdentificationConv} proposes a VGG\cite{VGGNetReference} based architecture, and use multiple organ features. It produces above 70\% mean average precision on ImageCLEF dataset\cite{ImageCLEF2013}.
+Recently, with the huge success of deep ConvNets, particularly from the winners of ILSVRC \cite{Alex2014} \cite{VGGNetReference}, \cite{GoogleNetReference} and \cite{ResNet}, researchers start to apply deep ConvNets to this problem.  In \cite{CNNOfTheShelf}, Sharif, et al. suggested that generic features can be extracted from large ConvNet and yield very good results on fine-grained classification problems even without fine-tuning the pre-trained model. \cite{EvaluationOfLeafConv} compares traditional approaches with ConvNet based approach, and discuss impacts on various conditions, including translation, rotation, scale and occlusion. However it only give results on Flavia\cite{FlaviaDataset} dataset which is relatively less challenging\ref{DataSet}. \cite{PlantIdentificationConv} proposes a VGG\cite{VGGNetReference} based architecture, and use multiple organ features. It produces above 70\% mean average precision on ImageCLEF dataset\cite{ImageCLEF2013}.
 
 
 \section{DataSet}
@@ -541,47 +544,30 @@ Here is the pipeline of our system.
   \begin{align*}
     min_{\gamma, w, b}\quad &\frac{1}{2} || w || ^2 + C \sum_{i=1}^m \xi_i \\
     s.t.\quad & y^{(i)} ( w\tran x^{(i)} + b ) \geq 1 - \xi_i \\
-         & \xi_i \geq 0, i = 1, \dots, m 
+         & \xi_i \geq 0, i = 1, \dots, m
   \end{align*}
 \end{enumerate}
 \subsection{ConvNets approach}
-  \subsubsection{Setup}
-  For ConvNets, we used Keras framework \cite{Keras} with TensorFlow \cite{TensorFlow} backend of GPU support: NVIDIA GeForce GT 750M 2048 MB. As an alternative, we also run on CPU given the limited graphic memory of our GPU which is crucial for a deeper ConvNets architecture.
+  \subsubsection{Setup} \
 
-  \subsubsection{Exploration}
-  We started by training ConvNets classifier from scratch, following the guidelines below:
+  For ConvNets, we used Keras framework \cite{Keras} with TensorFlow \cite{TensorFlow} backend of GPU support: NVIDIA GeForce GT 750M 2048 MB. As an alternative, we also run on CPU given the limited graphic memory of our GPU which is crucial for a deeper ConvNet architecture.
+
+  \subsubsection{Exploration} \
+
+  We started by training ConvNet classifier from scratch, following the guidelines below:
   \begin{enumerate}
     \item Convolutional layer learning features from general to specific, giving more layers helps with the transition. Study on deep convolutional nets suggests that deeper models are preferred under a parameter budget\cite{Deep2013}.
     \item Dropout reduces overfitting \cite{Dropout} \cite{Alex2014}
     \item Use aggressive pooling to reduce the dimensionality.
   \end{enumerate}
-  We designed our ConvNets with the architecture below:
+  We designed our ConvNet with the architecture below:
   \begin{figure}[H]
     \centering
     \includegraphics[scale=0.4]{cnn_arch}
-    \caption{Customized ConvNets Classifier Architecture}
+    \caption{Customized ConvNet Classifier Architecture}
     \label{cnn_arch}
   \end{figure}
-  Using cross entropy to measure loss,
-  \begin{equation*}
-    \sum_i^n\sum_k^K -y_{true}^{(k)} log(y_{predict}^{(k)})
-  \end{equation*}
-  we got the learning curve:
-  \begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.4]{cnn_loss}
-    \caption{Loss curve of ConvNets Classifier}
-    \label{cnn_loss}
-  \end{figure}
-  The loss of Swedish dataset \cite{SwedishLeafDataset} keeps decreasing as expected. For Flavia dataset \cite{FlaviaDataset}, the training loss keeps decreasing, but at some point, validation loss stop changing. For ImageCLEF uniform dataset \cite{ImageCLEF2013}, it actually stopped learning and the loss goes back up and stay there.
-
-  The accuracy is consistent from the loss, where accuracy of Swedish converges at $92\%$, with a test accuracy of $90.46\%$, but it doesn't work well with other datasets especially ImageCLEF dataset, which equals to random guessing.
-  \begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.4]{cnn_acc}
-    \caption{\label{fig:cnn_acc} Accuracy curve of ConvNets Classifier}
-    \label{cnn_acc}
-  \end{figure}
+  It has pretty good outcome for Swedish datasets, but unfortunately doesn't play well with other datasets. See the result section for more.
 
   Compare the datasets, intuitively, there are a few things to consider:
   \begin{itemize}
@@ -589,13 +575,14 @@ Here is the pipeline of our system.
     \item More species with less samples per classes.
   \end{itemize}
 
-  Some of our data set such as ImageCLEF2013 is even more challenging in term of clutter and occlusion, which we didn't cover in the customized ConvNets classifier experiment.
+  Some of our data set such as ImageCLEF2013 is even more challenging in term of clutter and occlusion, which we didn't cover in the customized ConvNet classifier experiment.
 
-  A deeper ConvNets with more aggressive filters is needed to extract the features more efficiently and to deal with the noise and variation of datasets. But given the constrains of time and computations, we can't afford to train a deeper network with much more parameters.
+  A deeper ConvNet with more aggressive filters is needed to extract the features more efficiently and to deal with the noise and variation of datasets. But given the constrains of time and computations, we can't afford to train a deeper network with much more parameters.
 
-  As a common practice, we switched to use pre-trained weights of proven ConvNets architecture. Since the output is different for our specific problem, we cannot apply the architecture of the pre-trained weights directly. We used Transfer Learning which will be discussed in next subsection.
+  As a common practice, we switched to use pre-trained weights of proven ConvNet architecture. Since the output is different for our specific problem, we cannot apply the architecture of the pre-trained weights directly. We used Transfer Learning which will be discussed in next subsection.\par
 
-  \subsubsection{Transfer Learning}
+  \subsubsection{Transfer Learning} \
+
   The two well-known options for Transfer Learning are:
   \begin{enumerate}
     \item ConvNets as fixed feature extractor, and then classify with other Classifiers such as Logistic Regression/Softmax or SVM
@@ -661,9 +648,28 @@ Here is the pipeline of our system.
 \end{figure}
 
 \section{Experimental Results}
-We choose prediction rank-1 identification (i.e. accuracy) as our performance metric, which is defined as $Accurary = \frac{N_c}{N_t} \times 100 \%$, where $N_c$ represents the number of correct match and $N_t$ is the total number of test samples.
 
-We use 3-fold cross validation to select model and hyper parameters. All the best results are collected with Linear SVM and C=0.01.
+First, let's take a look at the customized ConvNet architecture
+Using cross entropy to measure loss,
+\begin{equation*}
+  \sum_i^n\sum_k^K -y_{true}^{(k)} log(y_{predict}^{(k)})
+\end{equation*}
+we got the learning curve:
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.4]{cnn_loss}
+  \caption{Loss curve of ConvNet Classifier}
+  \label{cnn_loss}
+\end{figure}
+The loss of Swedish dataset \cite{SwedishLeafDataset} keeps decreasing as expected. For Flavia dataset \cite{FlaviaDataset}, the training loss keeps decreasing, but at some point, validation loss stop changing. For ImageCLEF uniform dataset \cite{ImageCLEF2013}, it actually stopped learning and the loss goes back up and stay there.
+
+The accuracy is consistent from the loss, where accuracy of Swedish converges at $92\%$, with a test accuracy of $90.46\%$, but it doesn't work well with other datasets especially ImageCLEF dataset, which equals to random guessing.
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.4]{cnn_acc}
+  \caption{\label{fig:cnn_acc} Accuracy curve of ConvNet Classifier}
+  \label{cnn_acc}
+\end{figure}
 
 \begin{figure}[H]
   \centering
@@ -672,6 +678,11 @@ We use 3-fold cross validation to select model and hyper parameters. All the bes
   \label{fig:best_cm_uniform}
 \end{figure}
 
+We choose prediction rank-1 identification (i.e. accuracy) as our performance metric, which is defined as $Accurary = \frac{N_c}{N_t} \times 100 \%$, where $N_c$ represents the number of correct match and $N_t$ is the total number of test samples.
+
+We use 3-fold cross validation to select model and hyper parameters. All the best results are collected with Linear SVM and C=0.01.
+
+And lastly, here is the test accuracy of the approaches we took.
 \begin{figure}[H]
   \centering
   \includegraphics[width=1.00\linewidth]{test_accuracy_with_customized_cnn}
@@ -794,7 +805,7 @@ CLEF\_Natural & $10.75\%$ & $47.22\%$     &
 \end{table}
 \item To understand what stimulate neurons and how variations affect such stimulus, we visualize the feature map and deconv\cite{deconv} of pool5 layer of ResNet for several pairs of data, using the visualization toolbox \cite{DeepVizTool}, in table \ref{tbl:vizpool5}.  Except for the last pair, all pairs come from the same species. And we can tell roughly that background clutter and color give quite different CNN codes.
       \begin{itemize}
-        \item [--] Background clutter yields the biggest confusions for ConvNets. None of the top 5 ILSVRC labels match and the stimulated neurons are quite different.
+        \item [--] Background clutter yields the biggest confusions for ConvNet. None of the top 5 ILSVRC labels match and the stimulated neurons are quite different.
         \item [--] Color and scale seem to activate slightly different sets of neurons.
       \end{itemize}
 
