@@ -33,6 +33,7 @@ class Codebook(object):
         vectors = np.concatenate((vectors,vec))
       else:
         logging.error("no features extracted for img: %s", r[1])
+      logging.debug("found %d feature descriptors for %s, %d x %d" % (len(vec), r[1], r[2].shape[1], r[2].shape[0]))
     #TODO: PCA
     estimator = ClusterKMeans.fit(K, vectors)
     logging.debug("distortion function: %f"%estimator.inertia_)

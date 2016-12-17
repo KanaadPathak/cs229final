@@ -123,7 +123,7 @@
 \graphicspath{{../images/}}
 % and their extensions so you won't have to specify these with
 % every instance of \includegraphics
-\DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+\DeclareGraphicsExtensions{.pdf,.jpg,.png}
 
 % graphicx was written by David Carlisle and Sebastian Rahtz. It is
 % required if you want graphics, photos, etc. graphicx.sty is already
@@ -396,6 +396,7 @@
 
 \usepackage[final]{pdfpages} % In­clude PDF doc­u­ments
 \usepackage[colorlinks=true, allcolors=blue]{hyperref} % Ex­ten­sive sup­port for hy­per­text
+\usepackage{wrapfig}
 
 
 
@@ -456,14 +457,12 @@
 %\begin{abstract}
 %\end{abstract}
 \section{Introduction}
-Automatic plant species recognition with image processing is a fine-grained image recognition problem and generally considered a hard problem due to the subtle differences between different species in the same class. Sometime such fine differences can be even challenging to humans. Typically this requires large training data but it is not feasible due to the number of planets (over 220000 \cite{Charles13}).
+Automatic plant species recognition with image processing has application in weeds identification, species discovery, plant taxonomy, natural reserve park management and so on \cite{Pedro13}.  It is considered as a fine-grained image recognition problem which is hard to solve since
 \begin{enumerate}
-  \item The subtle differences between different species in the same class. Sometime such fine differences can be even challenging to humans.
-  \item Large number of categories, over 220000 \cite{Charles13}.
+  \item The subtle differences between different species in the same class. Sometime such fine differences can be even challenging to human experts.
+  \item Typically this requires large training data but it is not feasible due to the number of species (over 220000 \cite{Charles13}).
 \end{enumerate}
-
-The main application are weeds identification, species discovery, plant taxonomy, natural reserve park management and so on \cite{Pedro13}.
-
+\centering\includegraphics[width=0.65\linewidth]{easilyconfused}
 
 In this report, we describe our exploration with this problem, using traditional handcrafted features and features extracted from pretrained deep convolution neural network (ConvNets).
 
@@ -478,11 +477,19 @@ The rest of the report is organized as follows. In section \ref{DataSet}, we des
 
 \section{Related Work }
 Research on automatic leaf classification from image has been active since 2000. Lots of hand-crafted features have since proposed, ranging from shape based, to statistical texture and margin \cite{Charles13} \cite{Pedro13} \cite{Cho2002}. Also generic computer vision object recognition/detection features, such SIFT and HOG are studied for this problem. [TODO]
-Most of such manually engineered features achieve excellent accuracy on clean images taken in controlled conditions, which consist of one single well aligned leave on contrasting background, such as those images in data set [TODO ].
-Recently, with the huge success of ConvNets, particularly in annual ImageNet Large Scale Visual Recognition Challenge \cite{Alex2014}, researchers start to apply ConvNets to this problem [TODO].  [TODO] have suggested that generic features can be extracted from large ConvNet and yield very good results on fine-grained classification problems even without fine-tuning the pretrained model.
+Most of such manually engineered features achieve excellent accuracy on clean images taken in controlled conditions, which consist of one single well aligned leave on contrasting background, such as those images in data set \cite{SwedishLeafDataset}.
+Recently, with the huge success of ConvNets, particularly the winners of ILSVRC \cite{Alex2014}, researchers start to apply ConvNets to this problem [TODO].  [TODO] have suggested that generic features can be extracted from large ConvNet and yield very good results on fine-grained classification problems even without fine-tuning the pretrained model.
 
 \section{DataSet}
 \label{DataSet}
+  \begin{tabular}{c@{}c@{}c@{}c@{}c@{}}
+  {\includegraphics[height=4.0em]{swedish1}} &
+  {\includegraphics[height=4.0em]{flavia1}} &
+  {\includegraphics[height=4.0em]{clef1}} &
+  {\includegraphics[height=4.0em]{clef2}} &
+  {\includegraphics[height=4.0em]{clef3}}
+  \end{tabular}
+
     We found two types of data set
 \begin{enumerate}
   \item Clean images, which consists of well aligned leaf on single contrasting background, with little or no variations of luminance or color. \\
@@ -492,17 +499,15 @@ Recently, with the huge success of ConvNets, particularly in annual ImageNet Lar
       Name & Species & Samples Per Species        \\ \hline
       Swedish \cite{SwedishLeafDataset} & 15 & 75        \\ \hline
       Flavia \cite{FlaviaDataset}       & 33 & $\sim$ 60 \\ \hline
-      UCI \cite{UCIDataSet}:            & 40 & 5~16      \\ \hline
-      Kaggle \cite{Pedro13}:            & 99 & 16        \\ \hline
       \end{tabular}
   \end{center}
 
-  \item ImageCLEF \cite{ImageCLEF2013}, which is collected through crowd sourced application, has 250 species and 26077 images. This is a much more challenging datasets with variations on lighting conditions, viewpoints, background clutters and even occlusions. The data further split to different subset: uniform, which is relatively with less clutter, and natrual-background, which is taken in a total natural enviroment. To effectively evaluate our approaches, we use subsets of this dataset.\\
+  \item ImageCLEF \cite{ImageCLEF2013}, which is collected through crowd sourced application. This is a much more noisy datasets with variations on lighting conditions, viewpoints, background clutters and even occlusions. The dataset can be further split into two subset: uniform, which is taken in a more controlled environment, and natural-background, which is taken in a natural environment.
   \begin{center}
       \begin{tabular}{| l | l | l | l |}
       \hline
       Name    & Species & train samples & test samples \\ \hline
-      uniform & 66      & [TODO:]       & 1194         \\ \hline
+      uniform & 66      & 9607         & 1194         \\ \hline
       natural & 57      & 2585          & 521          \\ \hline
       \end{tabular}
   \end{center}
@@ -511,26 +516,28 @@ Recently, with the huge success of ConvNets, particularly in annual ImageNet Lar
 \section{Approach}
 
 \subsection{Overview}
-Images captured in the field, such as those from ImageCLEF \cite{ImageCLEF2013}, are more challenging as there are much more intra class variations due to viewpoint, lighting condition and occlusion.
-We break down the problem into two pieces. Firstly, we want to locate the leaf in the image which is an single object localization problem.  This step becomes necessary if the image have multiple objects and possibly leaf is not the most salient object.  Then, we predict the species of the leaf, which is a fine-grained classification problem. This is the main task and for most data set, we only need to perform this task. Here we explore both traditional method, such as Bag of Features,  and ConvNets based method.
-
+Here is the pipeline of our system.
 \begin{figure}[H]
   \center
-  \includegraphics[scale=0.2]{overview}
+  \includegraphics[width=1.0\linewidth]{overview}
   \caption{ Overview of the system }
   \label{fig:pipeline}
 \end{figure}
 
-  Firstly, during preprocessing, we apply Contrast Limited Adaptive Histogram Equalization to reduce lighting condition variation and raw images are resized to fit to the next layer. In traditional approach, we also use K-means to remove background color heuristically. For challenging dataset, we find the convex hull containing the largest N contours and then use GrabCut to segment leaf out of the background clutter.
-  Next we extract features and we explore two options,
+Firstly, during preprocessing, we apply CLAHE\cite{CLAHE} to reduce lighting condition variation and then resize raw images to fit the next layer. We also attempt to remove background with the following techniques in a heuristic way
+  \begin{enumerate}
+    \item use K-means (K=2) and throw away the background 
+    \item find the convex hull containing the largest N contours and then use GrabCut\cite{Grabcut} to segment leaf out of the background clutter.
+  \end{enumerate}
+  Next we extract features
 \begin{enumerate}
   \item ConvNets.
-    We take transfer learning approach, in order to make use of the power of ConvNets with the constrains of time and computations. Specifically, we take a couple of ConvNets that are pretrained with ImageNet for ILSVRC object image classification task, remove one or two top layers and then treat the rest of the ConvNet as fixed feature extractor for the our data set.
-
-
-  \item SIFT + Bag of Features
-    Key points are densely sampled and SIFT feature descriptors are retrieved from each raw images. Then at last, we train a classifier, using the feature vectors from the above step and predict labels for our test data.
+    We take transfer learning approach, in order to make use of the power of ConvNets under the constrains of time and computations. Specifically, we take a couple of ConvNets that are pretrained on ImageNet for ILSVRC object classification task, remove top FC layers and then treat the rest of the ConvNet as fixed feature extractor. The CNN codes are our features. To battle overfitting issue, we augment our input images.
+  \item Traditional SIFT + Bag of Features
+    Key points are densely sampled and SIFT feature descriptors are retrieved at each key point. We fix size of the codebook (K) as 1000/300 for different data sets. 
 \end{enumerate}
+Finally,  we train a simple classifier from the feature vectors and then predict labels for our test data.
+
 
 \subsection{ConvNets approach}
   \subsubsection{Setup}
@@ -677,16 +684,15 @@ We break down the problem into two pieces. Firstly, we want to locate the leaf i
       \item size for each class(fine tuning is not a good idea)
     \end{enumerate}
 
-\subsection{Bag of Features (BoF) + local feature descriptors}
-   Due to the simplicity and performance, this well established approach was taken at first. Interest points are detected from the raw images and then local invariant feature descriptors are collected, which are clustered to form the visual vocabulary/codebook. Afterwards, each raw image can be represented with histograms of visual words, i.e. term vectors.  We have prototyped a BoF system, based on the OpenCV package.  Here is the illustration of the system \ref{fig:bofsystemdesign}.
-\newpage
+    \subsection{SIFT + Bag of Features (BoF) }
+   Due to the simplicity and performance, this well established approach was taken at first.  We prototyped the system with OpenCV libraries.  Here is the illustration of the system \ref{fig:bofsystemdesign}.
+ Key points are densely sampled with a step size of 20 from the grays caned copies of the training set. Then we extract SIFT descriptor for each key point, which are clustered to build visual words via K-Means. Several codebook size (500, 1000, 3000) are used and we pick the one with the best validation results for each data set. To reduce computation complexity, we randomly select 100 training images to build the codebook.  Finally, each train and test sample is represented with histograms of visual words, i.e. term vectors, and this is used as feature vectors for classification.
 \begin{figure}
   \centering
-  \includegraphics[scale=0.2]{flowchart}
-  \caption{ System Design for BoF }
+  \includegraphics[width=1.00\linewidth]{bof}
+  \caption{ Bag of Features }
   \label{fig:bofsystemdesign}
 \end{figure}
-During preprocessing, raw images are converted to gray-scaled images and resized to reduce computation complexity. We extract SIFT descriptors from the pixels after detecting the key points. Limiting the width of image to 128 pixels, we have roughly 200 SIFT descriptors per image. Then all the descriptors are clustered to build visual words via K-Means. Due to computation complexity, we pick randomly 100 training images to build the visual vocabulary for the initial run.
 
 \section{Experimental Results}
 [Explain cross validation approach we used]
@@ -697,9 +703,140 @@ We use prediction rank-1 identification (i.e. accuracy) as our performance metri
 [Test results as table.]
 
 \section{Discussions}
+\begin{enumerate}
+  \item As expected, CNN codes off the shelf yields similar or better accuracy, compared to SIFT+BoF. Particularly traditional method suffers on noisy datasets.  We use t-SNE \cite{tSNE} to visualize the feature vectors and it is clear that feature tend to spread further in Image CLEF Natural dataset. And the combination of Natural data set + traditional method gives the most sprawling representation in feature space. 
+  \begin{tabular}{c@{}c@{}}
+  {\includegraphics[width=0.50\linewidth]{tsne_uniform_bof}}  &
+  {\includegraphics[width=0.50\linewidth]{tsne_uniform_tl}} \\
+  {\includegraphics[width=0.50\linewidth]{tsne_natural_bof}}  &
+  {\includegraphics[width=0.50\linewidth]{tsne_natural_tl}} \\
+  \end{tabular}
+  {\tiny Top left: Uniform BoF. Top right: Uniform Transfer Learning. Bottom left: Natural BoF. Bottom right: Natural Transfer Learning.}
 
+  \begin{table}
+      \scriptsize
+    \begin{tabular}{c@{}c@{}c@{} l }
+  {\includegraphics[height=0.6in]{20326}}  &
+  {\includegraphics[height=0.75in]{20326_pool5}}  &
+  {\includegraphics[height=0.75in]{20326_pool5_119_deconv}} &
+  \begin{tabular}[b]{@{}c@{}}
+      shower curtain(0.21) \\
+      window shade (0.19)  \\
+      cup (0.11)\\
+      theater curtain (0.07) \\
+      tub (0.07)
+    \end{tabular} 
+  \\
+  {\includegraphics[height=0.75in]{20326_clean}}  &
+  {\includegraphics[height=0.75in]{20326_clean_pool5}}  &
+  {\includegraphics[height=0.75in]{20326_clean_pool5_485_deconv}} & 
+  \begin{tabular}[b]{@{}c@{}}
+        pot (0.57) \\
+        strawberry (0.19)\\
+        vase (0.04)\\
+        buckey (0.03) \\
+        hip (0.02)
+    \end{tabular}
+  \\
+  {\includegraphics[height=0.75in]{6139}}  &
+  {\includegraphics[height=0.75in]{6139_pool5}}  &
+  {\includegraphics[height=0.75in]{6139_pool5_697_deconv}}  &
+  \begin{tabular}[b]{@{}c@{}}
+  lampshade(0.17) \\
+  tick(0.10) \\
+  gong(0.08) \\
+  orange(0.07) \\
+  bonnet (0.04)
+    \end{tabular}
+  \\
+  {\includegraphics[height=0.75in]{2469}}  &
+  {\includegraphics[height=0.75in]{2469_pool5}}  &
+  {\includegraphics[height=0.75in]{2469_pool5_1227_deconv}}  &
+  \begin{tabular}[b]{@{}c@{}}
+  spider web (0.19) \\ 
+  orange (0.11) \\
+  lemon (0.10) \\
+  lycaenid (0.07) \\
+  parachute (0.07)
+    \end{tabular}
+  \\
+  {\includegraphics[height=0.75in]{5078}}  &
+  {\includegraphics[height=0.75in]{5078_pool5}}  &
+  {\includegraphics[height=0.75in]{5078_pool5_851_deconv}}  &
+  \begin{tabular}[b]{@{}c@{}}
+  vase (0.14) \\
+  spotlight (0.11) \\
+  daisy (0.05) \\
+  goblet (0.04) \\
+  candle (0.04)
+    \end{tabular}
+  \\
+  {\includegraphics[height=0.75in]{5812}}  &
+  {\includegraphics[height=0.75in]{5812_pool5}}  &
+  {\includegraphics[height=0.75in]{5812_pool5_486_deconv}}  &
+  \begin{tabular}[b]{@{}c@{}}
+  lacewing(0.21) \\
+  pot (0.10) \\
+  vase (0.05) \\
+  hair slide (0.05) \\
+  dragonfly(0.05) 
+    \end{tabular}
+  \\
+  {\includegraphics[height=0.75in]{675}}  &
+  {\includegraphics[height=0.75in]{675_pool5}}  &
+  {\includegraphics[height=0.75in]{675_pool5_1501_deconv}} & 
+  \begin{tabular}[b]{@{}c@{}}
+  lacewing (0.42) \\
+  nematode (0.28) \\
+  ear (0.05) \\
+  damselfly (0.02) \\
+  dragonfly (0.02)
+    \end{tabular}
+  \\
+  {\includegraphics[height=0.75in]{4879}}  &
+  {\includegraphics[height=0.75in]{4879_pool5}}  &
+  {\includegraphics[height=0.75in]{4879_pool5_110_deconv}} &
+  \begin{tabular}[b]{@{}c@{}}
+  nematode (0.95) \\
+  dragonfly (0.02)  \\
+  lacewing (0.01) 
+    \end{tabular}
+  \\
+  \end{tabular}
+  \caption{Feature map and deconv for pool5 layer}
+  \label{tbl:vizpool5}
+\end{table}
+\item To understand what stimulate neurons and how variations affect such stimulus, we visualize the feature map and deconv\cite{deconv} of pool5 layer of ResNet for several pairs of data, using the visualization toolbox \cite{DeepVizTool}, in table \ref{tbl:vizpool5}.  Except for the last pair, all pairs come from the same species. And we can tell roughly that background clutter and color give quite different CNN codes. 
+      \begin{itemize}
+        \item [--] Background clutter yields the biggest confusions for ConvNet. None of the top 5 ILSVRC labels match and the stimulated neurons are quite different.
+        \item [--] Color and scale seem to activate slightly different sets of neurons.
+      \end{itemize}
+
+\item As an exercise for error analysis, we manually inspect the results of two preprocessing methods and pick the best out of these two for Image CLEF Uniform data set.
+
+    \begin{tabular}{ c c c }
+    \hline\hline
+    No preprocessing & K-means & Hand-picked \\
+    63.23\% &  58.79\% & 71.11\% \\
+    \hline
+  \end{tabular}
+
+This clearly tells that the K-means preprocessing is not solid and the background noise contributes to the misclassification results.
+
+
+\item Looking at the confusion matrix, we believe the main causes for misclassification
+      \begin{itemize}
+        \item [--] Very fine differences between species, which is hard even for human experts
+        \item [--] Noisy and possibly non-representative train data lead to overfitting,
+      \end{itemize}
+\end{enumerate}
 
 \section{Conclusion and Future work}
+  \begin{enumerate}
+    \item Acquire more data and fine-tune ConvNet to solve overfitting problem
+    \item Engage advanced techniques for image augmentation
+    \item Explore state-of-art method to detect and locate leaf for Image CLEF natural leaf dataset.
+  \end{enumerate}
 
 
 % if have a single appendix:
@@ -832,6 +969,13 @@ We use prediction rank-1 identification (i.e. accuracy) as our performance metri
 
   \bibitem{Dropout}
     N. Srivastava, G. Hinton, A. Krizhevsky, I. Sutskever, R. Salakhutdinov. Dropout: A Simple Way to Prevent Neural Networks from Overfitting. J. Machine Learning Res. 15, 1929–1958 (2014)
+
+  \bibitem{Grabcut}
+    Rother, Carsten, Vladimir Kolmogorov, and Andrew Blake. "Grabcut: Interactive foreground extraction using iterated graph cuts." ACM transactions on graphics (TOG). Vol. 23. No. 3. ACM, 2004.
+  \bibitem{CLAHE}
+    Reza, Ali M. "Realization of the contrast limited adaptive histogram equalization (CLAHE) for real-time image enhancement." Journal of VLSI signal processing systems for signal, image and video technology 38.1 (2004): 35-44.
+  \bibitem{deconv}
+    Idier, Jérôme, ed. Bayesian approach to inverse problems. John Wiley \& Sons, 2013.
 \end{thebibliography}
 
 % biography section
