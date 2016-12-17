@@ -14,7 +14,7 @@ def _convert(img):
     return preprocess_input(x)
 
 
-def stitch(img_path, target_size=(128, 192), rows=0, cols=0):
+def stitch(img_path, target_size=(256, 256), rows=0, cols=0):
     jpgs = [f for f in os.listdir(img_path) if f.endswith('jpeg') or f.endswith('jpg')]
     first_path = os.path.join(img_path, jpgs[0])
     img = cv2.imread(first_path, cv2.IMREAD_UNCHANGED)
