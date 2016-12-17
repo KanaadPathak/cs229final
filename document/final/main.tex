@@ -490,20 +490,23 @@ Recently, with the huge success of deep ConvNets, particularly from the winners 
 
 \section{DataSet}
 \label{DataSet}
+  \begin{table}
   \begin{tabular}{c@{}c@{}c@{}c@{}c@{}}
-  {\includegraphics[height=6.0em]{swedish1}} &
-  {\includegraphics[height=6.0em]{flavia1}} &
-  {\includegraphics[height=6.0em]{clef1}} &
-  {\includegraphics[height=6.0em]{clef2}} &
-  {\includegraphics[height=6.0em]{clef3}}
+  {\includegraphics[height=8.0em]{swedish1}} &
+  {\includegraphics[height=8.0em]{flavia1}} &
+  {\includegraphics[height=8.0em]{clef1}} &
+  {\includegraphics[height=8.0em]{clef2}} &
+  {\includegraphics[height=8.0em]{clef3}}
   \end{tabular}
+  \caption{from left to right, Flavia, Swedish, natural, uniform, natural}
+  \end{table}
 
     We consider two types of dataset.
 \begin{enumerate}
   \item Swedish\cite{SwedishLeafDataset} and Flavia\cite{FlaviaDataset}. Both contain clean images only, which is characterized with well aligned leaf on contrasting background, with little or no variations of luminance or color. \\
 
   \item ImageCLEF \cite{ImageCLEF2013}, which is collected through crowd sourced application, is a much more noisy datasets with considerable variations on lighting conditions, viewpoints, background clutters and even occlusions. The dataset can be further split into two subset: uniform, which is taken in a more controlled environment, and natural, which is taken in a natural environment.
-  \begin{table}
+  \begin{centering}
     \centering
       \begin{tabular}{| c | c | c |}
       \hline
@@ -513,8 +516,7 @@ Recently, with the huge success of deep ConvNets, particularly from the winners 
       Swedish & 15      & 75 / species             \\ \hline
       Flavia  & 33      & $\sim$ 60 / species      \\ \hline
       \end{tabular}
-      \caption{from left to right, Flavia, Swedish, natural, uniform, natural}
-  \end{table}
+  \end{centering}
 \end{enumerate}
 
 \section{Approach}
@@ -674,12 +676,6 @@ The accuracy is consistent from the loss, where accuracy of Swedish converges at
   \label{cnn_acc}
 \end{figure}
 
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=1.00\linewidth]{best_cm_uniform}
-  \caption{ Confusion Matrix }
-  \label{fig:best_cm_uniform}
-\end{figure}
 
 We choose prediction rank-1 identification (i.e. accuracy) as our performance metric, which is defined as $Accurary = \frac{N_c}{N_t} \times 100 \%$, where $N_c$ represents the number of correct match and $N_t$ is the total number of test samples.
 
@@ -822,6 +818,13 @@ CLEF\_Natural & $10.75\%$ & $47.22\%$     &
   \end{tabular}
 
 This clearly tells that the K-means preprocessing is not solid and the background noise contributes to the misclassification results.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.00\linewidth]{best_cm_uniform}
+  \caption{ Confusion Matrix }
+  \label{fig:best_cm_uniform}
+\end{figure}
 
 
 \item Looking at the confusion matrix, we believe the main causes for misclassification
