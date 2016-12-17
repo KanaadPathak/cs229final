@@ -526,7 +526,7 @@ Here is the pipeline of our system.
 
 Firstly, during preprocessing, we apply CLAHE\cite{CLAHE} to reduce lighting condition variation and then resize raw images to fit the next layer. We also attempt to remove background with the following techniques in a heuristic way
   \begin{enumerate}
-    \item use K-means (K=2) and throw away the background 
+    \item use K-means (K=2) and throw away the background
     \item find the convex hull containing the largest N contours and then use GrabCut\cite{Grabcut} to segment leaf out of the background clutter.
   \end{enumerate}
   Next we extract features
@@ -534,7 +534,7 @@ Firstly, during preprocessing, we apply CLAHE\cite{CLAHE} to reduce lighting con
   \item ConvNets.
     We take transfer learning approach, in order to make use of the power of ConvNets under the constrains of time and computations. Specifically, we take a couple of ConvNets that are pretrained on ImageNet for ILSVRC object classification task, remove top FC layers and then treat the rest of the ConvNet as fixed feature extractor. The CNN codes are our features. To battle overfitting issue, we augment our input images.
   \item Traditional SIFT + Bag of Features
-    Key points are densely sampled and SIFT feature descriptors are retrieved at each key point. We fix size of the codebook (K) as 1000/300 for different data sets. 
+    Key points are densely sampled and SIFT feature descriptors are retrieved at each key point. We fix size of the codebook (K) as 1000/300 for different data sets.
 \end{enumerate}
 Finally,  we train a simple classifier from the feature vectors and then predict labels for our test data.
 
@@ -586,14 +586,6 @@ Finally,  we train a simple classifier from the feature vectors and then predict
 
   As a common practice, we switched to use pre-trained weights of proven ConvNets architecture.
 
-  \subsubsection{Data Augmentation}
-  Before we start with the pre-trained weights, application of data augmentation is helpful.
-  Research shows number of samples need to be big enough to avoid excessive overfitting. See B section of the supplementary material of \cite{Jason2014}. Note that the research is proven for AlexNet. While we don't have enough data to seek for the threshold which suffices to avoid overfitting for our choice of architecture, we assume for the ImageCLEF data sets \cite{ImageCLEF2013}, 20 per samples is not enough.
-
-  Data augmentation is widely used to reduce overfitting on image data \cite{Alex2014}. This technique makes up the lower amount of samples and with some transformation increases the variation of the image. In our case, we've applied rotation, flipping, space shifting and channel shifting.
-
-  For our problemset, we experimented both to apply or to not apply data augmentation for the ImageCLEF dataset.
-
   \subsubsection{Transfer Learning}
   Since the output is different for our specific problem, we cannot apply the architecture of the pre-trained weights directly. At minimum we have to drop the softmax layer at the very end to retrain with our own dataset. The technique is known as Transfer Learning. The two well-known options for Transfer Learning are:
   \begin{enumerate}
@@ -629,7 +621,7 @@ Finally,  we train a simple classifier from the feature vectors and then predict
 
   We download the weights and load it into the preset model. And drop off the layer after the last Convolutional/Residual block. Feed the network with augmented data, the CNN codes (feature vector) we get from ResNet50 is 2048 dimensions.
 
-  With the help of visualization, intuitively we can see that each filter is seizing different features, roughly the outlines, the texture or the contour. The output from later layers is more abstract and global than the earlier layers. We can also see that some of the filters are completely dark, means for that particular filter, it doesn't response to certain feature of the image after rectification.
+  With the help of visualization, intuitively we can see that each filter is seizing different features. The output from later layers is more abstract and global than the earlier layers. We can also see that some of the filters are completely dark, means for that particular filter, it doesn't response to certain feature of the image after rectification.
 
   \begin{figure}[H]
     \centering
@@ -642,38 +634,12 @@ Finally,  we train a simple classifier from the feature vectors and then predict
       \centering
       \includegraphics[width=0.9\textwidth]{33214-a1.jpg}
       \vspace{4ex}
-    \end{minipage}%
-    \begin{minipage}[b]{0.3\linewidth}
-      \centering
-      \includegraphics[width=0.9\textwidth]{33214-a10.jpg}
-      \vspace{4ex}
-    \end{minipage}
-    \begin{minipage}[b]{0.3\linewidth}
-      \centering
-      \includegraphics[width=0.9\textwidth]{33214-a22.jpg}
-      \vspace{4ex}
-    \end{minipage}%
-    \begin{minipage}[b]{0.3\linewidth}
-      \centering
-      \includegraphics[width=0.9\textwidth]{33214-a40.jpg}
-      \vspace{4ex}
-    \end{minipage}%
-    \begin{minipage}[b]{0.3\linewidth}
-      \centering
-      \includegraphics[width=0.9\textwidth]{33214-a49.jpg}
-      \vspace{4ex}
     \end{minipage}
     \caption{Visualization of partial outputs for each stage of ResNet50. Left to right, top to bottom, they are from First Convolutional layer, the activation layer right after, Stage 2, Stage 3, Stage 4 and Stage 5 respectively. Note that the 4 outputs of Conv layer are corresponding to the 4 outputs of the activation layer}
     \label{fig:visual_output}
   \end{figure}
 
   Thus, we can assume that the pre-trained weight is applicable to our problem, at least the early layers do generalize well to our feature space.
-
-  \subsubsection{Classification}
-
-  The feature vector is normalized with unit variance and we learn a linear SVM classifier (or others) from the features.
-
-  We applied grid search for the hyperparameters. For SVM, we searched for the $C$ parameters with logarithmic scale $.01$, $.1$ and $1.$
 
   \subsection{Discussion}
     How do you decide what type of transfer learning you should perform on a new dataset? This is a function of several factors, but the two most important ones are the size of the new dataset (small or big), and its similarity to the original dataset (e.g. ImageNet-like in terms of the content of images and the classes, or very different, such as microscope images). Keeping in mind that ConvNet features are more generic in early layers and more original-dataset-specific in later layers, here are some common rules of thumb for navigating the 4 major scenarios:
@@ -699,12 +665,25 @@ Finally,  we train a simple classifier from the feature vectors and then predict
 
 We use prediction rank-1 identification (i.e. accuracy) as our performance metric, which is defined as $Accurary = \frac{N_c}{N_t} \times 100 \%$, where $N_c$ represents the number of correct match and $N_t$ is the total number of test samples.
 
+\begin{figure}
+  \centering
+  \includegraphics[width=1.00\linewidth]{test_accuracy_with_customized_cnn}
+  \caption{ Bag of Features }
+  \label{fig:test_accuracy}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=1.00\linewidth]{best_cm_uniform}
+  \caption{ Confusion Matrix }
+  \label{fig:best_cm_uniform}
+\end{figure}
 
 [Test results as table.]
 
 \section{Discussions}
 \begin{enumerate}
-  \item As expected, CNN codes off the shelf yields similar or better accuracy, compared to SIFT+BoF. Particularly traditional method suffers on noisy datasets.  We use t-SNE \cite{tSNE} to visualize the feature vectors and it is clear that feature tend to spread further in Image CLEF Natural dataset. And the combination of Natural data set + traditional method gives the most sprawling representation in feature space. 
+  \item As expected, CNN codes off the shelf yields similar or better accuracy, compared to SIFT+BoF. Particularly traditional method suffers on noisy datasets.  We use t-SNE \cite{tSNE} to visualize the feature vectors and it is clear that feature tend to spread further in Image CLEF Natural dataset. And the combination of Natural data set + traditional method gives the most sprawling representation in feature space.
   \begin{tabular}{c@{}c@{}}
   {\includegraphics[width=0.50\linewidth]{tsne_uniform_bof}}  &
   {\includegraphics[width=0.50\linewidth]{tsne_uniform_tl}} \\
@@ -725,11 +704,11 @@ We use prediction rank-1 identification (i.e. accuracy) as our performance metri
       cup (0.11)\\
       theater curtain (0.07) \\
       tub (0.07)
-    \end{tabular} 
+    \end{tabular}
   \\
   {\includegraphics[height=0.75in]{20326_clean}}  &
   {\includegraphics[height=0.75in]{20326_clean_pool5}}  &
-  {\includegraphics[height=0.75in]{20326_clean_pool5_485_deconv}} & 
+  {\includegraphics[height=0.75in]{20326_clean_pool5_485_deconv}} &
   \begin{tabular}[b]{@{}c@{}}
         pot (0.57) \\
         strawberry (0.19)\\
@@ -753,7 +732,7 @@ We use prediction rank-1 identification (i.e. accuracy) as our performance metri
   {\includegraphics[height=0.75in]{2469_pool5}}  &
   {\includegraphics[height=0.75in]{2469_pool5_1227_deconv}}  &
   \begin{tabular}[b]{@{}c@{}}
-  spider web (0.19) \\ 
+  spider web (0.19) \\
   orange (0.11) \\
   lemon (0.10) \\
   lycaenid (0.07) \\
@@ -779,12 +758,12 @@ We use prediction rank-1 identification (i.e. accuracy) as our performance metri
   pot (0.10) \\
   vase (0.05) \\
   hair slide (0.05) \\
-  dragonfly(0.05) 
+  dragonfly(0.05)
     \end{tabular}
   \\
   {\includegraphics[height=0.75in]{675}}  &
   {\includegraphics[height=0.75in]{675_pool5}}  &
-  {\includegraphics[height=0.75in]{675_pool5_1501_deconv}} & 
+  {\includegraphics[height=0.75in]{675_pool5_1501_deconv}} &
   \begin{tabular}[b]{@{}c@{}}
   lacewing (0.42) \\
   nematode (0.28) \\
@@ -799,14 +778,14 @@ We use prediction rank-1 identification (i.e. accuracy) as our performance metri
   \begin{tabular}[b]{@{}c@{}}
   nematode (0.95) \\
   dragonfly (0.02)  \\
-  lacewing (0.01) 
+  lacewing (0.01)
     \end{tabular}
   \\
   \end{tabular}
   \caption{Feature map and deconv for pool5 layer}
   \label{tbl:vizpool5}
 \end{table}
-\item To understand what stimulate neurons and how variations affect such stimulus, we visualize the feature map and deconv\cite{deconv} of pool5 layer of ResNet for several pairs of data, using the visualization toolbox \cite{DeepVizTool}, in table \ref{tbl:vizpool5}.  Except for the last pair, all pairs come from the same species. And we can tell roughly that background clutter and color give quite different CNN codes. 
+\item To understand what stimulate neurons and how variations affect such stimulus, we visualize the feature map and deconv\cite{deconv} of pool5 layer of ResNet for several pairs of data, using the visualization toolbox \cite{DeepVizTool}, in table \ref{tbl:vizpool5}.  Except for the last pair, all pairs come from the same species. And we can tell roughly that background clutter and color give quite different CNN codes.
       \begin{itemize}
         \item [--] Background clutter yields the biggest confusions for ConvNet. None of the top 5 ILSVRC labels match and the stimulated neurons are quite different.
         \item [--] Color and scale seem to activate slightly different sets of neurons.
