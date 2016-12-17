@@ -490,16 +490,14 @@ Recently, with the huge success of deep ConvNets, particularly from the winners 
 
 \section{DataSet}
 \label{DataSet}
-  \begin{table}
   \begin{tabular}{c@{}c@{}c@{}c@{}c@{}}
-  {\includegraphics[height=8.0em]{swedish1}} &
-  {\includegraphics[height=8.0em]{flavia1}} &
-  {\includegraphics[height=8.0em]{clef1}} &
-  {\includegraphics[height=8.0em]{clef2}} &
-  {\includegraphics[height=8.0em]{clef3}}
+  {\includegraphics[height=6.0em]{swedish1}} &
+  {\includegraphics[height=6.0em]{flavia1}} &
+  {\includegraphics[height=6.0em]{clef1}} &
+  {\includegraphics[height=6.0em]{clef2}} &
+  {\includegraphics[height=6.0em]{clef3}}
   \end{tabular}
-  \caption{from left to right, Flavia, Swedish, natural, uniform, natural}
-  \end{table}
+  {\centering \scriptsize From left to right, Flavia, Swedish, natural, uniform, natural}
 
     We consider two types of dataset.
 \begin{enumerate}
@@ -700,7 +698,7 @@ CLEF\_Natural & $10.75\%$ & $47.22\%$     &
 
 \section{Discussions}
 \begin{enumerate}
-  \item As expected, CNN codes off the shelf yields similar or better accuracy, compared to SIFT+BoF. Particularly traditional method suffers on noisy datasets.  We use t-SNE \cite{tSNE} to visualize the feature vectors and it is clear that feature tend to spread further in ImageCLEF Natural dataset. And the combination of Natural data set + traditional method gives the most sprawling representation in feature space.
+  \item As expected, CNN codes with pretrained weights yields similar or better accuracy, compared to SIFT+BoF. Particularly traditional method suffers on noisy datasets.  We use t-SNE \cite{tSNE} to visualize high dimension the feature vectors into 2D figure. It is clear that feature tend to spread and mix for ImageCLEF Natural dataset, which means it is harder to separate them in feature space. This is aligned with our results.
   \begin{tabular}{c@{}c@{}}
   {\includegraphics[width=0.50\linewidth]{tsne_uniform_bof}}  &
   {\includegraphics[width=0.50\linewidth]{tsne_uniform_tl}} \\
@@ -835,7 +833,7 @@ This clearly tells that the K-means preprocessing is not solid and the backgroun
 \end{enumerate}
 
 \section{Conclusion and Future work}
-We explore deep ConvNet with leaf classification problem. CNN codes and simple linear SVM gives best the results for both clean and noisy datasets. Further investigation gives some insights on impacts of background clutter, color/scale variations on CNN codes.
+We explore deep ConvNet with leaf classification problem. CNN codes and simple linear SVM gives the best results for both clean and noisy datasets. Further investigation gives some insights on impacts of background clutter, color/scale variations on CNN codes.
 
 We think these are the area for improvement
   \begin{enumerate}
