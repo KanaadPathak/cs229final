@@ -653,7 +653,7 @@ Here is the pipeline of our system.
 \section{Experimental Results}
 
 First, let's take a look at the customized ConvNet architecture
-Using cross entropy to measure loss,
+using cross entropy to measure loss,
 \begin{equation*}
   \sum_i^n\sum_k^K -y_{true}^{(k)} log(y_{predict}^{(k)})
 \end{equation*}
@@ -677,9 +677,7 @@ The accuracy is consistent from the loss, where accuracy of Swedish converges at
 
 We choose prediction rank-1 identification (i.e. accuracy) as our performance metric, which is defined as $Accurary = \frac{N_c}{N_t} \times 100 \%$, where $N_c$ represents the number of correct match and $N_t$ is the total number of test samples.
 
-We use 3-fold cross validation to select model and hyper parameters. All the best results are collected with Linear SVM and C=0.01.
-
-And lastly, here is the test accuracy of the approaches we took.
+We use 3-fold cross validation to select model and hyper parameters. All the best results are collected with Linear SVM and C=0.01.  Here are the test results.
 \begin{figure}[H]
   \centering
   \includegraphics[width=1.00\linewidth]{test_accuracy_with_customized_cnn}
