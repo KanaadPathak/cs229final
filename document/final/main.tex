@@ -567,9 +567,9 @@ Here is the pipeline of our system.
     \caption{Loss curve of ConvNets Classifier}
     \label{cnn_loss}
   \end{figure}
-  The loss of Swedish dataset \cite{SwedishLeafDataset} keeps decreasing as expected. But for Flavia dataset \cite{FlaviaDataset}, the training loss is keep decreasing, but at some point, validation loss stop changing. For ImageCLEF uniform dataset \cite{ImageCLEF2013}, it actually stopped learning and the loss goes back up and stay there.
+  The loss of Swedish dataset \cite{SwedishLeafDataset} keeps decreasing as expected. For Flavia dataset \cite{FlaviaDataset}, the training loss keeps decreasing, but at some point, validation loss stop changing. For ImageCLEF uniform dataset \cite{ImageCLEF2013}, it actually stopped learning and the loss goes back up and stay there.
 
-  The accuracy is consistent from the loss, where accuracy of Swedish converges at $92\%$, with a test accuracy of $90.46\%$, but it doesn't work well with other datasets especially ImageCLEF dataset.
+  The accuracy is consistent from the loss, where accuracy of Swedish converges at $92\%$, with a test accuracy of $90.46\%$, but it doesn't work well with other datasets especially ImageCLEF dataset, which equals to random guessing.
   \begin{figure}[H]
     \centering
     \includegraphics[scale=0.4]{cnn_acc}
@@ -644,18 +644,9 @@ Here is the pipeline of our system.
 
   Thus, we can assume that the pre-trained weight is applicable to our problem, at least the early layers do generalize well to our feature space.
 
-  \subsection{Discussion}
-    How do you decide what type of transfer learning you should perform on a new dataset? This is a function of several factors, but the two most important ones are the size of the new dataset (small or big), and its similarity to the original dataset (e.g. ImageNet-like in terms of the content of images and the classes, or very different, such as microscope images). Keeping in mind that ConvNets features are more generic in early layers and more original-dataset-specific in later layers, here are some common rules of thumb for navigating the 4 major scenarios:
-    \cite{CS231N}
-
-    \begin{enumerate}
-      \item similarity (transfer learning is good)
-      \item size for each class(fine tuning is not a good idea)
-    \end{enumerate}
-
-    \subsection{SIFT + Bag of Features (BoF) }
-   Due to the simplicity and performance, this well established approach was taken at first.  We prototyped the system with OpenCV libraries.  Here is the illustration of the system \ref{fig:bofsystemdesign}.
- Key points are densely sampled with a step size of 20 from the grays caned copies of the training set. Then we extract SIFT descriptor for each key point, which are clustered to build visual words via K-Means. Several codebook size (500, 1000, 3000) are used and we pick the one with the best validation results for each data set. To reduce computation complexity, we randomly select 100 training images to build the codebook.  Finally, each train and test sample is represented with histograms of visual words, i.e. term vectors, and this is used as feature vectors for classification.
+  \subsection{SIFT + Bag of Features (BoF) }
+  Due to the simplicity and performance, this well established approach was taken at first.  We prototyped the system with OpenCV libraries.  Here is the illustration of the system \ref{fig:bofsystemdesign}.
+  Key points are densely sampled with a step size of 20 from the grays caned copies of the training set. Then we extract SIFT descriptor for each key point, which are clustered to build visual words via K-Means. Several codebook size (500, 1000, 3000) are used and we pick the one with the best validation results for each data set. To reduce computation complexity, we randomly select 100 training images to build the codebook.  Finally, each train and test sample is represented with histograms of visual words, i.e. term vectors, and this is used as feature vectors for classification.
 \begin{figure}[H]
   \centering
   \includegraphics[width=1.00\linewidth]{bof}
@@ -940,7 +931,7 @@ This clearly tells that the K-means preprocessing is not solid and the backgroun
     \url{https://www.tensorflow.org/},
 
   \bibitem{KerasBlog}
-    Chollet, Fran\c{c}ois, 2015, \url{ https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html}
+    Chollet, Fran\c{c}ois, 2015, \url{https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html}
 
   \bibitem{CS231N}
     Andrej Karpathy et al. \url{http://cs231n.github.io/transfer-learning/}
