@@ -648,7 +648,7 @@ Finally,  we train a simple classifier from the feature vectors and then predict
     \subsection{SIFT + Bag of Features (BoF) }
    Due to the simplicity and performance, this well established approach was taken at first.  We prototyped the system with OpenCV libraries.  Here is the illustration of the system \ref{fig:bofsystemdesign}.
  Key points are densely sampled with a step size of 20 from the grays caned copies of the training set. Then we extract SIFT descriptor for each key point, which are clustered to build visual words via K-Means. Several codebook size (500, 1000, 3000) are used and we pick the one with the best validation results for each data set. To reduce computation complexity, we randomly select 100 training images to build the codebook.  Finally, each train and test sample is represented with histograms of visual words, i.e. term vectors, and this is used as feature vectors for classification.
-\begin{figure}
+\begin{figure}[H]
   \centering
   \includegraphics[width=1.00\linewidth]{bof}
   \caption{ Bag of Features }
@@ -660,21 +660,28 @@ Finally,  we train a simple classifier from the feature vectors and then predict
 
 We use prediction rank-1 identification (i.e. accuracy) as our performance metric, which is defined as $Accurary = \frac{N_c}{N_t} \times 100 \%$, where $N_c$ represents the number of correct match and $N_t$ is the total number of test samples.
 
-\begin{figure}
+\begin{figure}[H]
   \centering
   \includegraphics[width=1.00\linewidth]{test_accuracy_with_customized_cnn}
   \caption{ Bag of Features }
   \label{fig:test_accuracy}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
   \centering
   \includegraphics[width=1.00\linewidth]{best_cm_uniform}
   \caption{ Confusion Matrix }
   \label{fig:best_cm_uniform}
 \end{figure}
 
-[Test results as table.]
+\begin{tabular}{c@{}c@{}c@{}c@{}}
+Dataset       & SIFT\_BOF & TL\_ResNet50  & Customized\_CNN \\
+\hline
+Swedish       & $97.70\%$ & $99.33\%$     & $94.44\%$ \\
+Flavia        & $96.84\%$ & $97.81\%$     & $49.80\%$ \\
+CLEF\_Uniform & $47.40\%$ & $71.11\%$     & $0.50\%$  \\
+CLEF\_Natural & $10.75\%$ & $47.22\%$     &
+\end{tabular}
 
 \section{Discussions}
 \begin{enumerate}
