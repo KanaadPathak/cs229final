@@ -464,7 +464,11 @@ Automatic plant species recognition with image processing has application in wee
 \end{enumerate}
 
 In this report, we describe our exploration with this problem, using traditional handcrafted features and features extracted from pretrained deep convolution neural network (ConvNets). The input to our system is raw images from various datasets and the output is the label for each species.
-{\includegraphics[width=0.8\linewidth]{easilyconfused}}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\linewidth]{easilyconfused}
+\end{figure}
 
 % IEEEtran.cls defaults to using nonbold math in the Abstract.
 % This preserves the distinction between vectors and scalars. However,
@@ -476,7 +480,7 @@ In this report, we describe our exploration with this problem, using traditional
 \section{Related Work}
 Research on automatic leaf classification with computer vision processing has been active since 2000. Lots of hand-crafted features have been proposed, ranging from shape based, to statistical texture and margin \cite{Charles13} \cite{Pedro13} \cite{Cho2002}. Also generic computer vision object recognition/detection features, such SIFT\cite{SIFT} and HOG\cite{HOG} are studied for this problem.  Most of such manually engineered features achieve excellent accuracy on clean images taken in controlled conditions, which consist of one single well aligned leave on contrasting background, such as those images in data set \cite{SwedishLeafDataset}.
 
-Recently, with the huge success of deep ConvNets, particularly from the winners of ILSVRC \cite{Alex2014} \cite{VGGNetReference}, \cite{GoogleNetReference} and \cite{ResNet}, researchers start to apply deep ConvNets to this problem.  In \cite{CNNOfTheShelf}, Sharif, et al. suggested that generic features can be extracted from large ConvNet and yield very good results on fine-grained classification problems even without fine-tuning the pretrained model.  \cite{EvaluationOfLeafConv} compares traditional approaches with ConvNet based approach, and discuss impacts on various conditions, including translation, rotation, scale and occlusion. However it only give results on Flavia\cite{FlaviaDataset} dataset which is relatively less challenging\ref{DataSet}. \cite{PlantIdentificationConv} proposes a VGG\cite{VGGNetReference} based architecture, and use multiple organ features. It produces above 70\% mean average precision on ImageCLEF dataset\cite{ImageCLEF2013}.  
+Recently, with the huge success of deep ConvNets, particularly from the winners of ILSVRC \cite{Alex2014} \cite{VGGNetReference}, \cite{GoogleNetReference} and \cite{ResNet}, researchers start to apply deep ConvNets to this problem.  In \cite{CNNOfTheShelf}, Sharif, et al. suggested that generic features can be extracted from large ConvNet and yield very good results on fine-grained classification problems even without fine-tuning the pretrained model.  \cite{EvaluationOfLeafConv} compares traditional approaches with ConvNet based approach, and discuss impacts on various conditions, including translation, rotation, scale and occlusion. However it only give results on Flavia\cite{FlaviaDataset} dataset which is relatively less challenging\ref{DataSet}. \cite{PlantIdentificationConv} proposes a VGG\cite{VGGNetReference} based architecture, and use multiple organ features. It produces above 70\% mean average precision on ImageCLEF dataset\cite{ImageCLEF2013}.
 
 
 \section{DataSet}
@@ -579,10 +583,10 @@ Here is the pipeline of our system.
 
   A deeper ConvNets with more aggressive filters is needed to extract the features more efficiently and to deal with the noise and variation of datasets. But given the constrains of time and computations, we can't afford to train a deeper network with much more parameters.
 
-  As a common practice, we switched to use pre-trained weights of proven ConvNets architecture.
+  As a common practice, we switched to use pre-trained weights of proven ConvNets architecture. Since the output is different for our specific problem, we cannot apply the architecture of the pre-trained weights directly. We used Transfer Learning which will be discussed in next subsection.
 
   \subsubsection{Transfer Learning}
-  Since the output is different for our specific problem, we cannot apply the architecture of the pre-trained weights directly. At minimum we have to drop the softmax layer at the very end to retrain with our own dataset. The technique is known as Transfer Learning. The two well-known options for Transfer Learning are:
+  The two well-known options for Transfer Learning are:
   \begin{enumerate}
     \item ConvNet as fixed feature extractor, and then classify with other Classifiers such as Logistic Regression/Softmax or SVM
     \item Fine-tuning the ConvNet. For a $N$ level structure, train the last $H$ levels with the $N-H$ lower levels freeze (the higher the level, the less overfitting to the target-datasets) \cite{CS231N}.
@@ -594,7 +598,7 @@ Here is the pipeline of our system.
     \item ResNet, winner of ILSVRC 2015. The available weights are for ResNet50 with 50 layers (including Fully Connected layers) in total.
   \end{itemize}
 
-  The ideality to choose an architecture of pre-trained weights is that it has been trained against original datasets that is similar to the target datasets. ImageNet has $14,197,122$ images, $21841$ synsets. Among them, there are $70$ synsets that is related to leaves. Given the large number of syncsets, the weights trained against ImageNet is generalized enough that there will be relatively less bias. The weights are trained for the object image classification task of ImageNet, which is aligned with our task except that ours are more fine-grained leaf classification.
+  The ideal situation to choose an architecture of pre-trained weights is that it has been trained against original datasets that is similar to the target datasets. ImageNet has $14,197,122$ images, $21841$ synsets. Among them, there are $70$ synsets that is related to leaves. Given the large number of syncsets, the weights trained against ImageNet is generalized enough that there will be relatively less bias. The weights are trained for the object image classification task of ImageNet, which is aligned with our task except that ours are more fine-grained leaf classification.
 
   Further more, Jason et al. found that even features transferred from distant tasks are better than random weights \cite{Jason2014}. Also note that ConvNet features are more generic in early layers and more original-dataset-specific in later layers\cite{CS231N}.
 
@@ -630,7 +634,7 @@ Here is the pipeline of our system.
       \includegraphics[width=0.9\textwidth]{33214-a1.jpg}
       \vspace{4ex}
     \end{minipage}
-    \caption{Visualization of partial outputs for each stage of ResNet50. Left to right, top to bottom, they are from First Convolutional layer, the activation layer right after, Stage 2, Stage 3, Stage 4 and Stage 5 respectively. Note that the 4 outputs of Conv layer are corresponding to the 4 outputs of the activation layer}
+    \caption{Visualization of partial outputs for each stage of ResNet50. Left to right, top to bottom, they are from first convolutional layer, the activation layer right after respectively. Note that the 4 outputs of Conv layer are corresponding to the 4 outputs of the activation layer}
     \label{fig:visual_output}
   \end{figure}
 
@@ -656,22 +660,20 @@ Here is the pipeline of our system.
 \end{figure}
 
 \section{Experimental Results}
-[Explain cross validation approach we used]
-
 We use prediction rank-1 identification (i.e. accuracy) as our performance metric, which is defined as $Accurary = \frac{N_c}{N_t} \times 100 \%$, where $N_c$ represents the number of correct match and $N_t$ is the total number of test samples.
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=1.00\linewidth]{test_accuracy_with_customized_cnn}
-  \caption{ Bag of Features }
-  \label{fig:test_accuracy}
-\end{figure}
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=1.00\linewidth]{best_cm_uniform}
   \caption{ Confusion Matrix }
   \label{fig:best_cm_uniform}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.00\linewidth]{test_accuracy_with_customized_cnn}
+  \caption{ test Accuracy }
+  \label{fig:test_accuracy}
 \end{figure}
 
 \begin{tabular}{c@{}c@{}c@{}c@{}}
@@ -983,7 +985,7 @@ This clearly tells that the K-means preprocessing is not solid and the backgroun
 
   \bibitem{DeepVizTool}
   Yosinski, Jason, et al. "Understanding neural networks through deep visualization." arXiv preprint arXiv:1506.06579 (2015).
- 
+
 \end{thebibliography}
 
 % biography section
