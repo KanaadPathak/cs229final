@@ -472,6 +472,7 @@ In this report, we describe our exploration with this problem, using traditional
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.8\linewidth]{easilyconfused}
+  \caption{Examples of species with fine differences}
 \end{figure}
 
 % IEEEtran.cls defaults to using nonbold math in the Abstract.
@@ -502,7 +503,8 @@ Recently, with the huge success of deep ConvNets, particularly from the winners 
   \item Swedish\cite{SwedishLeafDataset} and Flavia\cite{FlaviaDataset}. Both contain clean images only, which is characterized with well aligned leaf on contrasting background, with little or no variations of luminance or color. \\
 
   \item ImageCLEF \cite{ImageCLEF2013}, which is collected through crowd sourced application, is a much more noisy datasets with considerable variations on lighting conditions, viewpoints, background clutters and even occlusions. The dataset can be further split into two subset: uniform, which is taken in a more controlled environment, and natural, which is taken in a natural environment.
-  \begin{center}
+  \begin{table}
+    \centering
       \begin{tabular}{| c | c | c |}
       \hline
       Name    & Species & samples                  \\ \hline
@@ -511,7 +513,8 @@ Recently, with the huge success of deep ConvNets, particularly from the winners 
       Swedish & 15      & 75 / species             \\ \hline
       Flavia  & 33      & $\sim$ 60 / species      \\ \hline
       \end{tabular}
-  \end{center}
+      \caption{from left to right, Flavia, Swedish, natural, uniform, natural}
+  \end{table}
 \end{enumerate}
 
 \section{Approach}
