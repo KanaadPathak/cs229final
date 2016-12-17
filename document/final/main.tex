@@ -397,6 +397,7 @@
 \usepackage[final]{pdfpages} % In­clude PDF doc­u­ments
 \usepackage[colorlinks=true, allcolors=blue]{hyperref} % Ex­ten­sive sup­port for hy­per­text
 \usepackage{wrapfig}
+\newcommand*{\tran}{^{\intercal}}
 
 
 
@@ -457,7 +458,7 @@
 %\begin{abstract}
 %\end{abstract}
 \section{Introduction}
-Automatic plant species recognition with image processing has application in weeds identification, species discovery, plant taxonomy, natural reserve park management and so on \cite{Pedro13}.  It is considered a fine-grained image recognition problem which is hard to solve since
+Automatic plant species recognition with image processing has application in weeds identification, species discovery, plant taxonomy, natural reserve park management and so on \cite{Pedro13}.  It is considered a fine-grained image recognition problem and hard to solve because
 \begin{enumerate}
   \item The subtle differences between different species in the same class. Sometime such fine differences can be even challenging to human experts.
   \item Typically this requires large training data but it is not feasible due to the number of species (over 220000 \cite{Charles13}).
@@ -478,9 +479,9 @@ In this report, we describe our exploration with this problem, using traditional
 % in the abstract anyway.
 
 \section{Related Work}
-Research on automatic leaf classification with computer vision processing has been active since 2000. Lots of hand-crafted features have been proposed, ranging from shape based, to statistical texture and margin \cite{Charles13} \cite{Pedro13} \cite{Cho2002}. Also generic computer vision object recognition/detection features, such SIFT\cite{SIFT} and HOG\cite{HOG} are studied for this problem.  Most of such manually engineered features achieve excellent accuracy on clean images taken in controlled conditions, which consist of one single well aligned leave on contrasting background, such as those images in data set \cite{SwedishLeafDataset}.
+Research on automatic leaf classification has been active since 2000. Lots of hand-crafted features have been proposed, ranging from shape based, to statistical texture and margin related \cite{Charles13} \cite{Pedro13} \cite{Cho2002}. Also generic computer vision object recognition features, such SIFT\cite{SIFT} and HOG\cite{HOG}, are studied for this problem.  Most of such manually engineered features achieve excellent accuracy on clean images taken in controlled conditions, which consist of one single well aligned leave on contrasting background, such as those images in data set \cite{SwedishLeafDataset}.
 
-Recently, with the huge success of deep ConvNets, particularly from the winners of ILSVRC \cite{Alex2014} \cite{VGGNetReference}, \cite{GoogleNetReference} and \cite{ResNet}, researchers start to apply deep ConvNets to this problem.  In \cite{CNNOfTheShelf}, Sharif, et al. suggested that generic features can be extracted from large ConvNet and yield very good results on fine-grained classification problems even without fine-tuning the pre-trained model.  \cite{EvaluationOfLeafConv} compares traditional approaches with ConvNet based approach, and discuss impacts on various conditions, including translation, rotation, scale and occlusion. However it only give results on Flavia\cite{FlaviaDataset} dataset which is relatively less challenging\ref{DataSet}. \cite{PlantIdentificationConv} proposes a VGG\cite{VGGNetReference} based architecture, and use multiple organ features. It produces above 70\% mean average precision on ImageCLEF dataset\cite{ImageCLEF2013}.
+Recently, with the huge success of deep ConvNets, particularly from the winners of ILSVRC \cite{Alex2014} \cite{VGGNetReference} \cite{GoogleNetReference} \cite{ResNet}, researchers start to apply deep ConvNets to this problem.  In \cite{CNNOfTheShelf}, Sharif, et al. suggested that generic features can be extracted from large ConvNet and yield very good results on fine-grained classification problems even without fine-tuning the pre-trained model.  \cite{EvaluationOfLeafConv} compares traditional approaches with ConvNet based approach, and discuss impacts on various conditions, including translation, rotation, scale and occlusion. However it only give results on Flavia\cite{FlaviaDataset} dataset which is relatively less challenging\ref{DataSet}. \cite{PlantIdentificationConv} proposes a VGG\cite{VGGNetReference} based architecture, and use multiple organ features. It produces above 70\% mean average precision on ImageCLEF dataset\cite{ImageCLEF2013}.
 
 
 \section{DataSet}
@@ -497,7 +498,7 @@ Recently, with the huge success of deep ConvNets, particularly from the winners 
 \begin{enumerate}
   \item Swedish\cite{SwedishLeafDataset} and Flavia\cite{FlaviaDataset}. Both contain clean images only, which is characterized with well aligned leaf on contrasting background, with little or no variations of luminance or color. \\
 
-  \item ImageCLEF \cite{ImageCLEF2013}, which is collected through crowd sourced application. This is a much more noisy datasets with considerable variations on lighting conditions, viewpoints, background clutters and even occlusions. The dataset can be further split into two subset: uniform, which is taken in a more controlled environment, and natural, which is taken in a natural environment.
+  \item ImageCLEF \cite{ImageCLEF2013}, which is collected through crowd sourced application, is a much more noisy datasets with considerable variations on lighting conditions, viewpoints, background clutters and even occlusions. The dataset can be further split into two subset: uniform, which is taken in a more controlled environment, and natural, which is taken in a natural environment.
   \begin{center}
       \begin{tabular}{| c | c | c |}
       \hline
@@ -536,7 +537,12 @@ Here is the pipeline of our system.
 
     Key points are densely sampled and SIFT feature descriptors are retrieved at each key point. We fix size of the codebook (K) as 1000/300 for different data sets.
 \end{itemize}
-\item Finally,  we train a simple classifier from the feature vectors and then predict labels for our test data.
+\item Finally,  we train a simple classifier from the feature vectors and then predict labels for our test data. For linear SVM, we optimize as follows
+  \begin{align*}
+    min_{\gamma, w, b}\quad &\frac{1}{2} || w || ^2 + C \sum_{i=1}^m \xi_i \\
+    s.t.\quad & y^{(i)} ( w\tran x^{(i)} + b ) \geq 1 - \xi_i \\
+         & \xi_i \geq 0, i = 1, \dots, m 
+  \end{align*}
 \end{enumerate}
 \subsection{ConvNets approach}
   \subsubsection{Setup}
@@ -655,7 +661,9 @@ Here is the pipeline of our system.
 \end{figure}
 
 \section{Experimental Results}
-We use prediction rank-1 identification (i.e. accuracy) as our performance metric, which is defined as $Accuracy = \frac{N_c}{N_t} \times 100 \%$, where $N_c$ represents the number of correct match and $N_t$ is the total number of test samples.
+We choose prediction rank-1 identification (i.e. accuracy) as our performance metric, which is defined as $Accurary = \frac{N_c}{N_t} \times 100 \%$, where $N_c$ represents the number of correct match and $N_t$ is the total number of test samples.
+
+We use 3-fold cross validation to select model and hyper parameters. All the best results are collected with Linear SVM and C=0.01.
 
 \begin{figure}[H]
   \centering
@@ -790,7 +798,7 @@ CLEF\_Natural & $10.75\%$ & $47.22\%$     &
         \item [--] Color and scale seem to activate slightly different sets of neurons.
       \end{itemize}
 
-\item As an exercise for error analysis, we manually inspect the results of two preprocessing methods and pick the best out of these two for ImageCLEF Uniform data set.\\
+\item As an exercise for error analysis, we manually inspect the results of two preprocessing methods and pick the best out of these two for ImageCLEF Uniform data set.
 
     \begin{tabular}{ c c c }
     \hline\hline
@@ -810,10 +818,13 @@ This clearly tells that the K-means preprocessing is not solid and the backgroun
 \end{enumerate}
 
 \section{Conclusion and Future work}
+We explore deep ConvNet with leaf classification problem. CNN codes and simple linear SVM gives best the results for both clean and noisy datasets. Further investigation gives some insights on impacts of background clutter, color/scale variations on CNN codes.
+
+We think these are the area for improvement
   \begin{enumerate}
-    \item Acquire more data and fine-tune ConvNets to solve overfitting problem
+    \item Acquire more data and fine-tune ConvNets to fight overfitting problem
     \item Engage advanced techniques for image augmentation
-    \item Explore state-of-art method to detect and locate leaf for ImageCLEF natural leaf dataset.
+    \item Explore state-of-art method to detect and locate leaf from background. This should allow ConvNet to focus on the discriminating features.
   \end{enumerate}
 
 
